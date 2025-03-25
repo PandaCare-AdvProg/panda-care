@@ -1,1 +1,1 @@
-rootProject.name = "pandacare"
+rootProject.name = "panda-care"
