@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 import id.ac.ui.cs.advprog.pandacare.enums.ConsultationStatus;
+import id.ac.ui.cs.advprog.pandacare.observer.ConsultationObserver;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,5 +52,28 @@ public class Consultation {
         this.notes = notes;
         this.status = ConsultationStatus.PENDING;
     }
-
+    
+    @jakarta.persistence.Transient
+    private final List<ConsultationObserver> observers = new ArrayList<>();
+    
+    public void addObserver(ConsultationObserver observer) {
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+    
+    public void removeObserver(ConsultationObserver observer) {
+        observers.remove(observer);
+    }
+    
+    public void setStatus(ConsultationStatus status) {
+        this.status = status;
+        notifyObservers("Status changed to " + status);
+    }
+    
+    private void notifyObservers(String message) {
+        for (ConsultationObserver observer : new ArrayList<>(observers)) {
+            observer.update(this, message);
+        }
+    }
 }
