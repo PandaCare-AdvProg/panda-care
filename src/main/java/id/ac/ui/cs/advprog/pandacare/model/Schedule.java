@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.pandacare.model;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.state.ScheduleState;
 import id.ac.ui.cs.advprog.pandacare.state.AvailableState;
+import id.ac.ui.cs.advprog.pandacare.state.BookedState;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
@@ -44,6 +45,8 @@ public class Schedule {
 
     public void book() {
         state.book(this);
+        this.status = ScheduleStatus.BOOKED;
+        this.state = new BookedState();
     }
 
     public void cancel() {
