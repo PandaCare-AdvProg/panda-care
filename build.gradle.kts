@@ -25,6 +25,8 @@ repositories {
 
 dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
@@ -38,6 +40,6 @@ dependencies {
     implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }
