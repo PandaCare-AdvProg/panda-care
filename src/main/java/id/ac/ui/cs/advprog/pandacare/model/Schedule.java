@@ -1,8 +1,7 @@
 package id.ac.ui.cs.advprog.pandacare.model;
+
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
-import id.ac.ui.cs.advprog.pandacare.state.ScheduleState;
-import id.ac.ui.cs.advprog.pandacare.state.AvailableState;
-import id.ac.ui.cs.advprog.pandacare.state.BookedState;
+import id.ac.ui.cs.advprog.pandacare.state.*;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
@@ -45,12 +44,26 @@ public class Schedule {
 
     public void book() {
         state.book(this);
-        this.status = ScheduleStatus.BOOKED;
-        this.state = new BookedState();
     }
 
     public void cancel() {
         state.cancel(this);
+    }
+
+    public void complete() {
+        if (!(state instanceof BookedState)) {
+            throw new IllegalStateException("Only booked schedules can be completed");
+        }
+        this.status = ScheduleStatus.COMPLETED;
+        this.state = new CompletedState();
+    }
+
+    public void markAsCanceled() {
+        if (!(state instanceof AvailableState || state instanceof BookedState)) {
+            throw new IllegalStateException("Only available or booked schedules can be canceled");
+        }
+        this.status = ScheduleStatus.CANCELED;
+        this.state = new CanceledState();
     }
 
     public Schedule() {}
@@ -64,5 +77,21 @@ public class Schedule {
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
+        this.state = determineInitialState(status);
+    }
+
+    private ScheduleState determineInitialState(ScheduleStatus status) {
+        switch (status) {
+            case AVAILABLE:
+                return new AvailableState();
+            case BOOKED:
+                return new BookedState();
+            case COMPLETED:
+                return new CompletedState();
+            case CANCELED:
+                return new CanceledState();
+            default:
+                throw new IllegalArgumentException("Unknown schedule status: " + status);
+        }
     }
 }
