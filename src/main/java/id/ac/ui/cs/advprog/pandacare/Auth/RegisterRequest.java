@@ -1,5 +1,9 @@
 package id.ac.ui.cs.advprog.pandacare.Auth;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -7,8 +11,7 @@ package id.ac.ui.cs.advprog.pandacare.Auth;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private String firstname;
-    private String lastname;
+    private String name;
     private String email;
     private String password;
 }
