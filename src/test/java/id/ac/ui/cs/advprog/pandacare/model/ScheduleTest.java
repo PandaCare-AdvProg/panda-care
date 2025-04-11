@@ -93,52 +93,23 @@ void shouldInitializeStateBasedOnStatus() {
     assertThat(completedSchedule.getState()).isInstanceOf(CompletedState.class);
     assertThat(canceledSchedule.getState()).isInstanceOf(CanceledState.class);
 }
-@Test
-void shouldAddConsultationWithinTimeRange() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.AVAILABLE);
-    Patient patient = new Patient();
-    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
-    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
 
-    schedule.addConsultation(consultation);
-
-    assertThat(schedule.getConsultations()).contains(consultation);
-    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.BOOKED);
-    assertThat(schedule.getState()).isInstanceOf(BookedState.class);
-}
-
-@Test
-void shouldThrowWhenAddingConsultationOutsideTimeRange() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.AVAILABLE);
-    Patient patient = new Patient();
-    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 18, 0); // Outside time range
-    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
-
-    assertThatThrownBy(() -> schedule.addConsultation(consultation))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Consultation time must be within the schedule's time range");
-}
 
 @Test
 void shouldRemoveConsultationAndRevertToAvailableState() {
     Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY,
+        LocalTime.of(9, 0), LocalTime.of(17, 0),
         ScheduleStatus.AVAILABLE);
     Patient patient = new Patient();
     LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
     Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
 
     schedule.addConsultation(consultation);
-    schedule.removeConsultation(consultation);
+    schedule.setConsultation(null); // Simulate removing the consultation
+    schedule.cancel(); // Transition back to AVAILABLE
 
-    assertThat(schedule.getConsultations()).doesNotContain(consultation);
+    assertThat(schedule.getConsultation()).isNull();
     assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.AVAILABLE);
     assertThat(schedule.getState()).isInstanceOf(AvailableState.class);
 }

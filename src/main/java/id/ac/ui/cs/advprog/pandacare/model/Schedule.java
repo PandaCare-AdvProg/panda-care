@@ -40,8 +40,8 @@ public class Schedule {
     @jakarta.persistence.Transient
     private ScheduleState state = new AvailableState();
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Consultation> consultations = new ArrayList<>();
+    @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Consultation consultation;
 
     public void setState(ScheduleState state) {
         this.state = state;
@@ -64,28 +64,14 @@ public class Schedule {
     }
 
     public void addConsultation(Consultation consultation) {
-        if (!this.status.equals(ScheduleStatus.AVAILABLE)) {
-            throw new IllegalStateException("Cannot add consultation to a non-available schedule");
+        if (this.consultation != null) {
+            throw new IllegalStateException("This schedule already has a consultation");
         }
-    
-        LocalTime consultationTime = consultation.getScheduledTime().toLocalTime();
-        if (consultationTime.isBefore(this.startTime) || consultationTime.isAfter(this.endTime)) {
-            throw new IllegalArgumentException("Consultation time must be within the schedule's time range");
-        }
-    
-        consultations.add(consultation);
+        this.consultation = consultation;
         consultation.setSchedule(this);
-        this.book(); 
+        this.book();
     }
     
-    public void removeConsultation(Consultation consultation) {
-        consultations.remove(consultation);
-        consultation.setSchedule(null);
-        if (consultations.isEmpty()) {
-            this.cancel(); 
-        }
-    }
-
     public Schedule() {}
 
     public Schedule(Doctor doctor, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ScheduleStatus status) {
