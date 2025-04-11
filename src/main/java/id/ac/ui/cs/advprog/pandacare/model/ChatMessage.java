@@ -34,8 +34,14 @@ public class ChatMessage {
 
     private String content;
 
+    @Builder.Default
     private boolean edited = false;
+
+    @Builder.Default
     private boolean deleted = false;
+
+    @Builder.Default
+    private boolean initialized = false;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -80,10 +86,18 @@ public class ChatMessage {
     }
 
     public void setContent(String content) {
-        this.content = content;
-        if (id != null) { // Only notify if this is an existing message
-            this.edited = true;
-            notifyObservers("Content updated");
+        if (!initialized) {
+            this.content = content;
+            initialized = true;
+            return;
+        }
+
+        if (!Objects.equals(this.content, content)) {
+            this.content = content;
+            if (id != null) {
+                this.edited = true;
+                notifyObservers("Content updated");
+            }
         }
     }
 
