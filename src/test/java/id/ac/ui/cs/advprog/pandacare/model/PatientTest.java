@@ -29,7 +29,7 @@ class PatientTest {
         assertEquals("John Doe", patient.getName());
         assertEquals("1234567890123456", patient.getNik());
         assertEquals("123 Main St", patient.getAddress());
-        assertEquals("081234567890", patient.getPhoneNumber());
+        assertEquals("081234567890", patient.getPhonenum());
         assertEquals("No medical history", patient.getMedicalHistory());
     }
 
@@ -41,7 +41,7 @@ class PatientTest {
         patient.setName("John Doe");
         patient.setNik("1234567890123456");
         patient.setAddress("123 Main St");
-        patient.setPhoneNumber("081234567890");
+        patient.setPhonenum("081234567890");
         patient.setMedicalHistory("No medical history");
 
         assertEquals("test@example.com", patient.getEmail());
@@ -49,7 +49,7 @@ class PatientTest {
         assertEquals("John Doe", patient.getName());
         assertEquals("1234567890123456", patient.getNik());
         assertEquals("123 Main St", patient.getAddress());
-        assertEquals("081234567890", patient.getPhoneNumber());
+        assertEquals("081234567890", patient.getPhonenum());
         assertEquals("No medical history", patient.getMedicalHistory());
     }
 
