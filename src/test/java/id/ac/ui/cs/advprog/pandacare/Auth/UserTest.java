@@ -16,7 +16,7 @@ class UserTest {
     void testUserBuilder() {
         User user = User.builder()
                 .id(1L)
-                .nik(12345)
+                .nik("12345")
                 .name("Test User")
                 .email("test@example.com")
                 .password("password123")
@@ -71,7 +71,7 @@ class UserTest {
 
     @Test
     void testAllArgsConstructor() {
-        User user = new User(1L, 12345, "Test User", "test@example.com",
+        User user = new User(1L, "12345", "Test User", "test@example.com",
                 "password", "123 St", "08123", Role.USER);
 
         assertEquals(1, user.getId());
