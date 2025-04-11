@@ -14,6 +14,7 @@ class DoctorBuilderTest {
                 .setPassword("password123")
                 .setName("John Doe")
                 .setNik("1234567890")
+                .setAddress("123 Blue St")
                 .setWorkingAddress("123 Main St")
                 .setPhoneNumber("081234567890")
                 .setSpecialty("Radiology");
@@ -22,8 +23,9 @@ class DoctorBuilderTest {
         assertEquals("password123", builder.build().getPassword());
         assertEquals("John Doe", builder.build().getName());
         assertEquals("1234567890", builder.build().getNik());
+        assertEquals("123 Blue St", builder.build().getAddress());
         assertEquals("123 Main St", builder.build().getWorkingAddress());
-        assertEquals("081234567890", builder.build().getPhoneNumber());
+        assertEquals("081234567890", builder.build().getPhonenum());
         assertEquals("Radiology", builder.build().getSpecialty());
     }
 
@@ -34,6 +36,7 @@ class DoctorBuilderTest {
                 .setPassword("password123")
                 .setName("John Doe")
                 .setNik("1234567890")
+                .setAddress("123 Blue St")
                 .setWorkingAddress("123 Main St")
                 .setPhoneNumber("081234567890")
                 .setSpecialty("Dermatology")
@@ -44,8 +47,9 @@ class DoctorBuilderTest {
         assertEquals("password123", Doctor.getPassword());
         assertEquals("John Doe", Doctor.getName());
         assertEquals("1234567890", Doctor.getNik());
+        assertEquals("123 Blue St", Doctor.getAddress());
         assertEquals("123 Main St", Doctor.getWorkingAddress());
-        assertEquals("081234567890", Doctor.getPhoneNumber());
+        assertEquals("081234567890", Doctor.getPhonenum());
         assertEquals("Dermatology", Doctor.getSpecialty());
     }
 
@@ -56,6 +60,7 @@ class DoctorBuilderTest {
                 .setPassword("password123")
                 .setName("John Doe")
                 .setNik("1234567890")
+                .setAddress("123 Blue St")
                 .setWorkingAddress("123 Main St");
 
         Exception exception = assertThrows(IllegalStateException.class, builder::build);

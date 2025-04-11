@@ -7,6 +7,7 @@ public class DoctorBuilder {
     private String password;
     private String name;
     private String nik;
+    private String address;
     private String workingAddress;
     private String phoneNumber;
     private String specialty;
@@ -31,6 +32,11 @@ public class DoctorBuilder {
         return this;
     }
 
+    public DoctorBuilder setAddress(String address) {
+        this.address = address;
+        return this;
+    }
+
     public DoctorBuilder setWorkingAddress(String workingAddress) {
         this.workingAddress = workingAddress;
         return this;
@@ -47,9 +53,9 @@ public class DoctorBuilder {
     }
 
     public Doctor build() {
-        if (email == null || password == null || name == null || nik == null || workingAddress == null || phoneNumber == null) {
+        if (email == null || password == null || name == null || nik == null || address == null || workingAddress == null || phoneNumber == null) {
             throw new IllegalStateException("Required fields are missing");
         }
-        return new Doctor(email, password, name, nik, workingAddress, phoneNumber, specialty);
+        return new Doctor(email, password, name, nik, address, workingAddress, phoneNumber, specialty);
     }
 }
