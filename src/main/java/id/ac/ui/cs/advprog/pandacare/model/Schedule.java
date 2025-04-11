@@ -7,6 +7,8 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,6 +40,9 @@ public class Schedule {
     @jakarta.persistence.Transient
     private ScheduleState state = new AvailableState();
 
+    @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Consultation consultation;
+
     public void setState(ScheduleState state) {
         this.state = state;
     }
@@ -58,14 +63,15 @@ public class Schedule {
         this.state = new CompletedState();
     }
 
-    public void markAsCanceled() {
-        if (!(state instanceof AvailableState || state instanceof BookedState)) {
-            throw new IllegalStateException("Only available or booked schedules can be canceled");
+    public void addConsultation(Consultation consultation) {
+        if (this.consultation != null) {
+            throw new IllegalStateException("This schedule already has a consultation");
         }
-        this.status = ScheduleStatus.CANCELED;
-        this.state = new CanceledState();
+        this.consultation = consultation;
+        consultation.setSchedule(this);
+        this.book();
     }
-
+    
     public Schedule() {}
 
     public Schedule(Doctor doctor, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ScheduleStatus status) {

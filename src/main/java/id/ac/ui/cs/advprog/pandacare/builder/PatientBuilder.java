@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.pandacare.builder;
 
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.model.Patient;
 
 public class PatientBuilder {
@@ -10,6 +11,7 @@ public class PatientBuilder {
     private String address;
     private String phoneNumber;
     private String medicalHistory;
+    private Role role; // Add Role field
 
     public PatientBuilder setEmail(String email) {
         this.email = email;
@@ -46,10 +48,15 @@ public class PatientBuilder {
         return this;
     }
 
+    public PatientBuilder setRole(Role role) { 
+        this.role = role;
+        return this;
+    }
+
     public Patient build() {
-        if (email == null || password == null || name == null || nik == null || address == null || phoneNumber == null) {
+        if (email == null || password == null || name == null || nik == null || address == null || phoneNumber == null || role == null) {
             throw new IllegalStateException("Required fields are missing");
         }
-        return new Patient(email, password, name, nik, address, phoneNumber, medicalHistory);
+        return new Patient(email, password, name, nik, address, phoneNumber, role, medicalHistory);
     }
 }
