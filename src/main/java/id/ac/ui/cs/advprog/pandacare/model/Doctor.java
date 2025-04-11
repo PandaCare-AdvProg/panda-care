@@ -39,7 +39,7 @@ public class Doctor extends User {
         super();
     }
 
-    public Doctor(String email, String password, String name, String nik, String address, String workingAddress, String phonenum, String specialty) {
+    public Doctor(String email, String password, String name, String nik, String address, String workingAddress, String phonenum, Role role, String specialty) {
         super(email, password, name, nik, address, phonenum, Role.DOCTOR);
         this.workingAddress = workingAddress;
         this.specialty = specialty;
