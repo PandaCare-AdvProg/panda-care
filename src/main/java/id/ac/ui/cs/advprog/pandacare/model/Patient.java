@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import id.ac.ui.cs.advprog.pandacare.Auth.User;
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,32 +9,10 @@ import lombok.EqualsAndHashCode;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "patient")
-public class Patient {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "nik", nullable = false, unique = true)
-    private String nik;
-
-    @Column(name = "address", nullable = false)
-    private String address;
-
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
+public class Patient extends User {
 
     @Column(name = "medical_history", columnDefinition = "TEXT")
     private String medicalHistory;
@@ -40,27 +20,22 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", nik='" + nik + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                "id=" + getId() +
+                ", email='" + getEmail() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", nik='" + getNik() + '\'' +
+                ", address='" + getAddress() + '\'' +
+                ", phoneNumber='" + getPhonenum() + '\'' +
                 ", medicalHistory='" + medicalHistory + '\'' +
                 '}';
     }
 
-    // Constructors
     public Patient() {
+        super();
     }
 
-    public Patient(String email, String password, String name, String nik, String address, String phoneNumber, String medicalHistory) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.nik = nik;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
+    public Patient(String email, String password, String name, String nik, String address, String phonenum, String medicalHistory) {
+        super(email, password, name, nik, address, phonenum, Role.PATIENT); 
         this.medicalHistory = medicalHistory;
     }
 }

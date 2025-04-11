@@ -23,7 +23,7 @@ class PatientBuilderTest {
         assertEquals("John Doe", builder.build().getName());
         assertEquals("1234567890", builder.build().getNik());
         assertEquals("123 Main St", builder.build().getAddress());
-        assertEquals("081234567890", builder.build().getPhoneNumber());
+        assertEquals("081234567890", builder.build().getPhonenum());
         assertEquals("No known allergies", builder.build().getMedicalHistory());
     }
 
@@ -45,7 +45,7 @@ class PatientBuilderTest {
         assertEquals("John Doe", patient.getName());
         assertEquals("1234567890", patient.getNik());
         assertEquals("123 Main St", patient.getAddress());
-        assertEquals("081234567890", patient.getPhoneNumber());
+        assertEquals("081234567890", patient.getPhonenum());
         assertEquals("No known allergies", patient.getMedicalHistory());
     }
 
