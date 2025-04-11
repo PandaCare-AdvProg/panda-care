@@ -7,6 +7,8 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,6 +40,9 @@ public class Schedule {
     @jakarta.persistence.Transient
     private ScheduleState state = new AvailableState();
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consultation> consultations = new ArrayList<>();
+
     public void setState(ScheduleState state) {
         this.state = state;
     }
@@ -58,12 +63,27 @@ public class Schedule {
         this.state = new CompletedState();
     }
 
-    public void markAsCanceled() {
-        if (!(state instanceof AvailableState || state instanceof BookedState)) {
-            throw new IllegalStateException("Only available or booked schedules can be canceled");
+    public void addConsultation(Consultation consultation) {
+        if (!this.status.equals(ScheduleStatus.AVAILABLE)) {
+            throw new IllegalStateException("Cannot add consultation to a non-available schedule");
         }
-        this.status = ScheduleStatus.CANCELED;
-        this.state = new CanceledState();
+    
+        LocalTime consultationTime = consultation.getScheduledTime().toLocalTime();
+        if (consultationTime.isBefore(this.startTime) || consultationTime.isAfter(this.endTime)) {
+            throw new IllegalArgumentException("Consultation time must be within the schedule's time range");
+        }
+    
+        consultations.add(consultation);
+        consultation.setSchedule(this);
+        this.book(); 
+    }
+    
+    public void removeConsultation(Consultation consultation) {
+        consultations.remove(consultation);
+        consultation.setSchedule(null);
+        if (consultations.isEmpty()) {
+            this.cancel(); 
+        }
     }
 
     public Schedule() {}

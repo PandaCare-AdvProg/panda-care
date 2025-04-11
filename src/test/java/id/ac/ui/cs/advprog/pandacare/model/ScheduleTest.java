@@ -6,6 +6,7 @@ import id.ac.ui.cs.advprog.pandacare.state.CanceledState;
 import id.ac.ui.cs.advprog.pandacare.state.CompletedState;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
@@ -72,31 +73,6 @@ void shouldTransitionToCompletedStateWhenCompleteIsCalledOnBookedState() {
 }
 
 @Test
-void shouldTransitionToCanceledStateWhenMarkAsCanceledIsCalledOnAvailableState() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.AVAILABLE);
-
-    schedule.markAsCanceled();
-
-    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.CANCELED);
-    assertThat(schedule.getState()).isInstanceOf(CanceledState.class);
-}
-
-@Test
-void shouldThrowWhenMarkAsCanceledCalledOnCompletedState() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.COMPLETED);
-
-    assertThatThrownBy(schedule::markAsCanceled)
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Only available or booked schedules can be canceled");
-}
-
-@Test
 void shouldInitializeStateBasedOnStatus() {
     Doctor doctor = new Doctor();
     Schedule availableSchedule = new Schedule(doctor, DayOfWeek.MONDAY, 
@@ -116,5 +92,54 @@ void shouldInitializeStateBasedOnStatus() {
     assertThat(bookedSchedule.getState()).isInstanceOf(BookedState.class);
     assertThat(completedSchedule.getState()).isInstanceOf(CompletedState.class);
     assertThat(canceledSchedule.getState()).isInstanceOf(CanceledState.class);
+}
+@Test
+void shouldAddConsultationWithinTimeRange() {
+    Doctor doctor = new Doctor();
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
+        LocalTime.of(9, 0), LocalTime.of(17, 0), 
+        ScheduleStatus.AVAILABLE);
+    Patient patient = new Patient();
+    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+
+    schedule.addConsultation(consultation);
+
+    assertThat(schedule.getConsultations()).contains(consultation);
+    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.BOOKED);
+    assertThat(schedule.getState()).isInstanceOf(BookedState.class);
+}
+
+@Test
+void shouldThrowWhenAddingConsultationOutsideTimeRange() {
+    Doctor doctor = new Doctor();
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
+        LocalTime.of(9, 0), LocalTime.of(17, 0), 
+        ScheduleStatus.AVAILABLE);
+    Patient patient = new Patient();
+    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 18, 0); // Outside time range
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+
+    assertThatThrownBy(() -> schedule.addConsultation(consultation))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("Consultation time must be within the schedule's time range");
+}
+
+@Test
+void shouldRemoveConsultationAndRevertToAvailableState() {
+    Doctor doctor = new Doctor();
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
+        LocalTime.of(9, 0), LocalTime.of(17, 0), 
+        ScheduleStatus.AVAILABLE);
+    Patient patient = new Patient();
+    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+
+    schedule.addConsultation(consultation);
+    schedule.removeConsultation(consultation);
+
+    assertThat(schedule.getConsultations()).doesNotContain(consultation);
+    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.AVAILABLE);
+    assertThat(schedule.getState()).isInstanceOf(AvailableState.class);
 }
 }
