@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "patient")
+//@Table(name = "patient")
 public class Patient extends User {
 
     @Column(name = "medical_history", columnDefinition = "TEXT")
