@@ -2,10 +2,12 @@ package id.ac.ui.cs.advprog.pandacare.model;
 
 import id.ac.ui.cs.advprog.pandacare.Auth.User;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
+import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.*;
 
 @Data
 @Builder
@@ -52,8 +54,41 @@ public class ChatMessage {
         updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
-    protected void onUpdate() {
+    void onUpdate() {
         updatedAt = LocalDateTime.now();
+        notifyObservers("Message updated");
+    }
+
+    // Observer pattern implementation
+    @Transient
+    private final List<ChatObserver> observers = new ArrayList<>();
+
+    public void addObserver(ChatObserver observer) {
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    public void removeObserver(ChatObserver observer) {
+        observers.remove(observer);
+    }
+
+    void notifyObservers(String event) {
+        for (ChatObserver observer : new ArrayList<>(observers)) {
+            observer.update(this, event);
+        }
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+        if (id != null) { // Only notify if this is an existing message
+            this.edited = true;
+            notifyObservers("Content updated");
+        }
+    }
+
+    public void markAsDeleted() {
+        this.deleted = true;
+        notifyObservers("Message deleted");
     }
 }
