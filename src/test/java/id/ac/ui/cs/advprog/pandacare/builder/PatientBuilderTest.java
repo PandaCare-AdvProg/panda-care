@@ -1,9 +1,10 @@
 package id.ac.ui.cs.advprog.pandacare.builder;
 
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 class PatientBuilderTest {
 
@@ -16,7 +17,8 @@ class PatientBuilderTest {
                 .setNik("1234567890")
                 .setAddress("123 Main St")
                 .setPhoneNumber("081234567890")
-                .setMedicalHistory("No known allergies");
+                .setMedicalHistory("No known allergies")
+                .setRole(Role.PATIENT); // Set the Role
 
         assertEquals("test@example.com", builder.build().getEmail());
         assertEquals("password123", builder.build().getPassword());
@@ -25,6 +27,7 @@ class PatientBuilderTest {
         assertEquals("123 Main St", builder.build().getAddress());
         assertEquals("081234567890", builder.build().getPhonenum());
         assertEquals("No known allergies", builder.build().getMedicalHistory());
+        assertEquals(Role.PATIENT, builder.build().getRole()); // Verify the Role
     }
 
     @Test
@@ -37,6 +40,7 @@ class PatientBuilderTest {
                 .setAddress("123 Main St")
                 .setPhoneNumber("081234567890")
                 .setMedicalHistory("No known allergies")
+                .setRole(Role.PATIENT) // Set the Role
                 .build();
 
         assertNotNull(patient);
@@ -47,6 +51,7 @@ class PatientBuilderTest {
         assertEquals("123 Main St", patient.getAddress());
         assertEquals("081234567890", patient.getPhonenum());
         assertEquals("No known allergies", patient.getMedicalHistory());
+        assertEquals(Role.PATIENT, patient.getRole()); // Verify the Role
     }
 
     @Test
