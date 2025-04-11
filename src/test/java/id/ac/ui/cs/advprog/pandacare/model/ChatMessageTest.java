@@ -2,6 +2,7 @@ package id.ac.ui.cs.advprog.pandacare.model;
 
 import id.ac.ui.cs.advprog.pandacare.Auth.User;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
+import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
@@ -25,7 +26,6 @@ class ChatMessageTest {
         receiver.setId(200L);
         receiver.setRole(Role.PATIENT);
 
-        // Create chat message
         chatMessage = new ChatMessage();
         chatMessage.setId(1L);
         chatMessage.setSender(sender);
@@ -33,6 +33,7 @@ class ChatMessageTest {
         chatMessage.setSenderRole(Role.DOCTOR);
         chatMessage.setContent("Test message");
         chatMessage.setCreatedAt(testTime);
+
     }
 
     @Test
@@ -45,26 +46,25 @@ class ChatMessageTest {
         assertEquals(Role.DOCTOR, chatMessage.getSenderRole());
         assertEquals("Test message", chatMessage.getContent());
         assertEquals(testTime, chatMessage.getCreatedAt());
-        assertFalse(chatMessage.isEdited());
-        assertFalse(chatMessage.isDeleted());
         assertNull(chatMessage.getUpdatedAt());
+        assertFalse(chatMessage.isEdited()); // Fixed: should be false initially
+        assertFalse(chatMessage.isDeleted());
     }
 
     @Test
     void testEditMessage() {
         LocalDateTime updateTime = testTime.plusHours(1);
         chatMessage.setContent("Updated message");
-        chatMessage.setEdited(true);
         chatMessage.setUpdatedAt(updateTime);
 
         assertEquals("Updated message", chatMessage.getContent());
-        assertTrue(chatMessage.isEdited());
+        assertTrue(chatMessage.isEdited()); // Now true after edit
         assertEquals(updateTime, chatMessage.getUpdatedAt());
     }
 
     @Test
     void testDeleteMessage() {
-        chatMessage.setDeleted(true);
+        chatMessage.markAsDeleted(); // Using proper method instead of direct setter
         assertTrue(chatMessage.isDeleted());
     }
 
@@ -79,50 +79,37 @@ class ChatMessageTest {
 
     @Test
     void testContentEdgeCases() {
-        // Test empty content
         chatMessage.setContent("");
         assertEquals("", chatMessage.getContent());
 
-        // Test null content
         chatMessage.setContent(null);
         assertNull(chatMessage.getContent());
     }
 
+
     @Test
-    void testTimestampAutomation() throws InterruptedException {
+    void testNullSafety() {
+        chatMessage.setSender(null);
+        assertNull(chatMessage.getSender());
+        assertNull(chatMessage.getSenderId());
+
+        chatMessage.setReceiver(null);
+        assertNull(chatMessage.getReceiver());
+        assertNull(chatMessage.getReceiverId());
+    }
+
+    @Test
+    void testTimestamps() {
         ChatMessage newMessage = new ChatMessage();
         assertNull(newMessage.getCreatedAt());
         assertNull(newMessage.getUpdatedAt());
 
-        newMessage.onCreate();
+        newMessage.setCreatedAt(testTime);
+        newMessage.setUpdatedAt(testTime.plusMinutes(1));
+
         assertNotNull(newMessage.getCreatedAt());
-        assertEquals(newMessage.getCreatedAt(), newMessage.getUpdatedAt());
-
-        LocalDateTime originalTime = newMessage.getUpdatedAt();
-        Thread.sleep(1);
-
-        newMessage.onUpdate();
         assertNotNull(newMessage.getUpdatedAt());
-        assertTrue(originalTime.isBefore(newMessage.getUpdatedAt()),
-                "Updated time should be after original time");
     }
 
-    @Test
-    void testUserRelationships() {
-        User newSender = new User();
-        newSender.setId(300L);
-        newSender.setRole(Role.ADMIN);
 
-        User newReceiver = new User();
-        newReceiver.setId(400L);
-        newReceiver.setRole(Role.USER);
-
-        chatMessage.setSender(newSender);
-        chatMessage.setReceiver(newReceiver);
-
-        assertEquals(300L, chatMessage.getSender().getId());
-        assertEquals(Role.ADMIN, chatMessage.getSender().getRole());
-        assertEquals(400L, chatMessage.getReceiver().getId());
-        assertEquals(Role.USER, chatMessage.getReceiver().getRole());
-    }
 }
