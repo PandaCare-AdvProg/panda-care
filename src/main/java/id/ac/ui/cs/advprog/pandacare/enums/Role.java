@@ -1,5 +1,5 @@
 package id.ac.ui.cs.advprog.pandacare.enums;
 
 public enum Role {
-    ADMIN, USER
+    ADMIN, USER, DOCTOR, PATIENT
 }
