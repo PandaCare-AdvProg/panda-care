@@ -9,8 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    void deleteById(Long scheduleId);
-    List<Schedule> findByDoctorId(Long doctorId);
+    List<Schedule> findByDoctor_Id(Long doctorId);
     Optional<Schedule> findById(Long scheduleId);
     List<Schedule> findByDayOfWeek(String dayOfWeek);    
 }
