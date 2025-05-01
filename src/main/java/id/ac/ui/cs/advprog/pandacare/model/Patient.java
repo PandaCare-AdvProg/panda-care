@@ -35,7 +35,7 @@ public class Patient extends User {
     }
 
     public Patient(String email, String password, String name, String nik, String address, String phonenum, Role role, String medicalHistory) {
-        super(email, password, name, nik, address, phonenum, role);
+        super(email, password, name, nik, address, phonenum, Role.PATIENT);
         this.medicalHistory = medicalHistory;
     }
 }
