@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+
 @Getter
 @Setter
 @Entity
@@ -17,7 +18,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
 
@@ -37,6 +38,9 @@ public class Schedule {
 
     @jakarta.persistence.Transient
     private ScheduleState state = new AvailableState();
+
+    @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Consultation consultation;
 
     public void setState(ScheduleState state) {
         this.state = state;
@@ -58,14 +62,26 @@ public class Schedule {
         this.state = new CompletedState();
     }
 
-    public void markAsCanceled() {
-        if (!(state instanceof AvailableState || state instanceof BookedState)) {
-            throw new IllegalStateException("Only available or booked schedules can be canceled");
+    public void addConsultation(Consultation consultation) {
+        if (this.consultation != null) {
+            throw new IllegalStateException("This schedule already has a consultation");
         }
-        this.status = ScheduleStatus.CANCELED;
-        this.state = new CanceledState();
+        this.consultation = consultation;
+        consultation.setSchedule(this);
+        this.book();
     }
-
+    public void setDoctorId(Doctor doctorId) {
+        this.doctor = doctorId;
+    }
+    
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    public void updateStatus(ScheduleStatus newStatus) {
+        this.status = newStatus;
+        this.state = determineInitialState(newStatus);
+    }
+    
     public Schedule() {}
 
     public Schedule(Doctor doctor, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ScheduleStatus status) {
@@ -93,5 +109,14 @@ public class Schedule {
             default:
                 throw new IllegalArgumentException("Unknown schedule status: " + status);
         }
+    }
+
+    public void removeConsultation(Consultation existing) {
+        if (this.consultation == null || !this.consultation.equals(existing)) {
+            throw new IllegalStateException("The provided consultation does not match the current consultation");
+        }
+        this.consultation.setSchedule(null);
+        this.consultation = null;
+        updateStatus(ScheduleStatus.AVAILABLE);
     }
 }

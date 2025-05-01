@@ -2,6 +2,8 @@ package id.ac.ui.cs.advprog.pandacare.model;
 
 import org.junit.jupiter.api.Test;
 
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PatientTest {
@@ -21,7 +23,7 @@ class PatientTest {
                 "1234567890123456",
                 "123 Main St",
                 "081234567890",
-                "No medical history"
+                Role.PATIENT, "No medical history"
         );
 
         assertEquals("test@example.com", patient.getEmail());
@@ -62,7 +64,7 @@ class PatientTest {
                 "1234567890123456",
                 "123 Main St",
                 "081234567890",
-                "No medical history"
+                Role.PATIENT, "No medical history"
         );
 
         String expected = "Patient{id=null, email='test@example.com', name='John Doe', nik='1234567890123456', address='123 Main St', phoneNumber='081234567890', medicalHistory='No medical history'}";

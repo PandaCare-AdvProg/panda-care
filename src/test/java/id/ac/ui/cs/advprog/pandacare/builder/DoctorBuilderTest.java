@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.pandacare.builder;
 
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,10 @@ class DoctorBuilderTest {
                 .setAddress("123 Blue St")
                 .setWorkingAddress("123 Main St")
                 .setPhoneNumber("081234567890")
+                .setRole(Role.DOCTOR)
                 .setSpecialty("Radiology");
+
+
 
         assertEquals("test@example.com", builder.build().getEmail());
         assertEquals("password123", builder.build().getPassword());
@@ -26,6 +30,7 @@ class DoctorBuilderTest {
         assertEquals("123 Blue St", builder.build().getAddress());
         assertEquals("123 Main St", builder.build().getWorkingAddress());
         assertEquals("081234567890", builder.build().getPhonenum());
+        assertEquals(Role.DOCTOR, builder.build().getRole());
         assertEquals("Radiology", builder.build().getSpecialty());
     }
 
@@ -39,6 +44,7 @@ class DoctorBuilderTest {
                 .setAddress("123 Blue St")
                 .setWorkingAddress("123 Main St")
                 .setPhoneNumber("081234567890")
+                .setRole(Role.DOCTOR)
                 .setSpecialty("Dermatology")
                 .build();
 
@@ -50,6 +56,7 @@ class DoctorBuilderTest {
         assertEquals("123 Blue St", Doctor.getAddress());
         assertEquals("123 Main St", Doctor.getWorkingAddress());
         assertEquals("081234567890", Doctor.getPhonenum());
+        assertEquals(Role.DOCTOR, builder.build().getRole());
         assertEquals("Dermatology", Doctor.getSpecialty());
     }
 
