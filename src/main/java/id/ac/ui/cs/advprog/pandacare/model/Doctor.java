@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import id.ac.ui.cs.advprog.pandacare.Auth.User;
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,32 +9,13 @@ import lombok.EqualsAndHashCode;
 
 
 @Getter @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "doctor")
-public class Doctor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name ="nik", nullable = false, unique = true)
-    private String nik;
+public class Doctor extends User {
 
     @Column(name = "working_address", nullable = false)
     private String workingAddress;
-
-    @Column(name = "phone_number", nullable = false, unique = true)
-    private String phoneNumber;
 
     @Column(name = "specialty", nullable = false)
     private String specialty;
@@ -40,28 +23,25 @@ public class Doctor {
     @Override
     public String toString() {
         return "Doctor{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", nik='" + nik + '\'' +
+                "id=" + getId() +
+                ", email='" + getEmail() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", nik='" + getNik() + '\'' +
+                ", address'" + getAddress() + '\'' +
                 ", workingAddress='" + workingAddress + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneNumber='" + getPhonenum() + '\'' +
                 ", specialty='" + specialty + '\'' +
                 '}';
     }
 
     // Constructors
     public Doctor() {
+        super();
     }
 
-    public Doctor(String email, String password, String name, String nik, String workingAddress, String phoneNumber, String specialty) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.nik = nik;
+    public Doctor(String email, String password, String name, String nik, String address, String workingAddress, String phonenum, Role role, String specialty) {
+        super(email, password, name, nik, address, phonenum, Role.DOCTOR);
         this.workingAddress = workingAddress;
-        this.phoneNumber = phoneNumber;
         this.specialty = specialty;
     }
-
 }
