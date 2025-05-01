@@ -66,9 +66,9 @@ public class ScheduleRepositoryTest {
         List<Schedule> schedules = new ArrayList<>();
         schedules.add(schedule);
 
-        when(scheduleRepository.findByDoctorId(102L)).thenReturn(schedules);
+        when(scheduleRepository.findByDoctor_Id(102L)).thenReturn(schedules);
 
-        List<Schedule> results = scheduleRepository.findByDoctorId(102L);
+        List<Schedule> results = scheduleRepository.findByDoctor_Id(102L);
 
         assertEquals(1, results.size());
         assertEquals(DayOfWeek.TUESDAY, results.get(0).getDayOfWeek());
