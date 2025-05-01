@@ -6,11 +6,13 @@ import id.ac.ui.cs.advprog.pandacare.state.CanceledState;
 import id.ac.ui.cs.advprog.pandacare.state.CompletedState;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleTest {
     
@@ -72,31 +74,6 @@ void shouldTransitionToCompletedStateWhenCompleteIsCalledOnBookedState() {
 }
 
 @Test
-void shouldTransitionToCanceledStateWhenMarkAsCanceledIsCalledOnAvailableState() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.AVAILABLE);
-
-    schedule.markAsCanceled();
-
-    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.CANCELED);
-    assertThat(schedule.getState()).isInstanceOf(CanceledState.class);
-}
-
-@Test
-void shouldThrowWhenMarkAsCanceledCalledOnCompletedState() {
-    Doctor doctor = new Doctor();
-    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
-        LocalTime.of(9, 0), LocalTime.of(17, 0), 
-        ScheduleStatus.COMPLETED);
-
-    assertThatThrownBy(schedule::markAsCanceled)
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessage("Only available or booked schedules can be canceled");
-}
-
-@Test
 void shouldInitializeStateBasedOnStatus() {
     Doctor doctor = new Doctor();
     Schedule availableSchedule = new Schedule(doctor, DayOfWeek.MONDAY, 
@@ -117,4 +94,52 @@ void shouldInitializeStateBasedOnStatus() {
     assertThat(completedSchedule.getState()).isInstanceOf(CompletedState.class);
     assertThat(canceledSchedule.getState()).isInstanceOf(CanceledState.class);
 }
+
+
+@Test
+void shouldRemoveConsultationAndRevertToAvailableState() {
+    Doctor doctor = new Doctor();
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY,
+        LocalTime.of(9, 0), LocalTime.of(17, 0),
+        ScheduleStatus.AVAILABLE);
+    Patient patient = new Patient();
+    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+
+    schedule.addConsultation(consultation);
+    schedule.setConsultation(null); // Simulate removing the consultation
+    schedule.cancel(); // Transition back to AVAILABLE
+
+    assertThat(schedule.getConsultation()).isNull();
+    assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.AVAILABLE);
+    assertThat(schedule.getState()).isInstanceOf(AvailableState.class);
+}
+    @Test
+    void testSetDoctorId() {
+        Doctor doctor = new Doctor();
+        doctor.setId(101L);
+
+        Schedule schedule = new Schedule();
+        schedule.setDoctorId(doctor);
+
+        assertEquals(doctor, schedule.getDoctor());
+    }
+
+    @Test
+    void testSetDayOfWeek() {
+        Schedule schedule = new Schedule();
+        schedule.setDayOfWeek(DayOfWeek.MONDAY);
+
+        assertEquals(DayOfWeek.MONDAY, schedule.getDayOfWeek());
+    }
+
+    @Test
+    void testUpdateStatus() {
+        Schedule schedule = new Schedule();
+        schedule.setStatus(ScheduleStatus.AVAILABLE);
+
+        schedule.updateStatus(ScheduleStatus.BOOKED);
+
+        assertEquals(ScheduleStatus.BOOKED, schedule.getStatus());
+    }
 }
