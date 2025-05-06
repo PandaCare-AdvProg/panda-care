@@ -16,4 +16,12 @@ public class RegisterRequest {
   private String email;
   private String password;
   private Role role;
+  private String nik;
+  private String address;
+  private String phonenum;
+  private String workingAddress;
+  private String specialty;
+  private String medicalHistory;
+  
+
 }
