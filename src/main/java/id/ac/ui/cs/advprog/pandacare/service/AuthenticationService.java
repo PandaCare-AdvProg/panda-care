@@ -2,6 +2,8 @@ package id.ac.ui.cs.advprog.pandacare.service;
 
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.enums.TokenType;
+import id.ac.ui.cs.advprog.pandacare.model.Doctor;
+import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Token;
 import id.ac.ui.cs.advprog.pandacare.model.User;
 import id.ac.ui.cs.advprog.pandacare.repository.TokenRepository;
@@ -35,22 +37,55 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final LogoutHandler logoutHandler; 
 
-  public AuthenticationResponse register(RegisterRequest request) {
-    var user = User.builder()
-        .name(request.getName())
-        .email(request.getEmail())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .role(Role.valueOf(request.getRole().name()))
-        .build();
-    var savedUser = repository.save(user);
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
+public AuthenticationResponse register(RegisterRequest request) {
+    User savedUser;
+    if (request.getRole() == Role.DOCTOR) {
+        var doctor = new Doctor(
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            request.getName(),
+            request.getNik(),
+            request.getAddress(),
+            request.getWorkingAddress(), 
+            request.getPhonenum(),
+            Role.DOCTOR,
+            request.getSpecialty()
+        );
+        savedUser = repository.save(doctor);
+    } else if (request.getRole() == Role.PATIENT) {
+        var patient = new Patient(
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            request.getName(),
+            request.getNik(),
+            request.getAddress(),
+            request.getPhonenum(),
+            Role.PATIENT,
+            request.getMedicalHistory()
+        );
+        savedUser = repository.save(patient);
+    } else {
+        var user = new User(
+            request.getEmail(),
+            passwordEncoder.encode(request.getPassword()),
+            request.getName(),
+            request.getNik(),
+            request.getAddress(),
+            request.getPhonenum(),
+            request.getRole()
+        );
+        savedUser = repository.save(user);
+    }
+
+    var jwtToken = jwtService.generateToken(savedUser);
+    var refreshToken = jwtService.generateRefreshToken(savedUser);
     saveUserToken(savedUser, jwtToken);
+
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .refreshToken(refreshToken)
         .build();
-  }
+}
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(

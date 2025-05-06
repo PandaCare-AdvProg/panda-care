@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.model.User;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,13 +10,14 @@ import lombok.EqualsAndHashCode;
 @Getter @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
+
 @Table(name = "doctor")
 public class Doctor extends User {
 
-    @Column(name = "working_address", nullable = false)
+    @Column(name = "working_address", nullable = true)
     private String workingAddress;
 
-    @Column(name = "specialty", nullable = false)
+    @Column(name = "specialty", nullable = true)
     private String specialty;
 
     @Override
@@ -34,7 +34,6 @@ public class Doctor extends User {
                 '}';
     }
 
-    // Constructors
     public Doctor() {
         super();
     }
