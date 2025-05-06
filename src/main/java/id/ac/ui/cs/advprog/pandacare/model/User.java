@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED) 
 @Table(name = "_user")
 public class User implements UserDetails {
     @Id
@@ -20,7 +21,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "nik")
-    private int nik;
+    private String nik;
 
     @Column(name = "name")
     private String name;
@@ -42,7 +43,15 @@ public class User implements UserDetails {
     private Role role;
 
 
-
+    public User(String email, String password, String name, String nik, String address, String phonenum, Role role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nik = nik;
+        this.address = address;
+        this.phonenum = phonenum;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
