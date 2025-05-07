@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ScheduleTest {
     
@@ -113,4 +114,32 @@ void shouldRemoveConsultationAndRevertToAvailableState() {
     assertThat(schedule.getStatus()).isEqualTo(ScheduleStatus.AVAILABLE);
     assertThat(schedule.getState()).isInstanceOf(AvailableState.class);
 }
+    @Test
+    void testSetDoctorId() {
+        Doctor doctor = new Doctor();
+        doctor.setId(101L);
+
+        Schedule schedule = new Schedule();
+        schedule.setDoctorId(doctor);
+
+        assertEquals(doctor, schedule.getDoctor());
+    }
+
+    @Test
+    void testSetDayOfWeek() {
+        Schedule schedule = new Schedule();
+        schedule.setDayOfWeek(DayOfWeek.MONDAY);
+
+        assertEquals(DayOfWeek.MONDAY, schedule.getDayOfWeek());
+    }
+
+    @Test
+    void testUpdateStatus() {
+        Schedule schedule = new Schedule();
+        schedule.setStatus(ScheduleStatus.AVAILABLE);
+
+        schedule.updateStatus(ScheduleStatus.BOOKED);
+
+        assertEquals(ScheduleStatus.BOOKED, schedule.getStatus());
+    }
 }

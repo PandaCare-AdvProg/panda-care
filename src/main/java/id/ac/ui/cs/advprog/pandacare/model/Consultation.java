@@ -74,7 +74,7 @@ public class Consultation {
         notifyObservers("Status changed to " + status);
     }
 
-    private void notifyObservers(String message) {
+    public void notifyObservers(String message) {
         for (ConsultationObserver observer : new ArrayList<>(observers)) {
             observer.update(this, message);
         }
