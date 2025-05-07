@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.Auth.User;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,8 +33,8 @@ public class Patient extends User {
         super();
     }
 
-    public Patient(String email, String password, String name, String nik, String address, String phonenum, String medicalHistory) {
-        super(email, password, name, nik, address, phonenum, Role.PATIENT); 
+    public Patient(String email, String password, String name, String nik, String address, String phonenum, Role role, String medicalHistory) {
+        super(email, password, name, nik, address, phonenum, Role.PATIENT);
         this.medicalHistory = medicalHistory;
     }
 }
