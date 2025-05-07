@@ -46,6 +46,38 @@ public class ChatMessage {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    public Role getSenderRole() {
+        return senderRole;
+    }
+
+    public void setSenderRole(Role senderRole) {
+        this.senderRole = senderRole;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
     public Long getSenderId() {
         return sender != null ? sender.getId() : null;
     }
@@ -60,12 +92,12 @@ public class ChatMessage {
         updatedAt = LocalDateTime.now();
     }
 
-    void onUpdate() {
+    // Changed from package-private to public
+    public void onUpdate() {
         updatedAt = LocalDateTime.now();
         notifyObservers("Message updated");
     }
 
-    // Observer pattern implementation
     @Transient
     private final List<ChatObserver> observers = new ArrayList<>();
 
@@ -79,7 +111,8 @@ public class ChatMessage {
         observers.remove(observer);
     }
 
-    void notifyObservers(String event) {
+    // Changed from package-private to public
+    public void notifyObservers(String event) {
         for (ChatObserver observer : new ArrayList<>(observers)) {
             observer.update(this, event);
         }
