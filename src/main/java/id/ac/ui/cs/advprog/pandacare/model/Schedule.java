@@ -7,8 +7,7 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
 
@@ -71,6 +70,17 @@ public class Schedule {
         consultation.setSchedule(this);
         this.book();
     }
+    public void setDoctorId(Doctor doctorId) {
+        this.doctor = doctorId;
+    }
+    
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    public void updateStatus(ScheduleStatus newStatus) {
+        this.status = newStatus;
+        this.state = determineInitialState(newStatus);
+    }
     
     public Schedule() {}
 
@@ -99,5 +109,14 @@ public class Schedule {
             default:
                 throw new IllegalArgumentException("Unknown schedule status: " + status);
         }
+    }
+
+    public void removeConsultation(Consultation existing) {
+        if (this.consultation == null || !this.consultation.equals(existing)) {
+            throw new IllegalStateException("The provided consultation does not match the current consultation");
+        }
+        this.consultation.setSchedule(null);
+        this.consultation = null;
+        updateStatus(ScheduleStatus.AVAILABLE);
     }
 }
