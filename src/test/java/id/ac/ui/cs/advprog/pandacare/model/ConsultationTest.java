@@ -1,32 +1,39 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
 import id.ac.ui.cs.advprog.pandacare.enums.ConsultationStatus;
+import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.observer.ConsultationObserver;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class ConsultationTest {
 
-    @Test
-    void consultationCreation_shouldSetDefaultPending() {
-        Doctor doctor = new Doctor();
-        Patient patient = new Patient();
-        LocalDateTime scheduledTime = LocalDateTime.now().plusDays(1);
+@Test
+void consultationCreation_shouldSetDefaultPending() {
+    Doctor doctor = new Doctor();
+    Patient patient = new Patient();
+    Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
+        LocalTime.of(9, 0), LocalTime.of(17, 0), 
+        ScheduleStatus.AVAILABLE);
+    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
 
-        Consultation consultation = new Consultation(doctor, patient, scheduledTime, "http://meeting.url", "Initial notes");
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
 
-        assertThat(consultation.getStatus()).isEqualTo(ConsultationStatus.PENDING);
-        assertThat(consultation.getDoctor()).isEqualTo(doctor);
-        assertThat(consultation.getPatient()).isEqualTo(patient);
-        assertThat(consultation.getScheduledTime()).isEqualTo(scheduledTime);
-        assertThat(consultation.getMeetingUrl()).isEqualTo("http://meeting.url");
-        assertThat(consultation.getNotes()).isEqualTo("Initial notes");
+    assertThat(consultation.getStatus()).isEqualTo(ConsultationStatus.PENDING);
+    assertThat(consultation.getDoctor()).isEqualTo(doctor);
+    assertThat(consultation.getPatient()).isEqualTo(patient);
+    assertThat(consultation.getSchedule()).isEqualTo(schedule);
+    assertThat(consultation.getScheduledTime()).isEqualTo(scheduledTime);
+    assertThat(consultation.getMeetingUrl()).isEqualTo("http://meeting.url");
+    assertThat(consultation.getNotes()).isEqualTo("Initial notes");
     }
-
     @Test
     void setStatus_shouldUpdateStatus() {
         Consultation consultation = new Consultation();

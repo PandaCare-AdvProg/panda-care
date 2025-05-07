@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.pandacare.Auth;
+package id.ac.ui.cs.advprog.pandacare.model;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED) 
 @Table(name = "_user")
 public class User implements UserDetails {
     @Id
