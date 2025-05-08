@@ -1,24 +1,44 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.Auth.User;
+import java.util.ArrayList;
+
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
+import java.util.List;
 
 
 @Getter @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
+
 @Table(name = "doctor")
 public class Doctor extends User {
 
-    @Column(name = "working_address", nullable = false)
+    @Column(name = "working_address", nullable = true)
     private String workingAddress;
 
-    @Column(name = "specialty", nullable = false)
+    @Column(name = "specialty", nullable = true)
     private String specialty;
+
+    @OneToMany(
+    mappedBy = "doctor",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+    )
+    private List<Schedule> schedules = new ArrayList<>();
+
+    public void addSchedule(Schedule sched) {
+        schedules.add(sched);
+        sched.setDoctor(this);
+    }
+
+    public void removeSchedule(Schedule sched) {
+        schedules.remove(sched);
+        sched.setDoctor(null);
+    }
 
     @Override
     public String toString() {
@@ -34,7 +54,6 @@ public class Doctor extends User {
                 '}';
     }
 
-    // Constructors
     public Doctor() {
         super();
     }

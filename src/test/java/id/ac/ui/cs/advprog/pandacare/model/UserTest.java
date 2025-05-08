@@ -1,10 +1,11 @@
-package id.ac.ui.cs.advprog.pandacare.Auth;
+package id.ac.ui.cs.advprog.pandacare.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
+import id.ac.ui.cs.advprog.pandacare.model.User;
 
 import java.util.Collection;
 
