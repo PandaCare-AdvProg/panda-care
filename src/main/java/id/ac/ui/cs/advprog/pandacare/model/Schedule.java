@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import id.ac.ui.cs.advprog.pandacare.dto.DoctorDTO;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.state.*;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Getter
@@ -37,6 +40,7 @@ public class Schedule {
     private ScheduleStatus status = ScheduleStatus.AVAILABLE;
 
     @jakarta.persistence.Transient
+    @JsonIgnore
     private ScheduleState state = new AvailableState();
 
     @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
