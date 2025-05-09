@@ -103,8 +103,9 @@ void shouldRemoveConsultationAndRevertToAvailableState() {
         LocalTime.of(9, 0), LocalTime.of(17, 0),
         ScheduleStatus.AVAILABLE);
     Patient patient = new Patient();
-    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
-    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+    LocalTime scheduledTime = LocalTime.of(14, 10, 0);
+    DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, dayOfWeek, "http://meeting.url", "Initial notes");
 
     schedule.addConsultation(consultation);
     schedule.setConsultation(null); // Simulate removing the consultation
