@@ -7,8 +7,8 @@ import id.ac.ui.cs.advprog.pandacare.dto.ApiResponse;
 import id.ac.ui.cs.advprog.pandacare.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,21 +21,40 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<ProfileDTO>> getUserProfile(
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<ProfileDTO>> getUserProfile() {
+        // Get authentication principal (username) - which might be email or ID
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userIdentifier = authentication.getName();
         
-        Long userId = Long.parseLong(userDetails.getUsername());
-        ProfileDTO profile = profileService.getUserProfile(userId);
+        ProfileDTO profileDTO;
         
-        return ResponseEntity.ok(new ApiResponse<>(true, "Profile retrieved successfully", profile));
+        if (userIdentifier.contains("@")) {
+            // Handle as email - you'll need a method in your service
+            profileDTO = profileService.getUserProfileByEmail(userIdentifier);
+        } else {
+            try {
+                // Handle as numeric ID
+                Long userId = Long.parseLong(userIdentifier);
+                profileDTO = profileService.getUserProfile(userId);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(false, "Invalid user identifier", null)
+                );
+            }
+        }
+        
+        return ResponseEntity.ok(
+            new ApiResponse<>(true, "Profile retrieved successfully", profileDTO)
+        );
     }
-
+    
     @PutMapping
     public ResponseEntity<ApiResponse<ProfileDTO>> updateUserProfile(
-            @RequestBody ProfileUpdateRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @RequestBody ProfileUpdateRequest request) {
         
-        Long userId = Long.parseLong(userDetails.getUsername());
+        // Get authentication principal (username)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userIdentifier = authentication.getName();
         
         // Convert request to DTO
         ProfileDTO profileDTO = ProfileDTO.builder()
@@ -48,27 +67,69 @@ public class ProfileController {
                 .workingAddress(request.getWorkingAddress())
                 .build();
         
-        ProfileDTO updatedProfile = profileService.updateUserProfile(userId, profileDTO);
+        ProfileDTO updatedProfile;
+        
+        // Handle email or numeric ID
+        if (userIdentifier.contains("@")) {
+            updatedProfile = profileService.updateUserProfileByEmail(userIdentifier, profileDTO);
+        } else {
+            try {
+                Long userId = Long.parseLong(userIdentifier);
+                updatedProfile = profileService.updateUserProfile(userId, profileDTO);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(false, "Invalid user identifier", null)
+                );
+            }
+        }
         
         return ResponseEntity.ok(new ApiResponse<>(true, "Profile updated successfully", updatedProfile));
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse<Void>> deleteUserAccount(
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<Void>> deleteUserAccount() {
+        // Get authentication principal (username)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userIdentifier = authentication.getName();
         
-        Long userId = Long.parseLong(userDetails.getUsername());
-        profileService.deleteUserAccount(userId);
+        // Handle email or numeric ID
+        if (userIdentifier.contains("@")) {
+            profileService.deleteUserAccountByEmail(userIdentifier);
+        } else {
+            try {
+                Long userId = Long.parseLong(userIdentifier);
+                profileService.deleteUserAccount(userId);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(false, "Invalid user identifier", null)
+                );
+            }
+        }
         
         return ResponseEntity.ok(new ApiResponse<>(true, "Account deleted successfully", null));
     }
 
     @GetMapping("/consultations")
-    public ResponseEntity<ApiResponse<List<ConsultationHistoryDTO>>> getUserConsultationHistory(
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<ApiResponse<List<ConsultationHistoryDTO>>> getUserConsultationHistory() {
+        // Get authentication principal (username)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userIdentifier = authentication.getName();
         
-        Long userId = Long.parseLong(userDetails.getUsername());
-        List<ConsultationHistoryDTO> history = profileService.getUserConsultationHistory(userId);
+        List<ConsultationHistoryDTO> history;
+        
+        // Handle email or numeric ID
+        if (userIdentifier.contains("@")) {
+            history = profileService.getUserConsultationHistoryByEmail(userIdentifier);
+        } else {
+            try {
+                Long userId = Long.parseLong(userIdentifier);
+                history = profileService.getUserConsultationHistory(userId);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(
+                    new ApiResponse<>(false, "Invalid user identifier", null)
+                );
+            }
+        }
         
         return ResponseEntity.ok(new ApiResponse<>(true, "Consultation history retrieved successfully", history));
     }
