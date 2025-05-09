@@ -25,8 +25,12 @@ public class ChatMessage {
     private User sender;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", nullable = false)
+    @JoinColumn(name = "receiver_id")
     private User receiver;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private ChatRoom room;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sender_role")
@@ -46,6 +50,7 @@ public class ChatMessage {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
     public User getSender() {
         return sender;
     }
@@ -62,6 +67,14 @@ public class ChatMessage {
         this.receiver = receiver;
     }
 
+    public Long getRoomId() {
+        return room != null ? room.getId() : null;
+    }
+
+    public void setRoom(ChatRoom room) {
+        this.room = room;
+    }
+    
     public Role getSenderRole() {
         return senderRole;
     }
