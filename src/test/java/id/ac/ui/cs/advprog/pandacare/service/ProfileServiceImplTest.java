@@ -7,7 +7,6 @@ import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.model.Consultation;
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
 import id.ac.ui.cs.advprog.pandacare.model.Patient;
-import id.ac.ui.cs.advprog.pandacare.model.User;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -78,6 +76,8 @@ class ProfileServiceImplTest {
         consultation.setNotes("Regular checkup");
     }
 
+    // ID-based tests
+
     @Test
     void getUserProfile_patientProfile_returnsCorrectDTO() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(patient));
@@ -117,7 +117,6 @@ class ProfileServiceImplTest {
 
     @Test
     void updateUserProfile_validPatientUpdate_returnsUpdatedProfile() {
-        // Create the update DTO
         ProfileDTO updateDTO = ProfileDTO.builder()
                 .email("updated@example.com")
                 .name("Updated Name")
@@ -144,7 +143,6 @@ class ProfileServiceImplTest {
 
     @Test
     void updateUserProfile_validDoctorUpdate_returnsUpdatedProfile() {
-        // Create the update DTO
         ProfileDTO updateDTO = ProfileDTO.builder()
                 .email("updated-doc@example.com")
                 .name("Updated Doctor")
@@ -169,6 +167,15 @@ class ProfileServiceImplTest {
 
         verify(userRepository).findById(2L);
         verify(userRepository).save(doctor);
+    }
+
+    @Test
+    void deleteUserAccount_existingUser_deletesUser() {
+        doNothing().when(userRepository).deleteById(1L);
+        
+        profileService.deleteUserAccount(1L);
+        
+        verify(userRepository).deleteById(1L);
     }
 
     @Test
@@ -220,5 +227,118 @@ class ProfileServiceImplTest {
         
         verify(userRepository).findById(1L);
         verify(consultationRepository).findByPatientId(1L);
+    }
+    
+    // Email-based tests
+    
+    @Test
+    void getUserProfileByEmail_patientProfile_returnsCorrectDTO() {
+        when(userRepository.findByEmail("patient@example.com")).thenReturn(Optional.of(patient));
+
+        ProfileDTO result = profileService.getUserProfileByEmail("patient@example.com");
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("Patient Name", result.getName());
+        assertEquals("Test medical history", result.getMedicalHistory());
+        assertEquals(Role.PATIENT, result.getRole());
+        verify(userRepository).findByEmail("patient@example.com");
+    }
+
+    @Test
+    void getUserProfileByEmail_doctorProfile_returnsCorrectDTO() {
+        when(userRepository.findByEmail("doctor@example.com")).thenReturn(Optional.of(doctor));
+
+        ProfileDTO result = profileService.getUserProfileByEmail("doctor@example.com");
+
+        assertNotNull(result);
+        assertEquals(2L, result.getId());
+        assertEquals("Doctor Name", result.getName());
+        assertEquals("Cardiology", result.getSpecialty());
+        assertEquals("Hospital Address", result.getWorkingAddress());
+        assertEquals(Role.DOCTOR, result.getRole());
+        verify(userRepository).findByEmail("doctor@example.com");
+    }
+
+    @Test
+    void getUserProfileByEmail_userNotFound_throwsException() {
+        when(userRepository.findByEmail("nonexistent@example.com")).thenReturn(Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, 
+            () -> profileService.getUserProfileByEmail("nonexistent@example.com"));
+        verify(userRepository).findByEmail("nonexistent@example.com");
+    }
+
+    @Test
+    void updateUserProfileByEmail_validPatientUpdate_returnsUpdatedProfile() {
+        ProfileDTO updateDTO = ProfileDTO.builder()
+                .email("updated@example.com")
+                .name("Updated Name")
+                .address("Updated Address")
+                .phonenum("999999999")
+                .medicalHistory("Updated history")
+                .build();
+
+        when(userRepository.findByEmail("patient@example.com")).thenReturn(Optional.of(patient));
+        when(userRepository.save(any(Patient.class))).thenAnswer(i -> i.getArgument(0));
+
+        ProfileDTO result = profileService.updateUserProfileByEmail("patient@example.com", updateDTO);
+
+        assertNotNull(result);
+        assertEquals("updated@example.com", result.getEmail());
+        assertEquals("Updated Name", result.getName());
+        assertEquals("Updated Address", result.getAddress());
+        assertEquals("999999999", result.getPhonenum());
+        assertEquals("Updated history", result.getMedicalHistory());
+
+        verify(userRepository).findByEmail("patient@example.com");
+        verify(userRepository).save(patient);
+    }
+
+    @Test
+    void deleteUserAccountByEmail_existingUser_deletesUser() {
+        when(userRepository.findByEmail("patient@example.com")).thenReturn(Optional.of(patient));
+        doNothing().when(userRepository).delete(patient);
+        
+        profileService.deleteUserAccountByEmail("patient@example.com");
+        
+        verify(userRepository).findByEmail("patient@example.com");
+        verify(userRepository).delete(patient);
+    }
+
+    @Test
+    void getUserConsultationHistoryByEmail_patientUser_returnsPatientConsultations() {
+        List<Consultation> consultations = Arrays.asList(consultation);
+        
+        when(userRepository.findByEmail("patient@example.com")).thenReturn(Optional.of(patient));
+        when(consultationRepository.findByPatientId(1L)).thenReturn(consultations);
+
+        List<ConsultationHistoryDTO> result = profileService.getUserConsultationHistoryByEmail("patient@example.com");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Doctor Name", result.get(0).getDoctorName());
+        assertEquals("Patient Name", result.get(0).getPatientName());
+        
+        verify(userRepository).findByEmail("patient@example.com");
+        verify(consultationRepository).findByPatientId(1L);
+    }
+
+    @Test
+    void getUserConsultationHistoryByEmail_doctorUser_returnsDoctorConsultations() {
+        List<Consultation> consultations = Arrays.asList(consultation);
+        
+        when(userRepository.findByEmail("doctor@example.com")).thenReturn(Optional.of(doctor));
+        when(consultationRepository.findByDoctorId(2L)).thenReturn(consultations);
+
+        List<ConsultationHistoryDTO> result = profileService.getUserConsultationHistoryByEmail("doctor@example.com");
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Doctor Name", result.get(0).getDoctorName());
+        assertEquals("Patient Name", result.get(0).getPatientName());
+        
+        verify(userRepository).findByEmail("doctor@example.com");
+        verify(consultationRepository).findByDoctorId(2L);
     }
 }
