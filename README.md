@@ -17,4 +17,8 @@ This is our group assignment for Advanced Programming Even 2024-2025
 | **Container Diagram** | ![Container Diagram](https://github.com/user-attachments/assets/d138b673-8816-40f4-af87-53b97c2fddcc) |
 | **Deployment Diagram**| ![Deployment Diagram](https://github.com/user-attachments/assets/a3066898-bd23-4d2b-a180-dc9888ea9537) |
 
+Risk Storming was applied to proactively identify and address potential threats to the PandaCare system’s architecture. This technique enabled our team to collaboratively explore critical risks—such as user data exposure, weak authentication, unsecured APIs, and system scalability bottlenecks—early in the design phase. By visually analyzing the architecture using C4 diagrams, we pinpointed vulnerable areas and introduced effective mitigations.
+
+For example, we introduced an Authentication and Authorization container leveraging OAuth2 and JWT to secure API access and protect user data. Additionally, we enhanced scalability by integrating an Auto-Scaling Group with a Load Balancer to ensure that multiple Spring Boot instances can handle increased traffic reliably. This structured risk-focused approach ensures our system is not only functional, but also secure, resilient, and scalable from the ground up.
+
 
