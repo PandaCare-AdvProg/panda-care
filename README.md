@@ -41,6 +41,6 @@ For example, we introduced an Authentication and Authorization container leverag
 ### KD
 | Diagram Type         | Image |
 |----------------------|-------|
-| **Code Diagram Profile** |  ![alt text](image-1.png)  |
-| **Code Diagram Chat**     |  ![alt text](image.png)  |
-| **Component Diagram**| ![alt text](image-2.png)  |
+| **Code Diagram Profile** |  ![alt text](profile.png)  |
+| **Code Diagram Chat**     |  ![alt text](chat.png)  |
+| **Component Diagram**| ![alt text](codedia.png)  |
