@@ -48,8 +48,10 @@ For example, we introduced an Authentication and Authorization container leverag
 ### Chiara
 | Diagram Type         | Image |
 |----------------------|-------|
-| **Code Diagram Ratings** |  ![alt text](ratingc0dediagram.png)  |
+| **Code Diagram Ratings** |  ![alt text](ratingc0dediagram.jpg)  |
+| **Component Diagram**| ![alt text](ratingc0mpnent.png)  |
 
+ratingc0mpnent.png
 
 
 
