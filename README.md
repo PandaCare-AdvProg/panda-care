@@ -51,7 +51,6 @@ For example, we introduced an Authentication and Authorization container leverag
 | **Code Diagram Ratings** |  ![alt text](ratingc0dediagram.jpg)  |
 | **Component Diagram**| ![alt text](ratingc0mpnent.png)  |
 
-ratingc0mpnent.png
 
 
 
