@@ -22,3 +22,11 @@ Risk Storming was applied to proactively identify and address potential threats 
 For example, we introduced an Authentication and Authorization container leveraging OAuth2 and JWT to secure API access and protect user data. Additionally, we enhanced scalability by integrating an Auto-Scaling Group with a Load Balancer to ensure that multiple Spring Boot instances can handle increased traffic reliably. This structured risk-focused approach ensures our system is not only functional, but also secure, resilient, and scalable from the ground up.
 
 
+## Individual
+### Izzy
+| Diagram Type         | Image |
+|----------------------|-------|
+| **Code Diagram Authentication**     | ![Code Diagram Authentication](https://github.com/user-attachments/assets/6388d09f-430d-4d98-8df4-a325e981e16c) |
+| **Code Diagram Schedule**   | ![Code Diagram Schedule](https://github.com/user-attachments/assets/f8c2ea01-cd98-48a4-9952-1215b598205e)|
+| **Code Diagram Consultation** | ![Code Diagram Consultation](https://github.com/user-attachments/assets/7c57efa8-0d90-49bd-9ea8-71c9f083f6d1)|
+| **Component Diagram**| ![Deployment Diagram](https://github.com/user-attachments/assets/179719dc-c1ed-4883-b0fc-497173562af2)|
