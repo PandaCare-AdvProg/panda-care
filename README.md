@@ -36,3 +36,11 @@ For example, we introduced an Authentication and Authorization container leverag
 |----------------------|-------|
 | **Code Diagram Doctor**     | ![DoctorModule](https://github.com/user-attachments/assets/b3fac4cc-4bab-4407-b39a-600276ba166c)|
 | **Component Diagram**| ![Component drawio (2)](https://github.com/user-attachments/assets/36e02684-2b87-4e71-9044-460aedad488f)|
+
+
+### KD
+| Diagram Type         | Image |
+|----------------------|-------|
+| **Code Diagram Profile** |  ![alt text](image-1.png)  |
+| **Code Diagram Chat**     |  ![alt text](image.png)  |
+| **Component Diagram**| ![alt text](image-2.png)  |
