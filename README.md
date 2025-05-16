@@ -30,3 +30,9 @@ For example, we introduced an Authentication and Authorization container leverag
 | **Code Diagram Schedule**   | ![Code Diagram Schedule](https://github.com/user-attachments/assets/f8c2ea01-cd98-48a4-9952-1215b598205e)|
 | **Code Diagram Consultation** | ![Code Diagram Consultation](https://github.com/user-attachments/assets/7c57efa8-0d90-49bd-9ea8-71c9f083f6d1)|
 | **Component Diagram**| ![Deployment Diagram](https://github.com/user-attachments/assets/179719dc-c1ed-4883-b0fc-497173562af2)|
+
+### Diyo
+| Diagram Type         | Image |
+|----------------------|-------|
+| **Code Diagram Doctor**     | ![DoctorModule](https://github.com/user-attachments/assets/b3fac4cc-4bab-4407-b39a-600276ba166c)|
+| **Component Diagram**| ![Component drawio (2)](https://github.com/user-attachments/assets/36e02684-2b87-4e71-9044-460aedad488f)|
