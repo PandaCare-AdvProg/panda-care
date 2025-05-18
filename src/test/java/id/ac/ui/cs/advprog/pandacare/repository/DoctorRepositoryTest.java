@@ -6,7 +6,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import id.ac.ui.cs.advprog.pandacare.enums.Role;
+import id.ac.ui.cs.advprog.pandacare.model.Doctor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,52 +26,65 @@ class DoctorRepositoryTest {
     @Autowired
     private DoctorRepository doctorRepository;
 
-@Test
-@DisplayName("Should find DoctorDTO by id")
-void testFindDoctorDTOById() {
-    Doctor doctor = new Doctor();
-    doctor.setSpecialty("Cardiology");
-    doctor.setWorkingAddress("123 Panda St");
-    doctor.setEmail("doc1@panda.com");
-    doctor.setRole(id.ac.ui.cs.advprog.pandacare.enums.Role.DOCTOR); 
-    doctor = doctorRepository.save(doctor);
+    private Doctor doctor;
 
-    Optional<DoctorDTO> dto = doctorRepository.findDoctorDTOById(doctor.getId());
-    assertThat(dto).isPresent();
-    assertThat(dto.get().getId()).isEqualTo(doctor.getId());
-    assertThat(dto.get().getSpecialty()).isEqualTo("Cardiology");
-    assertThat(dto.get().getWorking_adress()).isEqualTo("123 Panda St");
-}
-
-@Test
-@DisplayName("Should find DoctorDTO by email")
-void testFindDoctorDTOByEmail() {
-    Doctor doctor = new Doctor();
-    doctor.setSpecialty("Dermatology");
-    doctor.setWorkingAddress("456 Bamboo Ave");
-    doctor.setEmail("doc2@panda.com");
-    doctor.setRole(id.ac.ui.cs.advprog.pandacare.enums.Role.DOCTOR);
-    doctor = doctorRepository.save(doctor);
-
-    Optional<DoctorDTO> dto = doctorRepository.findDoctorDTOByEmail("doc2@panda.com");
-    assertThat(dto).isPresent();
-    assertThat(dto.get().getSpecialty()).isEqualTo("Dermatology");
-    assertThat(dto.get().getWorking_adress()).isEqualTo("456 Bamboo Ave");
-}
+    @BeforeEach
+    void setup() {
+        doctor = new Doctor(
+                "doc@example.com",
+                "pass123",
+                "John Doe",
+                "1234567890",
+                "Jakarta",
+                "RSCM",
+                "08123456789",
+                Role.DOCTOR,
+                "Cardiology"
+        );
+        doctorRepository.save(doctor);
+    }
 
     @Test
-    @DisplayName("Should find Doctor by email")
-    void testFindDoctorByEmail() {
-        Doctor doctor = new Doctor();
-        doctor.setSpecialty("Neurology");
-        doctor.setWorkingAddress("789 Bear Rd");
-        doctor.setEmail("doc3@panda.com");
-        doctor.setRole(id.ac.ui.cs.advprog.pandacare.enums.Role.DOCTOR);
-        doctor = doctorRepository.save(doctor);
+    void testFindDoctorDTOById() {
+        Optional<DoctorDTO> dto = doctorRepository.findDoctorDTOById(doctor.getId());
 
-        Optional<Doctor> found = doctorRepository.findDoctorByEmail("doc3@panda.com");
+        assertThat(dto).isPresent();
+        assertThat(dto.get().getId()).isEqualTo(doctor.getId());
+        assertThat(dto.get().getSpecialty()).isEqualTo("Cardiology");
+        assertThat(dto.get().getWorking_adress()).isEqualTo("RSCM");
+    }
+
+    @Test
+    void testFindDoctorDTOByEmail() {
+        Optional<DoctorDTO> dto = doctorRepository.findDoctorDTOByEmail("doc@example.com");
+
+        assertThat(dto).isPresent();
+        assertThat(dto.get().getSpecialty()).isEqualTo("Cardiology");
+        assertThat(dto.get().getWorking_adress()).isEqualTo("RSCM");
+    }
+
+    @Test
+    void testFindDoctorByEmail() {
+        Optional<Doctor> found = doctorRepository.findDoctorByEmail("doc@example.com");
+
         assertThat(found).isPresent();
-        assertThat(found.get().getSpecialty()).isEqualTo("Neurology");
-        assertThat(found.get().getWorkingAddress()).isEqualTo("789 Bear Rd");
+        assertThat(found.get().getSpecialty()).isEqualTo("Cardiology");
+        assertThat(found.get().getWorkingAddress()).isEqualTo("RSCM");
+    }
+
+    @Test
+    void testFindByNameContainingIgnoreCase() {
+        List<Doctor> result = doctorRepository.findByNameContainingIgnoreCase("john");
+
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).getName()).containsIgnoringCase("john");
+    }
+
+    @Test
+    void testFindBySpecialtyContainingIgnoreCase() {
+        List<Doctor> result = doctorRepository.findBySpecialtyContainingIgnoreCase("cardio");
+
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).getSpecialty()).containsIgnoringCase("cardio");
     }
 }
