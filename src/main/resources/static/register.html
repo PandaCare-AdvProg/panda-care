@@ -7,7 +7,7 @@
 <body>
   <h2>Register</h2>
   <form id="registerForm">
-    <label>Username: <input type="text" name="name" required></label><br>
+    <label>Name: <input type="text" name="name" required></label><br>
     <label>Email: <input type="email" name="email" required></label><br>
     <label>Password: <input type="password" name="password" required></label><br>
     <label>Role: 
@@ -24,7 +24,7 @@
     e.preventDefault();
     const form = e.target;
     const data = {
-      username: form.username.value,
+      username: form.name.value,
       email: form.email.value,
       password: form.password.value,
       role: form.role.value
@@ -35,10 +35,6 @@
       body: JSON.stringify(data)
     });
     const result = await response.json();
-    // if(result.access_token) {
-    //   localStorage.setItem('token', result.access_token);
-    // }
-    // document.getElementById('registerResult').innerText = JSON.stringify(result, null, 2); // Remove or comment out this line
   });
 </script>
 </body>
