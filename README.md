@@ -44,3 +44,12 @@ For example, we introduced an Authentication and Authorization container leverag
 | **Code Diagram Profile** |  ![alt text](profile.png)  |
 | **Code Diagram Chat**     |  ![alt text](chat.png)  |
 | **Component Diagram**| ![alt text](codedia.png)  |
+
+### Chiara
+| Diagram Type         | Image |
+|----------------------|-------|
+| **Code Diagram Ratings** |  ![alt text](ratingc0dediagram.png)  |
+
+
+
+
