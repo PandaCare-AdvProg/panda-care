@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Getter @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -28,6 +30,8 @@ public class Doctor extends User {
     cascade = CascadeType.ALL,
     orphanRemoval = true
     )
+    
+    @JsonIgnore
     private List<Schedule> schedules = new ArrayList<>();
 
     public void addSchedule(Schedule sched) {
