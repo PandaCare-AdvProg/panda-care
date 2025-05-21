@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRequest {
-    private Long roomId;
-    private Long messageId;
+public class EditChatRequest {
+    private String roomId;
+    private String messageId;
     private String content;
 }
