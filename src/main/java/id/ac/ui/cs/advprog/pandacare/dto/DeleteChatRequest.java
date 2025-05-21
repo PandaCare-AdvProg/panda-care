@@ -1,16 +1,15 @@
 package id.ac.ui.cs.advprog.pandacare.dto;
 
-import java.util.Objects;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse<T> {
-    private boolean success;
-    private String message;
-    private T data;
-
+public class DeleteChatRequest {
+    private String roomId;
+    private String messageId;
 }
