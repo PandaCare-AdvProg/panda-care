@@ -40,7 +40,7 @@ public class ChatMessage {
     
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", referencedColumnName = "room_id", nullable = false)
     private ChatRoom chatRoom;
 
     public ChatMessage(String sender, String receiver, String content, LocalDateTime timestamp, ChatRoom chatRoom) {

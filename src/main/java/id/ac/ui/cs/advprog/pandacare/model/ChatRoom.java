@@ -13,6 +13,10 @@ import java.util.List;
 @Table(name = "chat_rooms")
 public class ChatRoom {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "room_id", unique = true)
     private String roomId;
     
     private String pacilianId;
