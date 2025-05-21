@@ -11,5 +11,4 @@ public interface ConsultationService {
     Consultation approveConsultation(Long consultationId);
     Consultation rejectConsultation(Long consultationId);
     Consultation completeConsultation(Long consultationId);
-    
 }
