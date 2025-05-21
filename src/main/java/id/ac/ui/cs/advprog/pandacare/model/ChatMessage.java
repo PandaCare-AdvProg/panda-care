@@ -1,112 +1,56 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.enums.Role;
-import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "chat_message")
+@Table(name = "chat_messages")
 public class ChatMessage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+    
+    @Column(name = "sender")
+    private String sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    @Column(name = "receiver")
+    private String receiver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private ChatRoom room;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sender_role")
-    private Role senderRole;
-
+    @Column(name = "content")
     private String content;
 
-    @Builder.Default
+    @Column(name = "edited")
     private boolean edited = false;
-
-    @Builder.Default
+    
+    @Column(name = "deleted")
     private boolean deleted = false;
+    
+    @Column(name = "timestamp", columnDefinition = "TIMESTAMP")
+    private LocalDateTime timestamp;
+    
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private ChatRoom chatRoom;
 
-    @Builder.Default
-    private boolean initialized = false;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    @Transient
-    private final List<ChatObserver> observers = new ArrayList<>();
-
-    public Long getRoomId() {
-        return room != null ? room.getId() : null;
+    public ChatMessage(String sender, String receiver, String content, LocalDateTime timestamp, ChatRoom chatRoom) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
+        this.timestamp = timestamp;
+        this.chatRoom = chatRoom;
+        this.edited = false;
+        this.deleted = false;
     }
 
-    public Long getSenderId() {
-        return sender != null ? sender.getId() : null;
-    }
-
-    public Long getReceiverId() {
-        return receiver != null ? receiver.getId() : null;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = createdAt;
-    }
-
-    public void onUpdate() {
-        updatedAt = LocalDateTime.now();
-        notifyObservers("Message updated");
-    }
-
-    public void setContent(String content) {
-        if (!initialized) {
-            this.content = content;
-            initialized = true;
-        } else if (!Objects.equals(this.content, content)) {
-            this.content = content;
-            if (id != null) {
-                this.edited = true;
-                notifyObservers("Content updated");
-            }
-        }
-    }
-
-    public void markAsDeleted() {
-        this.deleted = true;
-        notifyObservers("Message deleted");
-    }
-
-    public void addObserver(ChatObserver observer) {
-        if (observer != null && !observers.contains(observer)) {
-            observers.add(observer);
-        }
-    }
-
-    public void removeObserver(ChatObserver observer) {
-        observers.remove(observer);
-    }
-
-    public void notifyObservers(String event) {
-        for (ChatObserver observer : new ArrayList<>(observers)) {
-            observer.update(this, event);
-        }
-    }
 }
