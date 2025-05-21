@@ -63,4 +63,16 @@ class AuthenticationControllerTest {
 
                 verify(authenticationService, times(1)).refreshToken(request, response);
         }
+        @Test
+        void testLogout() {
+    HttpServletRequest request = mock(HttpServletRequest.class);
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    doNothing().when(authenticationService).logout(request, response);
+
+    ResponseEntity<String> result = authenticationController.logout(request, response);
+
+    assertEquals("Logged out successfully", result.getBody());
+    verify(authenticationService, times(1)).logout(request, response);
+}
 } 
