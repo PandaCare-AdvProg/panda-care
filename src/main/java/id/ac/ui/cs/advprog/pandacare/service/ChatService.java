@@ -1,25 +1,17 @@
 package id.ac.ui.cs.advprog.pandacare.service;
 
-import id.ac.ui.cs.advprog.pandacare.dto.ChatMessageDTO;
+import java.util.List;
+import java.util.Optional;
+
 import id.ac.ui.cs.advprog.pandacare.model.ChatMessage;
 import id.ac.ui.cs.advprog.pandacare.model.ChatRoom;
-import id.ac.ui.cs.advprog.pandacare.model.User;
-
-import java.util.List;
 
 public interface ChatService {
-    // Room management
-    ChatRoom createRoom(Long doctorId, Long patientId);
-    ChatRoom getRoomById(Long roomId);
-    List<ChatRoom> getRoomsByUserId(Long userId);
-    
-    // Message operations
-    ChatMessage sendMessage(Long roomId, Long senderId, String content);
-    ChatMessage editMessage(Long messageId, Long senderId, String newContent);
-    ChatMessage deleteMessage(Long messageId, Long senderId);
-    List<ChatMessage> getRoomMessages(Long roomId);
-    
-    // DTO transformation
-    ChatMessageDTO mapToDTO(ChatMessage message);
-    List<ChatMessageDTO> mapToDTOList(List<ChatMessage> messages);
-}
+    ChatMessage sendMessage(String roomId, String senderId, String receiverId, String content);
+    List<ChatMessage> getMessagesByRoomId(String roomId);
+    ChatRoom getChatRoomByPacilianAndCaregiver(String pacilianId, String caregiverId);
+    List<ChatRoom> getChatRoomsByPacilianId(String pacilianId);
+    List<ChatRoom> getChatRoomsByCaregiverId(String caregiverId);
+    Optional<ChatMessage> editMessage(String roomId, String messageId, String content);
+    void deleteMessage(String roomId, String messageId);
+} 

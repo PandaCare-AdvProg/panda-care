@@ -1,165 +1,94 @@
 package id.ac.ui.cs.advprog.pandacare.service;
 
-import id.ac.ui.cs.advprog.pandacare.dto.ChatMessageDTO;
-import id.ac.ui.cs.advprog.pandacare.model.ChatMessage;
-import id.ac.ui.cs.advprog.pandacare.model.ChatRoom;
-import id.ac.ui.cs.advprog.pandacare.model.User;
-import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
-import id.ac.ui.cs.advprog.pandacare.repository.ChatMessageRepository;
-import id.ac.ui.cs.advprog.pandacare.repository.ChatRoomRepository;
-import id.ac.ui.cs.advprog.pandacare.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import id.ac.ui.cs.advprog.pandacare.model.ChatMessage;
+import id.ac.ui.cs.advprog.pandacare.model.ChatRoom;
+import id.ac.ui.cs.advprog.pandacare.repository.ChatMessageRepository;
+import id.ac.ui.cs.advprog.pandacare.repository.ChatRoomRepository;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@Transactional
 public class ChatServiceImpl implements ChatService {
-
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
-    private final List<ChatObserver> chatObservers;
-
+    
+    private final ChatMessageRepository messageRepository;
+    private final ChatRoomRepository roomRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+    private final ChatMediator chatMediator;
+    
+    public ChatServiceImpl(
+            ChatMessageRepository messageRepository, 
+            ChatRoomRepository roomRepository, 
+            SimpMessagingTemplate messagingTemplate,
+            ChatMediator chatMediator) {
+        this.messageRepository = messageRepository;
+        this.roomRepository = roomRepository;
+        this.messagingTemplate = messagingTemplate;
+        this.chatMediator = chatMediator;
+    }
+    
     @Override
-    @Transactional
-    public ChatRoom createRoom(Long doctorId, Long patientId) {
-        User doctor = userRepository.findById(doctorId)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
-        
-        User patient = userRepository.findById(patientId)
-                .orElseThrow(() -> new IllegalArgumentException("Patient not found"));
-        
-        return chatRoomRepository.findByDoctorAndPatient(doctor, patient)
-                .orElseGet(() -> {
-                    ChatRoom newRoom = ChatRoom.builder()
-                            .doctor(doctor)
-                            .patient(patient)
-                            .messages(new ArrayList<>())
-                            .build();
-                    return chatRoomRepository.save(newRoom);
-                });
+    public ChatMessage sendMessage(String roomId, String senderId, String receiverId, String content) {
+        return chatMediator.sendMessage(roomId, senderId, receiverId, content);
     }
 
     @Override
-    public ChatRoom getRoomById(Long roomId) {
-        return chatRoomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException("Chat room not found"));
+    public List<ChatMessage> getMessagesByRoomId(String roomId) {
+        List<ChatMessage> messages = messageRepository.findByChatRoomRoomId(roomId)
+            .stream()
+            .sorted(Comparator.comparing(ChatMessage::getTimestamp))
+            .collect(Collectors.toList());
+        System.out.println("Found " + messages.size() + " messages for room " + roomId);
+        return messages;
     }
-
+    
     @Override
-    public List<ChatRoom> getRoomsByUserId(Long userId) {
-        return chatRoomRepository.findByUserId(userId);
-    }
-
-    @Override
-    @Transactional
-    public ChatMessage sendMessage(Long roomId, Long senderId, String content) {
-        ChatRoom room = getRoomById(roomId);
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
+    public ChatRoom getChatRoomByPacilianAndCaregiver(String pacilianId, String caregiverId) {
+        ChatRoom room = roomRepository.findByPacilianIdAndCaregiverId(pacilianId, caregiverId);
         
-        // Determine receiver based on the sender and room
-        User receiver;
-        if (sender.getId().equals(room.getDoctor().getId())) {
-            receiver = room.getPatient();
-        } else if (sender.getId().equals(room.getPatient().getId())) {
-            receiver = room.getDoctor();
-        } else {
-            throw new IllegalArgumentException("Sender is not part of this chat room");
+        if (room == null) {
+            String roomId = UUID.randomUUID().toString();
+            room = new ChatRoom(roomId, pacilianId, caregiverId);
+            roomRepository.save(room);
         }
         
-        ChatMessage message = ChatMessage.builder()
-                .sender(sender)
-                .receiver(receiver)
-                .room(room)
-                .senderRole(sender.getRole())
-                .content(content)
-                .createdAt(LocalDateTime.now())
-                .build();
-        
-        // Register observers
-        for (ChatObserver observer : chatObservers) {
-            message.addObserver(observer);
-        }
-        
-        ChatMessage savedMessage = chatMessageRepository.save(message);
-        message.notifyObservers("Message sent");
-        
-        return savedMessage;
+        return room;
+    }
+    
+    @Override
+    public List<ChatRoom> getChatRoomsByPacilianId(String pacilianId) {
+        return roomRepository.findByPacilianId(pacilianId);
+    }
+    
+    @Override
+    public List<ChatRoom> getChatRoomsByCaregiverId(String caregiverId) {
+        return roomRepository.findByCaregiverId(caregiverId);
     }
 
     @Override
-    @Transactional
-    public ChatMessage editMessage(Long messageId, Long senderId, String newContent) {
-        ChatMessage message = chatMessageRepository.findById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found"));
-        
-        if (!message.getSender().getId().equals(senderId)) {
-            throw new IllegalArgumentException("You can only edit your own messages");
-        }
-        
-        // Since setContent has observer notification logic, we should register observers first
-        for (ChatObserver observer : chatObservers) {
-            message.addObserver(observer);
-        }
-        
-        message.setContent(newContent);
-        return chatMessageRepository.save(message);
+    public Optional<ChatMessage> editMessage(String roomId, String messageId, String content) {
+        return messageRepository.findById(messageId)
+            .map(msg -> {
+                msg.setContent(content);
+                msg.setEdited(true);
+                ChatMessage saved = messageRepository.save(msg);
+                chatMediator.editMessage(saved, roomId);
+                return saved;
+            });
     }
 
     @Override
-    @Transactional
-    public ChatMessage deleteMessage(Long messageId, Long senderId) {
-        ChatMessage message = chatMessageRepository.findById(messageId)
-                .orElseThrow(() -> new IllegalArgumentException("Message not found"));
-        
-        if (!message.getSender().getId().equals(senderId)) {
-            throw new IllegalArgumentException("You can only delete your own messages");
-        }
-        
-        // Register observers
-        for (ChatObserver observer : chatObservers) {
-            message.addObserver(observer);
-        }
-        
-        message.setDeleted(true);
-        message.onUpdate();
-        return chatMessageRepository.save(message);
+    public void deleteMessage(String roomId, String messageId) {
+        messageRepository.deleteById(messageId);
+        chatMediator.deleteMessage(roomId, messageId);
     }
 
-    @Override
-    public List<ChatMessage> getRoomMessages(Long roomId) {
-        ChatRoom room = getRoomById(roomId);
-        return chatMessageRepository.findByRoomOrderByCreatedAtAsc(room);
-    }
-
-    @Override
-    public ChatMessageDTO mapToDTO(ChatMessage message) {
-        return ChatMessageDTO.builder()
-                .id(message.getId())
-                .roomId(message.getRoom().getId())
-                .senderId(message.getSender().getId())
-                .senderName(message.getSender().getName())
-                .senderRole(message.getSenderRole())
-                .content(message.isDeleted() ? "[Message deleted]" : message.getContent())
-                .edited(message.isEdited())
-                .deleted(message.isDeleted())
-                .createdAt(message.getCreatedAt())
-                .updatedAt(message.getUpdatedAt())
-                .build();
-    }
-
-    @Override
-    public List<ChatMessageDTO> mapToDTOList(List<ChatMessage> messages) {
-        return messages.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
-}
+} 
