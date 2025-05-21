@@ -8,7 +8,7 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -44,6 +44,7 @@ public class Schedule {
     private ScheduleState state = new AvailableState();
 
     @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Consultation consultation;
 
     public void setState(ScheduleState state) {
@@ -68,12 +69,15 @@ public class Schedule {
 
     public void addConsultation(Consultation consultation) {
         if (this.consultation != null) {
-            throw new IllegalStateException("This schedule already has a consultation");
+            throw new IllegalStateException("Schedule is already booked");
+        }
+        if (this.getStatus() == ScheduleStatus.AVAILABLE) {
+            this.book();
         }
         this.consultation = consultation;
         consultation.setSchedule(this);
-        this.book();
     }
+    
     public void setDoctorId(Doctor doctorId) {
         this.doctor = doctorId;
     }
