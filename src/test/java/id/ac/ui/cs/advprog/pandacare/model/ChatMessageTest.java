@@ -1,11 +1,12 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.model.User;
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChatMessageTest {
@@ -17,7 +18,6 @@ class ChatMessageTest {
 
     @BeforeEach
     void setUp() {
-        // Create test users
         sender = new User();
         sender.setId(100L);
         sender.setRole(Role.DOCTOR);
@@ -26,14 +26,15 @@ class ChatMessageTest {
         receiver.setId(200L);
         receiver.setRole(Role.PATIENT);
 
-        chatMessage = new ChatMessage();
-        chatMessage.setId(1L);
-        chatMessage.setSender(sender);
-        chatMessage.setReceiver(receiver);
-        chatMessage.setSenderRole(Role.DOCTOR);
-        chatMessage.setContent("Test message");
-        chatMessage.setCreatedAt(testTime);
+        chatMessage = ChatMessage.builder()
+                .id(1L)
+                .sender(sender)
+                .receiver(receiver)
+                .senderRole(Role.DOCTOR)
+                .createdAt(testTime)
+                .build();
 
+        chatMessage.setContent("Test message");
     }
 
     @Test
@@ -47,24 +48,20 @@ class ChatMessageTest {
         assertEquals("Test message", chatMessage.getContent());
         assertEquals(testTime, chatMessage.getCreatedAt());
         assertNull(chatMessage.getUpdatedAt());
-        assertFalse(chatMessage.isEdited()); // Fixed: should be false initially
+        assertFalse(chatMessage.isEdited());
         assertFalse(chatMessage.isDeleted());
     }
 
     @Test
     void testEditMessage() {
-        LocalDateTime updateTime = testTime.plusHours(1);
         chatMessage.setContent("Updated message");
-        chatMessage.setUpdatedAt(updateTime);
-
         assertEquals("Updated message", chatMessage.getContent());
-        assertTrue(chatMessage.isEdited()); // Now true after edit
-        assertEquals(updateTime, chatMessage.getUpdatedAt());
+        assertTrue(chatMessage.isEdited());
     }
 
     @Test
     void testDeleteMessage() {
-        chatMessage.markAsDeleted(); // Using proper method instead of direct setter
+        chatMessage.markAsDeleted();
         assertTrue(chatMessage.isDeleted());
     }
 
@@ -79,13 +76,12 @@ class ChatMessageTest {
 
     @Test
     void testContentEdgeCases() {
-        chatMessage.setContent("");
+        chatMessage.setContent("");  // already initialized from setUp
         assertEquals("", chatMessage.getContent());
 
         chatMessage.setContent(null);
         assertNull(chatMessage.getContent());
     }
-
 
     @Test
     void testNullSafety() {
@@ -105,11 +101,23 @@ class ChatMessageTest {
         assertNull(newMessage.getUpdatedAt());
 
         newMessage.setCreatedAt(testTime);
-        newMessage.setUpdatedAt(testTime.plusMinutes(1));
+        newMessage.onUpdate();
 
         assertNotNull(newMessage.getCreatedAt());
         assertNotNull(newMessage.getUpdatedAt());
     }
 
+    @Test
+    void testObserverNotification() {
+        StringBuilder log = new StringBuilder();
+        ChatObserver observer = (msg, event) -> log.append(event);
 
+        chatMessage.addObserver(observer);
+        chatMessage.setContent("Another update");
+
+        assertTrue(log.toString().contains("Content updated"));
+
+        chatMessage.markAsDeleted();
+        assertTrue(log.toString().contains("Message deleted"));
+    }
 }
