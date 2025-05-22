@@ -5,6 +5,10 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -38,8 +42,9 @@ public class User implements UserDetails {
     @Column(name = "phonenum")
     private String phonenum;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private Role role;
 
 
@@ -53,9 +58,12 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role == null
+            ? List.of()
+            : List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
