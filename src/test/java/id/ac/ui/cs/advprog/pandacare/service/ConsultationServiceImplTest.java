@@ -3,6 +3,7 @@ package id.ac.ui.cs.advprog.pandacare.service;
 import id.ac.ui.cs.advprog.pandacare.enums.ConsultationStatus;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.model.Consultation;
+import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Schedule;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.ScheduleRepository;
@@ -24,6 +25,8 @@ class ConsultationServiceImplTest {
     private ConsultationRepository consultationRepository;
     @Mock
     private ScheduleRepository scheduleRepository;
+    @Mock
+    private id.ac.ui.cs.advprog.pandacare.repository.PatientRepository patientRepository;
 
     @InjectMocks
     private ConsultationServiceImpl consultationService;
@@ -31,11 +34,19 @@ class ConsultationServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        org.springframework.security.core.context.SecurityContext securityContext = mock(org.springframework.security.core.context.SecurityContext.class);
+        org.springframework.security.core.Authentication authentication = mock(org.springframework.security.core.Authentication.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn("testUser");
+        org.springframework.security.core.context.SecurityContextHolder.setContext(securityContext);
     }
 
     @Test
     void testCreateConsultation() {
         Consultation consultation = new Consultation();
+        // Mock patient lookup by email
+        id.ac.ui.cs.advprog.pandacare.model.Patient mockPatient = new id.ac.ui.cs.advprog.pandacare.model.Patient();
+        when(patientRepository.findPatientByEmail("testUser")).thenReturn(java.util.Optional.of(mockPatient));
         when(consultationRepository.save(any(Consultation.class))).thenReturn(consultation);
 
         Consultation result = consultationService.createConsultation(consultation);
@@ -120,10 +131,8 @@ class ConsultationServiceImplTest {
         verify(consultationRepository).save(consultation);
     }
 
-// ...existing code...
     @Test
     void testUpdateConsultation_DoctorProposesNewSlot() {
-        // Arrange
         Schedule oldSchedule = new Schedule();
         oldSchedule.setId(1L);
         oldSchedule.setStatus(ScheduleStatus.BOOKED);
@@ -147,10 +156,8 @@ class ConsultationServiceImplTest {
         when(scheduleRepository.findById(2L)).thenReturn(Optional.of(newSchedule));
         when(consultationRepository.save(any(Consultation.class))).thenReturn(existing);
 
-        // Act
         Consultation result = consultationService.updateConsultation(1L, updated);
 
-        // Assert
         assertEquals(newSchedule, result.getSchedule());
         assertEquals(newSchedule.getDayOfWeek(), result.getDayOfWeek());
         assertEquals(newSchedule.getStartTime(), result.getScheduledTime());
@@ -236,4 +243,64 @@ class ConsultationServiceImplTest {
         assertEquals("http://meeting.url", result.getMeetingUrl());
         verify(consultationRepository).save(existing);
     }
+    @Test
+    void testCreateConsultation_ScheduleNotFound() {
+        Consultation consultation = new Consultation();
+        Schedule dummySchedule = new Schedule();
+        dummySchedule.setId(999L);
+        consultation.setSchedule(dummySchedule);
+        when(scheduleRepository.findById(999L)).thenReturn(Optional.empty());
+        when(patientRepository.findPatientByEmail("testUser"))
+            .thenReturn(Optional.of(new Patient()));
+        
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+            () -> consultationService.createConsultation(consultation));
+        assertEquals("Schedule not found", exception.getMessage());
+    }
+        @Test
+    void testUpdateConsultation_DoctorProposesNewSlotWaitingForPatientConfirmation_ScheduleNotFound() {
+        Schedule oldSchedule = new Schedule();
+        oldSchedule.setId(1L);
+        oldSchedule.setStatus(ScheduleStatus.BOOKED);
+        oldSchedule.setDayOfWeek(DayOfWeek.MONDAY);
+        oldSchedule.setStartTime(LocalTime.of(9, 0));
+
+        Consultation existing = new Consultation();
+        existing.setId(1L);
+        existing.setStatus(ConsultationStatus.PENDING);
+        existing.setSchedule(oldSchedule);
+        
+        Schedule updatedSchedule = new Schedule();
+        updatedSchedule.setId(2L);
+        updatedSchedule.setDayOfWeek(DayOfWeek.TUESDAY);
+        updatedSchedule.setStartTime(LocalTime.of(10, 0));
+        Consultation updated = new Consultation();
+        updated.setStatus(ConsultationStatus.WAITING_FOR_PATIENT_CONFIRMATION);
+        updated.setSchedule(updatedSchedule);
+        
+        when(consultationRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(scheduleRepository.findById(2L)).thenReturn(Optional.empty());
+        
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, 
+            () -> consultationService.updateConsultation(1L, updated));
+        assertEquals("Schedule not found", exception.getMessage());
+    }
+     @Test
+    void testUpdateConsultation_ConsultationNotFound() {
+        when(consultationRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, 
+            () -> consultationService.updateConsultation(999L, new Consultation()));
+        assertEquals("Not found: 999", exception.getMessage());
+    }
+    
+    @Test
+    void testCompleteConsultation_ConsultationNotFound() {
+        when(consultationRepository.findById(999L)).thenReturn(Optional.empty());
+        
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, 
+            () -> consultationService.completeConsultation(999L));
+        assertEquals("Consultation not found with id: 999", exception.getMessage());
+    }
+
 }

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Propose Consultation Schedule</title>
+  <script>
+    // Redirect to login if no JWT token is present
+    if (!localStorage.getItem('token')) {
+      window.location.href = '/login.html';
+    }
+  </script>
+</head>
+...
+<body>
+  <h2>Propose a Consultation Schedule</h2>
+  <form id="createConsultationForm">
+    <label>
+      Select Doctor:
+      <select name="doctorId" required>
+        <!-- Options will be loaded dynamically -->
+      </select>
+    </label>
+    <br>
+    <label>
+      Select Available Schedule:
+      <select name="scheduleId" required>
+        <!-- Options will be loaded dynamically based on selected doctor -->
+      </select>
+    </label>
+    <br>
+    <label>Meeting URL: <input type="url" name="meetingUrl"></label><br>
+    <label>Additional Notes: <textarea name="notes"></textarea></label><br>
+    <button type="submit">Send Consultation Request</button>
+  </form>
+  <div id="consultationResult"></div>
+  
+  <hr>
+  
+  <h2>Your Consultation History</h2>
+  <div id="consultationHistory">
+    <!-- Consultation requests will be listed here -->
+  </div>
+  
+  <!-- Modal for editing consultation schedule -->
+  <div id="editScheduleModal" style="display:none; position:fixed; top:20%; left:40%; padding:20px; background:#fff; border:1px solid #ccc; z-index:1000;">
+    <h3>Select a New Schedule</h3>
+    <select id="modalScheduleSelect">
+      <!-- Options will be loaded dynamically -->
+    </select>
+    <br><br>
+    <button id="modalSubmitBtn">Save Changes</button>
+    <button id="modalCancelBtn">Cancel</button>
+  </div>
+  
+  <script>
+    // Helper function to get auth headers
+    function getAuthHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    
+    // Load doctors from API and populate the select
+    async function loadDoctors() {
+      try {
+        const response = await fetch('/api/doctors', { headers: getAuthHeaders() });
+        const doctors = await response.json();
+        const doctorSelect = document.querySelector('select[name="doctorId"]');
+        doctorSelect.innerHTML = '';
+        doctors.forEach(doctor => {
+          const option = document.createElement('option');
+          option.value = doctor.id;
+          option.textContent = doctor.email || `Doctor ${doctor.id}`;
+          doctorSelect.appendChild(option);
+        });
+        // Trigger schedule load for the first doctor in the list
+        if (doctorSelect.value) {
+          loadSchedulesForDoctor(doctorSelect.value);
+        }
+      } catch (error) {
+        console.error('Error loading doctors', error);
+      }
+    }
+    
+    // Load schedules for a selected doctor from API and populate the schedule select in the form
+    async function loadSchedulesForDoctor(doctorId) {
+      try {
+        const response = await fetch(`/api/schedules/doctor/${doctorId}`, { headers: getAuthHeaders() });
+        const schedules = await response.json();
+        const scheduleSelect = document.querySelector('select[name="scheduleId"]');
+        scheduleSelect.innerHTML = '';
+        // Only include schedules with status AVAILABLE
+        schedules.filter(schedule => schedule.status === "AVAILABLE")
+                 .forEach(schedule => {
+          const option = document.createElement('option');
+          option.value = schedule.id;
+          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
+          scheduleSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading schedules', error);
+      }
+    }
+    
+    // Create a consultation request using POST /api/consultations
+    document.getElementById('createConsultationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        doctor: { id: form.doctorId.value },
+        schedule: { id: form.scheduleId.value },
+        meetingUrl: form.meetingUrl.value,
+        notes: form.notes.value
+      };
+      const response = await fetch('/api/consultations', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      document.getElementById('consultationResult').innerText = JSON.stringify(result, null, 2);
+      loadConsultationHistory();
+    });
+    
+    // Load the logged-in patient profile
+    async function loadPatientProfile() {
+      const response = await fetch('/api/patients/me', { headers: getAuthHeaders() });
+      if (!response.ok) throw new Error("Could not load patient profile");
+      return response.json();
+    }
+    
+    // Fetch consultation history for the logged-in patient
+    async function loadConsultationHistory() {
+      try {
+        const patient = await loadPatientProfile();
+        // Use the correct endpoint to retrieve the consultation history
+        const response = await fetch(`/api/consultations/patient/${patient.id}`, { headers: getAuthHeaders() });
+        const consultations = await response.json();
+        const listDiv = document.getElementById('consultationHistory');
+        listDiv.innerHTML = '';
+        consultations.forEach(c => {
+          const item = document.createElement('div');
+          item.style.border = "1px solid #ccc";
+          item.style.margin = "5px";
+          item.style.padding = "5px";
+          item.innerHTML = `
+            <strong>ID:</strong> ${c.id} <br>
+            <strong>Doctor:</strong> ${c.doctor.email} <br>
+            <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
+            <strong>Status:</strong> ${c.status} <br>
+            <button onclick="editConsultation(${c.id}, ${c.doctor.id})" ${c.status !== 'PENDING' ? 'disabled' : ''}>Edit</button>
+            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
+              <button onclick="acceptChange(${c.id})">Accept Change</button>
+              <button onclick="rejectChange(${c.id})">Reject Change</button>
+            ` : ''}
+          `;
+          listDiv.appendChild(item);
+        });
+      } catch (error) {
+        console.error("Error loading consultation history", error);
+      }
+    }
+    
+    // Edit consultation: open modal to select a new schedule from the same doctor
+    let currentConsultationId = null;
+    function editConsultation(consultationId, doctorId) {
+      currentConsultationId = consultationId;
+      loadModalSchedules(doctorId);
+      document.getElementById('editScheduleModal').style.display = 'block';
+    }
+    
+    // Load available schedules for the given doctor into the modal select element
+    async function loadModalSchedules(doctorId) {
+      try {
+        const response = await fetch(`/api/schedules/doctor/${doctorId}`, { headers: getAuthHeaders() });
+        const schedules = await response.json();
+        const modalSelect = document.getElementById('modalScheduleSelect');
+        modalSelect.innerHTML = '';
+        // Only include AVAILABLE schedules
+        schedules.filter(schedule => schedule.status === "AVAILABLE")
+                 .forEach(schedule => {
+          const option = document.createElement('option');
+          option.value = schedule.id;
+          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
+          modalSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading modal schedules', error);
+      }
+    }
+    
+    // Handle modal Save Changes button
+    document.getElementById('modalSubmitBtn').addEventListener('click', function() {
+      const selected = document.getElementById('modalScheduleSelect').value;
+      if (!selected) return alert("Please choose a schedule");
+      fetch(`/api/consultations/${currentConsultationId}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ schedule: { id: selected }, status: "PENDING" })
+      })
+      .then(res => res.json())
+      .then(result => {
+        alert("Consultation updated: " + JSON.stringify(result));
+        loadConsultationHistory();
+        document.getElementById('editScheduleModal').style.display = 'none';
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error updating consultation");
+      });
+    });
+    
+    // Handle modal Cancel button
+    document.getElementById('modalCancelBtn').addEventListener('click', function() {
+      document.getElementById('editScheduleModal').style.display = 'none';
+    });
+    
+    function acceptChange(consultationId) {
+      fetch(`/api/consultations/${consultationId}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status: "APPROVED" })
+      })
+      .then(res => res.json())
+      .then(result => {
+        if(result.notification) {
+          showToast(result.notification);
+        }
+        alert("Change accepted");
+        loadConsultationHistory();
+      })
+      .catch(error => {
+        console.error("Error accepting change:", error);
+        alert(error);
+      });
+    }
+    
+    function rejectChange(consultationId) {
+      fetch(`/api/consultations/${consultationId}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ status: "REJECTED" })
+      })
+      .then(res => res.text())
+      .then(text => {
+        const result = text ? JSON.parse(text) : {};
+        if(result.notification) {
+          showToast(result.notification);
+        }
+        alert("Change rejected");
+        loadConsultationHistory();
+      })
+      .catch(error => {
+        console.error("Error rejecting change:", error);
+        alert(error);
+      });
+    }
+    
+    // When doctor selection changes, reload schedules for that doctor
+    document.querySelector('select[name="doctorId"]').addEventListener('change', function() {
+      loadSchedulesForDoctor(this.value);
+    });
+    
+    // Initial load of doctors and consultation history
+    loadDoctors();
+    loadConsultationHistory();
+  </script>
+</body>
+</html>
