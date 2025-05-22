@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import id.ac.ui.cs.advprog.pandacare.dto.DoctorDTO;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.state.*;
 import lombok.Getter;
@@ -7,8 +8,9 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Getter
 @Setter
@@ -19,7 +21,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
 
@@ -38,9 +40,11 @@ public class Schedule {
     private ScheduleStatus status = ScheduleStatus.AVAILABLE;
 
     @jakarta.persistence.Transient
+    @JsonIgnore
     private ScheduleState state = new AvailableState();
 
     @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Consultation consultation;
 
     public void setState(ScheduleState state) {
@@ -65,11 +69,25 @@ public class Schedule {
 
     public void addConsultation(Consultation consultation) {
         if (this.consultation != null) {
-            throw new IllegalStateException("This schedule already has a consultation");
+            throw new IllegalStateException("Schedule is already booked");
+        }
+        if (this.getStatus() == ScheduleStatus.AVAILABLE) {
+            this.book();
         }
         this.consultation = consultation;
         consultation.setSchedule(this);
-        this.book();
+    }
+    
+    public void setDoctorId(Doctor doctorId) {
+        this.doctor = doctorId;
+    }
+    
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+    public void updateStatus(ScheduleStatus newStatus) {
+        this.status = newStatus;
+        this.state = determineInitialState(newStatus);
     }
     
     public Schedule() {}
@@ -99,5 +117,14 @@ public class Schedule {
             default:
                 throw new IllegalArgumentException("Unknown schedule status: " + status);
         }
+    }
+
+    public void removeConsultation(Consultation existing) {
+        if (this.consultation == null || !this.consultation.equals(existing)) {
+            throw new IllegalStateException("The provided consultation does not match the current consultation");
+        }
+        this.consultation.setSchedule(null);
+        this.consultation = null;
+        updateStatus(ScheduleStatus.AVAILABLE);
     }
 }
