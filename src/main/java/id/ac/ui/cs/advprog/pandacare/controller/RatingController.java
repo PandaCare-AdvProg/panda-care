@@ -1,8 +1,8 @@
 package id.ac.ui.cs.advprog.pandacare.controller;
 
 import id.ac.ui.cs.advprog.pandacare.model.Rating;
-// import id.ac.ui.cs.advprog.pandacare.request.RatingRequest;
-// import id.ac.ui.cs.advprog.pandacare.response.RatingResponse;
+import id.ac.ui.cs.advprog.pandacare.request.RatingRequest;
+import id.ac.ui.cs.advprog.pandacare.response.RatingResponse;
 import id.ac.ui.cs.advprog.pandacare.service.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
