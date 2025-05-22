@@ -5,8 +5,11 @@ import id.ac.ui.cs.advprog.pandacare.observer.ConsultationObserver;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +31,16 @@ public class Consultation {
     private Patient patient;
 
     @OneToOne
-    @JoinColumn(name = "schedule_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    @JsonBackReference
     private Schedule schedule;
 
     @Column(name = "scheduled_time", nullable = false)
-    private LocalDateTime scheduledTime;
+    private LocalTime scheduledTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DayOfWeek")
+    private DayOfWeek dayOfWeek;
 
     @Column(name = "meeting_url")
     private String meetingUrl;
@@ -44,16 +52,18 @@ public class Consultation {
     @Column(name = "status", nullable = false)
     private ConsultationStatus status = ConsultationStatus.PENDING;
 
+    @JsonIgnore
     @jakarta.persistence.Transient
     private final List<ConsultationObserver> observers = new ArrayList<>();
 
     public Consultation() {}
 
-    public Consultation(Doctor doctor, Patient patient, Schedule schedule, LocalDateTime scheduledTime, String meetingUrl, String notes) {
+    public Consultation(Doctor doctor, Patient patient, Schedule schedule, LocalTime scheduledTime, DayOfWeek dayOfWeek, String meetingUrl, String notes) {
         this.doctor = doctor;
         this.patient = patient;
         this.schedule = schedule;
         this.scheduledTime = scheduledTime;
+        this.dayOfWeek = dayOfWeek;
         this.meetingUrl = meetingUrl;
         this.notes = notes;
         this.status = ConsultationStatus.PENDING;
@@ -74,9 +84,16 @@ public class Consultation {
         notifyObservers("Status changed to " + status);
     }
 
-    private void notifyObservers(String message) {
+    public void notifyObservers(String message) {
         for (ConsultationObserver observer : new ArrayList<>(observers)) {
             observer.update(this, message);
+        }
+    }
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+        if (schedule != null) {
+            this.scheduledTime = schedule.getStartTime(); 
+            this.dayOfWeek = schedule.getDayOfWeek();     
         }
     }
     
