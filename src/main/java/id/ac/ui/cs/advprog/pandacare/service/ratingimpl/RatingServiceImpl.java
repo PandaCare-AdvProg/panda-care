@@ -1,4 +1,4 @@
-package id.ac.ui.cs.advprog.pandacare.service.impl;
+package id.ac.ui.cs.advprog.pandacare.service.ratingimpl;
 
 import id.ac.ui.cs.advprog.pandacare.model.Consultation;
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
