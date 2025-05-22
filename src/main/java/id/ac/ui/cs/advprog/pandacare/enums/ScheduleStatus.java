@@ -4,5 +4,5 @@ public enum ScheduleStatus {
 AVAILABLE,
 BOOKED,
 CANCELED,
-COMPLETED, 
+COMPLETED, PENDING, 
 }

@@ -22,9 +22,10 @@ void consultationCreation_shouldSetDefaultPending() {
     Schedule schedule = new Schedule(doctor, DayOfWeek.MONDAY, 
         LocalTime.of(9, 0), LocalTime.of(17, 0), 
         ScheduleStatus.AVAILABLE);
-    LocalDateTime scheduledTime = LocalDateTime.of(2025, 4, 14, 10, 0);
+    LocalTime scheduledTime = LocalTime.of(14, 10, 0);
+    DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
 
-    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, "http://meeting.url", "Initial notes");
+    Consultation consultation = new Consultation(doctor, patient, schedule, scheduledTime, dayOfWeek, "http://meeting.url", "Initial notes");
 
     assertThat(consultation.getStatus()).isEqualTo(ConsultationStatus.PENDING);
     assertThat(consultation.getDoctor()).isEqualTo(doctor);
