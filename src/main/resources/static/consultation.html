@@ -108,13 +108,11 @@
       <label>
         Select Doctor:
         <select name="doctorId" required>
-          <!-- Options will be loaded dynamically -->
         </select>
       </label>
       <label>
         Select Available Schedule:
         <select name="scheduleId" required>
-          <!-- Options will be loaded dynamically based on selected doctor -->
         </select>
       </label>
       <label>
@@ -167,7 +165,7 @@
         doctors.forEach(doctor => {
           const option = document.createElement('option');
           option.value = doctor.id;
-          option.textContent = doctor.email || `Doctor ${doctor.id}`;
+          option.textContent = doctor.name || `Doctor ${doctor.id}`;
           doctorSelect.appendChild(option);
         });
         if (doctorSelect.value) {
@@ -189,7 +187,9 @@
                  .forEach(schedule => {
           const option = document.createElement('option');
           option.value = schedule.id;
-          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
+          option.textContent = schedule.startTime 
+          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
+          : `Schedule ${schedule.id}`;          
           scheduleSelect.appendChild(option);
         });
       } catch (error) {
@@ -237,11 +237,11 @@
           item.className = 'list-item';
           item.innerHTML = `
             <strong>ID:</strong> ${c.id} <br>
-            <strong>Doctor:</strong> ${c.doctor.email} <br>
+            <strong>Doctor:</strong> ${c.doctor.name} <br>
+            <strong>Day:</strong> ${c.dayOfWeek} <br>
             <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
             <strong>Status:</strong> ${c.status} <br>
-            <button onclick="editConsultation(${c.id}, ${c.doctor.id})" ${c.status !== 'PENDING' ? 'disabled' : ''}>Edit</button>
-            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
+            ${c.status === 'PENDING' ? `<button onclick="editConsultation(${c.id}, ${c.doctor.id})">Edit</button>` : ''}            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
               <button onclick="acceptChange(${c.id})">Accept Change</button>
               <button onclick="rejectChange(${c.id})">Reject Change</button>
             ` : ''}
@@ -272,8 +272,11 @@
                  .forEach(schedule => {
           const option = document.createElement('option');
           option.value = schedule.id;
-          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
+          option.textContent = schedule.startTime 
+          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
+          : `Schedule ${schedule.id}`;    
           modalSelect.appendChild(option);
+      
         });
       } catch (error) {
         console.error('Error loading modal schedules', error);
