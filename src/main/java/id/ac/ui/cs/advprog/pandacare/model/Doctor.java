@@ -1,10 +1,15 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import java.util.ArrayList;
+
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Getter @Setter
@@ -19,6 +24,25 @@ public class Doctor extends User {
 
     @Column(name = "specialty", nullable = true)
     private String specialty;
+
+    @OneToMany(
+    mappedBy = "doctor",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+    )
+    
+    @JsonIgnore
+    private List<Schedule> schedules = new ArrayList<>();
+
+    public void addSchedule(Schedule sched) {
+        schedules.add(sched);
+        sched.setDoctor(this);
+    }
+
+    public void removeSchedule(Schedule sched) {
+        schedules.remove(sched);
+        sched.setDoctor(null);
+    }
 
     @Override
     public String toString() {
