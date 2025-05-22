@@ -3,39 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
+  <style>
+    .hidden { display: none; }
+    label { display: block; margin: 8px 0; }
+  </style>
 </head>
 <body>
   <h2>Register</h2>
   <form id="registerForm">
-    <label>Name: <input type="text" name="name" required></label><br>
-    <label>Email: <input type="email" name="email" required></label><br>
-    <label>Password: <input type="password" name="password" required></label><br>
-    <label>Role: 
-      <select name="role" required>
-        <option value="DOCTOR">Doctor</option>
+    <label>Name: <input type="text" name="name" required></label>
+    <label>Email: <input type="email" name="email" required></label>
+    <label>Password: <input type="password" name="password" required></label>
+    <label>NIK: <input type="text" name="nik"></label>
+    <label>Address: <input type="text" name="address"></label>
+    <label>Phone Number: <input type="text" name="phoneNumber"></label>
+    <label>Role:
+      <select name="role" id="role" required>
         <option value="PATIENT">Patient</option>
+        <option value="DOCTOR">Doctor</option>
       </select>
-    </label><br>
+    </label>
+    
+    <!-- Doctor-specific fields -->
+    <div id="doctorFields" class="hidden">
+      <label>Specialty: <input type="text" name="specialty"></label>
+      <label>Working Address: <input type="text" name="workingAddress"></label>
+    </div>
+    
+    <!-- Patient-specific fields -->
+    <div id="patientFields">
+      <label>Medical History: <textarea name="medicalHistory"></textarea></label>
+    </div>
+    
     <button type="submit">Register</button>
   </form>
   <div id="registerResult"></div>
-<script>
-  document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      password: form.password.value,
-      role: form.role.value
-    };
-    const response = await fetch('/api/v1/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+  
+  <script>
+    // (Optional) Helper to include auth headers if your schedule API still requires a JWT.
+    function getAuthHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    
+    const roleSelect = document.getElementById('role');
+    const doctorFields = document.getElementById('doctorFields');
+    const patientFields = document.getElementById('patientFields');
+    
+    // Toggle fields based on role selection
+    roleSelect.addEventListener('change', function() {
+      if(this.value === 'DOCTOR'){
+        doctorFields.classList.remove('hidden');
+        patientFields.classList.add('hidden');
+      } else if(this.value === 'PATIENT'){
+        patientFields.classList.remove('hidden');
+        doctorFields.classList.add('hidden');
+      }
     });
-    const result = await response.json();
-  });
-</script>
+    
+    window.addEventListener('load', () => roleSelect.dispatchEvent(new Event('change')));
+    
+    // Submit registration form then create schedule if role is DOCTOR.
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      // Build registration payload.
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value,
+        nik: form.nik.value,
+        address: form.address.value,
+        phonenum: form.phoneNumber.value,
+        role: form.role.value
+      };
+      
+      if(form.role.value === 'DOCTOR'){
+        data.specialty = form.specialty.value;
+        data.workingAddress = form.workingAddress.value;
+      } else if(form.role.value === 'PATIENT'){
+        data.medicalHistory = form.medicalHistory.value;
+      }
+      
+      // Register via the API.
+      const regResponse = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const regResult = await regResponse.json();
+      document.getElementById('registerResult').innerText = JSON.stringify(regResult, null, 2);      }
+    );
+  </script>
 </body>
 </html>
