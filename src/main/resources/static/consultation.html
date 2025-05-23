@@ -517,8 +517,47 @@
       // Set the consultation ID in the form
       document.getElementById('consultationId').value = consultationId;
       
-      // Check if there's an existing rating
-      checkExistingRating(consultationId);
+      // NEW ASYNC TECHNIQUE: Promise.all for parallel API calls
+      // Get both the consultation details and any existing rating simultaneously
+      Promise.all([
+        // First promise: get consultation details to know the doctor
+        fetch(`/api/v1/consultations/${consultationId}`, { 
+          headers: getAuthHeaders() 
+        }).then(res => res.json()),
+        
+        // Second promise: check if there's an existing rating
+        fetch(`/api/v1/ratings/consultation/${consultationId}`, { 
+          headers: getAuthHeaders() 
+        }).then(res => res.status === 200 ? res.json() : null)
+      ])
+      .then(([consultation, existingRating]) => {
+        // Show doctor's name in the rating form
+        const ratingHeader = document.querySelector('#ratingSection .card-header h4');
+        ratingHeader.textContent = `Rate Dr. ${consultation.doctor.name}`;
+        
+        // If there's an existing rating, pre-fill the form
+        if (existingRating) {
+          document.querySelector(`input[name="score"][value="${existingRating.score}"]`).checked = true;
+          document.getElementById('review').value = existingRating.review;
+          document.getElementById('submitRating').textContent = 'Update Rating';
+          document.getElementById('ratingForm').dataset.ratingId = existingRating.id;
+        }
+        
+        // Also fetch the doctor's average rating
+        return fetch(`/api/v1/ratings/doctor/${consultation.doctor.id}/average`, {
+          headers: getAuthHeaders()
+        }).then(res => res.json());
+      })
+      .then(avgRating => {
+        // Add average rating comparison to form
+        const compareText = document.createElement('p');
+        compareText.className = 'text-muted mt-2';
+        compareText.textContent = `Average rating for this doctor: ${avgRating.toFixed(1)}/5`;
+        document.querySelector('.rating-stars').appendChild(compareText);
+      })
+      .catch(error => {
+        console.error('Error loading rating data:', error);
+      });
     }
   </script>
 </body>
