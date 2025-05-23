@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,6 +42,7 @@ class RatingRepositoryTest {
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
+        consultation.setScheduledTime(LocalDateTime.now()); 
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -75,6 +77,7 @@ class RatingRepositoryTest {
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
+        consultation.setScheduledTime(LocalDateTime.now()); 
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -109,6 +112,7 @@ class RatingRepositoryTest {
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
+        consultation.setScheduledTime(LocalDateTime.now()); 
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -143,6 +147,7 @@ class RatingRepositoryTest {
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
+        consultation.setScheduledTime(LocalDateTime.now()); 
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
