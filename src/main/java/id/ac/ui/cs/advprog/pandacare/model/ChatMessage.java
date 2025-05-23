@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
 import id.ac.ui.cs.advprog.pandacare.model.User;
+
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.observer.ChatObserver;
 import jakarta.persistence.*;
