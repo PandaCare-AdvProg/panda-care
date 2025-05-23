@@ -29,11 +29,13 @@ class RatingRepositoryTest {
         Doctor doctor = new Doctor();
         doctor.setName("Dr. Smith");
         doctor.setEmail("drsmith@example.com");
+        doctor.setRole(Role.DOCTOR); 
         entityManager.persist(doctor);
         
         Patient patient = new Patient();
         patient.setName("John Doe");
         patient.setEmail("john@example.com");
+        patient.setRole(Role.PATIENT); 
         entityManager.persist(patient);
         
         Consultation consultation = new Consultation();
