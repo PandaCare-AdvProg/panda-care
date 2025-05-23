@@ -65,6 +65,14 @@
       border-radius: 4px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
+    .rating-stars {
+      display: flex;
+      gap: 5px;
+    }
+    .btn-check:checked + .btn-outline-warning {
+      background-color: #ffc107;
+      color: #fff;
+    }
   </style>
   <script>
     
@@ -133,18 +141,61 @@
   <section class="content-section">
     <h2>Your Consultation History</h2>
     <div id="consultationHistory">
-      <!-- Consultation requests will be listed here -->
     </div>
   </section>
 
-  <!-- Modal for editing consultation schedule -->
   <div id="editScheduleModal" class="modal">
     <h3>Select a New Schedule</h3>
     <select id="modalScheduleSelect">
-      <!-- Options will be loaded dynamically -->
     </select>
     <button id="modalSubmitBtn">Save Changes</button>
     <button id="modalCancelBtn">Cancel</button>
+  </div>
+
+  <!-- Rating section  -->
+  <div id="ratingSection" style="display: none;">
+    <div class="card mt-4">
+      <div class="card-header">
+        <h4>Rate Your Doctor</h4>
+      </div>
+      <div class="card-body">
+        <form id="ratingForm">
+          <input type="hidden" id="consultationId" name="consultationId">
+          
+          <div class="form-group mb-3">
+            <label>Your Rating:</label>
+            <div class="rating-stars">
+              <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="score" id="score1" value="1" autocomplete="off">
+                <label class="btn btn-outline-warning" for="score1">1★</label>
+                
+                <input type="radio" class="btn-check" name="score" id="score2" value="2" autocomplete="off">
+                <label class="btn btn-outline-warning" for="score2">2★</label>
+                
+                <input type="radio" class="btn-check" name="score" id="score3" value="3" autocomplete="off">
+                <label class="btn btn-outline-warning" for="score3">3★</label>
+                
+                <input type="radio" class="btn-check" name="score" id="score4" value="4" autocomplete="off">
+                <label class="btn btn-outline-warning" for="score4">4★</label>
+                
+                <input type="radio" class="btn-check" name="score" id="score5" value="5" autocomplete="off" checked>
+                <label class="btn btn-outline-warning" for="score5">5★</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group mb-3">
+            <label for="review">Your Review:</label>
+            <textarea class="form-control" id="review" name="review" rows="3" 
+                      placeholder="Share your experience with this doctor"></textarea>
+          </div>
+          
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary" id="submitRating">Submit Rating</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script>
