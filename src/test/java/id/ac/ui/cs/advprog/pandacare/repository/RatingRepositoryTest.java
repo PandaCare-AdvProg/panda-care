@@ -10,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,8 @@ class RatingRepositoryTest {
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
-        consultation.setScheduledTime(LocalDateTime.now()); 
+        consultation.setScheduledTime(LocalTime.now()); 
+        consultation.setDayOfWeek(DayOfWeek.MONDAY);
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -67,17 +69,20 @@ class RatingRepositoryTest {
         Doctor doctor = new Doctor();
         doctor.setName("Dr. Smith");
         doctor.setEmail("drsmith@example.com");
+        doctor.setRole(Role.DOCTOR); 
         entityManager.persist(doctor);
         
         Patient patient = new Patient();
         patient.setName("John Doe");
         patient.setEmail("john@example.com");
+        patient.setRole(Role.PATIENT); 
         entityManager.persist(patient);
         
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
-        consultation.setScheduledTime(LocalDateTime.now()); 
+        consultation.setScheduledTime(LocalTime.now()); 
+        consultation.setDayOfWeek(DayOfWeek.MONDAY);
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -102,17 +107,20 @@ class RatingRepositoryTest {
         Doctor doctor = new Doctor();
         doctor.setName("Dr. Smith");
         doctor.setEmail("drsmith@example.com");
+        doctor.setRole(Role.DOCTOR); 
         entityManager.persist(doctor);
         
         Patient patient = new Patient();
         patient.setName("John Doe");
         patient.setEmail("john@example.com");
+        patient.setRole(Role.PATIENT); 
         entityManager.persist(patient);
         
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
-        consultation.setScheduledTime(LocalDateTime.now()); 
+        consultation.setScheduledTime(LocalTime.now()); 
+        consultation.setDayOfWeek(DayOfWeek.MONDAY);
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
@@ -137,17 +145,20 @@ class RatingRepositoryTest {
         Doctor doctor = new Doctor();
         doctor.setName("Dr. Smith");
         doctor.setEmail("drsmith@example.com");
+        doctor.setRole(Role.DOCTOR); 
         entityManager.persist(doctor);
         
         Patient patient = new Patient();
         patient.setName("John Doe");
         patient.setEmail("john@example.com");
+        patient.setRole(Role.PATIENT); 
         entityManager.persist(patient);
         
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
-        consultation.setScheduledTime(LocalDateTime.now()); 
+        consultation.setScheduledTime(LocalTime.now()); 
+        consultation.setDayOfWeek(DayOfWeek.MONDAY);
         entityManager.persist(consultation);
         
         Rating rating = new Rating();
