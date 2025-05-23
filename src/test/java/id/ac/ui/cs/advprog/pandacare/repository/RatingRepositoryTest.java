@@ -1,16 +1,10 @@
 package id.ac.ui.cs.advprog.pandacare.repository;
 
-public class RatingRepositoryTest {
-
-}
-package id.ac.ui.cs.advprog.pandacare.repository;
-
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.model.Consultation;
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
 import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Rating;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
