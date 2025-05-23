@@ -6,7 +6,7 @@ import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Rating;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.RatingRepository;
-import id.ac.ui.cs.advprog.pandacare.service.impl.RatingServiceImpl;
+import id.ac.ui.cs.advprog.pandacare.service.ratingimpl.RatingServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
