@@ -372,6 +372,11 @@
         consultations.forEach(c => {
           const item = document.createElement('div');
           item.className = 'list-item';
+          
+          // Add a Review button for COMPLETED consultations
+          const reviewButton = c.status === 'COMPLETED' ? 
+            `<button onclick="openRatingForm(${c.id})">Review</button>` : '';
+          
           item.innerHTML = `
             <strong>ID:</strong> ${c.id} <br>
             <strong>Doctor:</strong> ${c.doctor.email} <br>
@@ -382,6 +387,7 @@
               <button onclick="acceptChange(${c.id})">Accept Change</button>
               <button onclick="rejectChange(${c.id})">Reject Change</button>
             ` : ''}
+            ${reviewButton}
           `;
           listDiv.appendChild(item);
         });
@@ -500,6 +506,20 @@
         ratingForm.addEventListener('submit', handleRatingSubmit);
       }
     });
+    
+    function openRatingForm(consultationId) {
+      // Show the rating section
+      document.getElementById('ratingSection').style.display = 'block';
+      
+      // Scroll to the rating section
+      document.getElementById('ratingSection').scrollIntoView({ behavior: 'smooth' });
+      
+      // Set the consultation ID in the form
+      document.getElementById('consultationId').value = consultationId;
+      
+      // Check if there's an existing rating
+      checkExistingRating(consultationId);
+    }
   </script>
 </body>
 </html>
