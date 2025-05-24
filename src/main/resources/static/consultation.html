@@ -156,6 +156,9 @@
     function handleRatingSubmit(event) {
       event.preventDefault();
       
+      console.log("Auth headers:", getAuthHeaders());
+      console.log("Token payload:", JSON.parse(atob(localStorage.getItem('token').split('.')[1])));
+      
       const ratingId = this.dataset.ratingId;
       const consultationId = document.getElementById('consultationId').value;
       const score = document.querySelector('input[name="score"]:checked').value;
@@ -166,10 +169,10 @@
         : '/api/v1/ratings';
         
       const method = ratingId ? 'PUT' : 'POST';
-      
+
       const data = ratingId 
         ? { score: parseInt(score), review } 
-        : { consultationId, score: parseInt(score), review };
+        : { consultationId: parseInt(consultationId), score: parseInt(score), review };
       
       fetch(url, {
         method: method,
@@ -202,11 +205,13 @@
       <label>
         Select Doctor:
         <select name="doctorId" required>
+          <!-- Options will be loaded dynamically -->
         </select>
       </label>
       <label>
         Select Available Schedule:
         <select name="scheduleId" required>
+          <!-- Options will be loaded dynamically based on selected doctor -->
         </select>
       </label>
       <label>
@@ -228,6 +233,10 @@
     </div>
   </section>
 
+  <button onclick="window.location.href='searchdoctor.html'" style="margin-top: 20px; padding: 10px 20px; background-color: #4a6fa5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    Search Doctors
+  </button>
+
   <div id="editScheduleModal" class="modal">
     <h3>Select a New Schedule</h3>
     <select id="modalScheduleSelect">
@@ -235,10 +244,6 @@
     <button id="modalSubmitBtn">Save Changes</button>
     <button id="modalCancelBtn">Cancel</button>
   </div>
-
-  <button onclick="window.location.href='searchdoctor.html'" style="margin-top: 20px; padding: 10px 20px; background-color: #4a6fa5; color: white; border: none; border-radius: 4px; cursor: pointer;">
-    Search Doctors
-  </button>
 
   <!-- Rating section  -->
   <div id="ratingSection" style="display: none;">
@@ -306,7 +311,7 @@
         doctors.forEach(doctor => {
           const option = document.createElement('option');
           option.value = doctor.id;
-          option.textContent = doctor.name || `Doctor ${doctor.id}`;
+          option.textContent = doctor.email || `Doctor ${doctor.id}`;
           doctorSelect.appendChild(option);
         });
         if (doctorSelect.value) {
@@ -328,9 +333,7 @@
                  .forEach(schedule => {
           const option = document.createElement('option');
           option.value = schedule.id;
-          option.textContent = schedule.startTime 
-          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
-          : `Schedule ${schedule.id}`;          
+          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
           scheduleSelect.appendChild(option);
         });
       } catch (error) {
@@ -383,11 +386,11 @@
           
           item.innerHTML = `
             <strong>ID:</strong> ${c.id} <br>
-            <strong>Doctor:</strong> ${c.doctor.name} <br>
-            <strong>Day:</strong> ${c.dayOfWeek} <br>
+            <strong>Doctor:</strong> ${c.doctor.email} <br>
             <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
             <strong>Status:</strong> ${c.status} <br>
-            ${c.status === 'PENDING' ? `<button onclick="editConsultation(${c.id}, ${c.doctor.id})">Edit</button>` : ''}            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
+            <button onclick="editConsultation(${c.id}, ${c.doctor.id})" ${c.status !== 'PENDING' ? 'disabled' : ''}>Edit</button>
+            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
               <button onclick="acceptChange(${c.id})">Accept Change</button>
               <button onclick="rejectChange(${c.id})">Reject Change</button>
             ` : ''}
@@ -419,11 +422,8 @@
                  .forEach(schedule => {
           const option = document.createElement('option');
           option.value = schedule.id;
-          option.textContent = schedule.startTime 
-          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
-          : `Schedule ${schedule.id}`;    
+          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
           modalSelect.appendChild(option);
-      
         });
       } catch (error) {
         console.error('Error loading modal schedules', error);
