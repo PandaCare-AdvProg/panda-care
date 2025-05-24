@@ -83,6 +83,24 @@
                 </div>
             </form>
         </div>
+        
+        <!-- Doctor ratings display -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h4>Patient Ratings</h4>
+          </div>
+          <div class="card-body">
+            <div class="average-rating mb-3">
+              <h5>Average Rating: <span id="avgRating" class="text-warning">0.0</span>/5
+              <span id="avgStars" class="text-warning">★★★★★</span></h5>
+            </div>
+            
+            <div id="ratingsList" class="mt-4">
+              <!-- Ratings will be loaded here -->
+              <div class="text-center" id="loadingRatings">Loading ratings...</div>
+            </div>
+          </div>
+        </div>
     </div>
 
     <!-- Password Change Modal -->
@@ -253,10 +271,103 @@
             window.location.href = 'login.html';
         }
 
+        // Get doctor ID for the current profile
+        async function getDoctorId() {
+            try {
+                const response = await fetch('/api/v1/user/profile', {
+                    headers: getAuthHeaders()
+                });
+                const userData = await response.json();
+                return userData.id;
+            } catch (error) {
+                console.error('Error getting doctor ID:', error);
+                return null;
+            }
+        }
+
+        // Load ratings for the doctor
+        async function loadDoctorRatings() {
+            const doctorId = await getDoctorId();
+            if (!doctorId) return;
+            
+            // Only load ratings if viewing a doctor profile
+            if (document.getElementById('role').value !== 'DOCTOR') {
+                document.querySelector('.card.mt-4').style.display = 'none';
+                return;
+            }
+            
+            fetch(`/api/v1/ratings/doctor/${doctorId}`, {
+                headers: getAuthHeaders()
+            })
+            .then(response => response.json())
+            .then(ratings => {
+                // Load average rating
+                fetch(`/api/v1/ratings/doctor/${doctorId}/average`, {
+                    headers: getAuthHeaders()
+                })
+                .then(response => response.json())
+                .then(avgRating => {
+                    document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+                    updateStarDisplay(avgRating);
+                });
+                
+                // Display all ratings
+                displayRatings(ratings);
+            })
+            .catch(error => {
+                console.error('Error loading ratings:', error);
+                document.getElementById('loadingRatings').textContent = 'Error loading ratings.';
+            });
+        }
+
+        // Display ratings in the ratings list
+        function displayRatings(ratings) {
+            const ratingsList = document.getElementById('ratingsList');
+            ratingsList.innerHTML = '';
+            
+            if (ratings.length === 0) {
+                ratingsList.innerHTML = '<p class="text-center">No ratings yet.</p>';
+                return;
+            }
+            
+            ratings.forEach(rating => {
+                const ratingItem = document.createElement('div');
+                ratingItem.className = 'rating-item border-bottom pb-3 mb-3';
+                
+                ratingItem.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <strong>${rating.patientName}</strong>
+                        <span class="text-warning">${rating.score}/5 ★</span>
+                    </div>
+                    <p class="mt-2">${rating.review}</p>
+                `;
+                
+                ratingsList.appendChild(ratingItem);
+            });
+        }
+
+        // Update star display based on rating
+        function updateStarDisplay(rating) {
+            const avgStars = document.getElementById('avgStars');
+            const fullStars = Math.round(rating);
+            
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    starsHtml += '★';
+                } else {
+                    starsHtml += '☆';
+                }
+            }
+            
+            avgStars.textContent = starsHtml;
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             checkAuth();
             fetchUserProfile();
+            loadDoctorRatings();
             
             document.getElementById('profile-form').addEventListener('submit', updateProfile);
             document.getElementById('logout-btn').addEventListener('click', logout);
