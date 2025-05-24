@@ -85,7 +85,7 @@ class DoctorControllerTest {
     void testListAllDoctors() {
         when(doctorService.getAllDoctors()).thenReturn(List.of(doctor));
 
-        List<Doctor> result = doctorController.listAll(null, null);
+        List<Doctor> result = doctorController.listAll(null, null, null);
 
         assertEquals(1, result.size());
         assertEquals(doctor, result.get(0));
@@ -95,7 +95,7 @@ class DoctorControllerTest {
     void testSearchByName() {
         when(doctorService.searchByName("Alice")).thenReturn(List.of(doctor));
 
-        List<Doctor> result = doctorController.listAll("Alice", null);
+        List<Doctor> result = doctorController.listAll("Alice", null, null);
 
         assertEquals(1, result.size());
         assertEquals(doctor, result.get(0));
@@ -105,7 +105,7 @@ class DoctorControllerTest {
     void testSearchBySpecialty() {
         when(doctorService.searchBySpecialty("Cardiology")).thenReturn(List.of(doctor));
 
-        List<Doctor> result = doctorController.listAll(null, "Cardiology");
+        List<Doctor> result = doctorController.listAll(null, "Cardiology", null);
 
         assertEquals(1, result.size());
         assertEquals(doctor, result.get(0));

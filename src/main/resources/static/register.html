@@ -2,40 +2,262 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
+  <style>
+    :root {
+      --primary-color: #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color: #4fc3f7;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #757575;
+      --error-color: #d32f2f;
+      --success-color: #388e3c;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-gray);
+      color: var(--dark-gray);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: var(--secondary-color);
+    }
+
+    input, select, textarea {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid var(--medium-gray);
+      border-radius: 4px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+    }
+
+    button {
+      padding: 10px;
+      background-color: var(--primary-color);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .error {
+      color: var(--error-color);
+      background-color: #ffebee;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .success-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--success-color);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <h2>Register</h2>
-  <form id="registerForm">
-    <label>Name: <input type="text" name="name" required></label><br>
-    <label>Email: <input type="email" name="email" required></label><br>
-    <label>Password: <input type="password" name="password" required></label><br>
-    <label>Role: 
-      <select name="role" required>
-        <option value="DOCTOR">Doctor</option>
-        <option value="PATIENT">Patient</option>
-      </select>
-    </label><br>
-    <button type="submit">Register</button>
-  </form>
-  <div id="registerResult"></div>
-<script>
-  document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      password: form.password.value,
-      role: form.role.value
-    };
-    const response = await fetch('/api/v1/auth/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+  <div class="container">
+    <h2>Register</h2>
+    <form id="registerForm">
+      <label>Name:
+        <input type="text" name="name" required>
+      </label>
+      <label>Email:
+        <input type="email" name="email" required>
+      </label>
+      <label>Password:
+        <input type="password" name="password" required>
+      </label>
+      <label>NIK:
+        <input type="text" name="nik" required>
+      </label>
+      <label>Address:
+        <input type="text" name="address" required>
+      </label>
+      <label>Phone Number:
+        <input type="text" name="phoneNumber" required>
+      </label>
+      <label>Role:
+        <select name="role" id="role" required>
+          <option value="PATIENT">Patient</option>
+          <option value="DOCTOR">Doctor</option>
+        </select>
+      </label>
+      
+      <!-- Doctor-specific fields -->
+      <div id="doctorFields" class="hidden">
+        <label>Specialty:
+          <input type="text" name="specialty">
+        </label>
+        <label>Working Address:
+          <input type="text" name="workingAddress">
+        </label>
+      </div>
+      
+      <!-- Patient-specific fields -->
+      <div id="patientFields">
+        <label>Medical History:
+          <textarea name="medicalHistory" rows="3"></textarea>
+        </label>
+      </div>
+      
+      <button type="submit">Register</button>
+    </form>
+    <div id="registerResult"></div>
+    <button onclick="window.location.href='login.html'" style="margin-top: 10px;">Go to Login</button>
+  </div>
+
+  <div class="success-popup" id="successPopup">
+    Registration successful! Redirecting to login...
+  </div>
+
+  <script>
+    // (Optional) Helper to include auth headers if your schedule API still requires a JWT.
+    function getAuthHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    
+    const roleSelect = document.getElementById('role');
+    const doctorFields = document.getElementById('doctorFields');
+    const patientFields = document.getElementById('patientFields');
+    const successPopup = document.getElementById('successPopup');
+    
+    // Toggle fields based on role selection
+    roleSelect.addEventListener('change', function() {
+      if (this.value === 'DOCTOR') {
+        doctorFields.classList.remove('hidden');
+        patientFields.classList.add('hidden');
+      } else if (this.value === 'PATIENT') {
+        patientFields.classList.remove('hidden');
+        doctorFields.classList.add('hidden');
+      }
     });
-    const result = await response.json();
-  });
-</script>
+    
+    window.addEventListener('load', () => roleSelect.dispatchEvent(new Event('change')));
+    
+    // Validator function
+    function validateForm(data) {
+      const errors = [];
+      if (!data.name.trim()) errors.push("Name is required.");
+      if (!data.email.trim() || !/^\S+@\S+\.\S+$/.test(data.email)) errors.push("Valid email is required.");
+      if (!data.password.trim() || data.password.length < 6) errors.push("Password must be at least 6 characters.");
+      if (!data.nik.trim()) errors.push("NIK is required.");
+      if (!data.address.trim()) errors.push("Address is required.");
+      if (!data.phonenum.trim()) errors.push("Phone Number is required.");
+      if (data.role === 'DOCTOR') {
+        if (!data.specialty.trim()) errors.push("Specialty is required for doctors.");
+        if (!data.workingAddress.trim()) errors.push("Working address is required for doctors.");
+      }
+      return errors;
+    }
+    
+    // Submit registration form
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        password: form.password.value,
+        nik: form.nik.value,
+        address: form.address.value,
+        phonenum: form.phoneNumber.value,
+        role: form.role.value
+      };
+      
+      if (form.role.value === 'DOCTOR') {
+        data.specialty = form.specialty.value;
+        data.workingAddress = form.workingAddress.value;
+      } else if (form.role.value === 'PATIENT') {
+        data.medicalHistory = form.medicalHistory.value;
+      }
+      
+      // Validate form data
+      const errors = validateForm(data);
+      if (errors.length > 0) {
+        document.getElementById('registerResult').innerHTML = `<div class="error">${errors.join('<br>')}</div>`;
+        return;
+      }
+      
+      // Register via the API
+      const regResponse = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (regResponse.ok) {
+        successPopup.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 3000);
+      } else {
+        const regResult = await regResponse.json();
+        document.getElementById('registerResult').innerHTML = `<div class="error">${regResult.message || 'Registration failed.'}</div>`;
+      }
+    });
+  </script>
 </body>
 </html>

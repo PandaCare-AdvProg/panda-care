@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     @Query("select d from Doctor d where d.email = :email")
     Optional<Doctor> findDoctorByEmail(@Param("email") String email);
+
+    @Query("SELECT DISTINCT d FROM Doctor d JOIN d.schedules s WHERE s.dayOfWeek = :day")
+    List<Doctor> findByScheduleDay(@Param("day") DayOfWeek day);
 }
