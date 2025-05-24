@@ -1,12 +1,15 @@
 package id.ac.ui.cs.advprog.pandacare.controller;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
@@ -28,22 +31,28 @@ public class DoctorController {
         this.doctorRepository = doctorRepository;
     }
 
-    @GetMapping
-    public List<Doctor> listAll(
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "specialty", required = false) String specialty
-    ) {
-        if (name != null) {
-            log.info("Searching doctors by name: {}", name);
-            return service.searchByName(name);
+
+@GetMapping
+public List<Doctor> listAll(
+    @RequestParam(value = "name", required = false) String name,
+    @RequestParam(value = "specialty", required = false) String specialty,
+    @RequestParam(value = "schedule", required = false) String schedule
+) {
+    DayOfWeek day = null;
+    if (schedule != null && !schedule.isBlank()) {
+        try {
+            day = DayOfWeek.valueOf(schedule.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Invalid day of week: " + schedule);
         }
-        if (specialty != null) {
-            log.info("Searching doctors by specialty: {}", specialty);
-            return service.searchBySpecialty(specialty);
-        }
-        log.info("Listing all doctors");
-        return service.getAllDoctors();
     }
+    // Use combined filtering if any filter exists.
+    if ((name != null && !name.isBlank()) || (specialty != null && !specialty.isBlank()) || day != null) {
+        return service.searchDoctors(name, specialty, day);
+    }
+    return service.getAllDoctors();
+}
 
     @GetMapping("/{id}")
     public ResponseEntity<Doctor> getById(@PathVariable Long id) {
