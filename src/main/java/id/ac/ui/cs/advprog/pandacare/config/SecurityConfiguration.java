@@ -30,7 +30,15 @@ public class SecurityConfiguration {
     "/topic/**",
     "/app/**",
     "/favicon.ico",
-    "/api/chat/messages/**"
+    "/api/chat/messages/**",
+    "/login.html",
+    "/register.html",
+    "/schedule.html",
+    "/consultation.html", 
+    "/searchdoctor.html",
+    "/viewdoctorprofile.html", 
+    "/api/doctors/**",
+    "/api/doctors"
 };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
