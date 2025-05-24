@@ -39,6 +39,8 @@ public class ConsultationServiceImpl implements ConsultationService {
         if (consultation.getSchedule() != null && consultation.getSchedule().getId() != null) {
             Schedule schedule = scheduleRepository.findById(consultation.getSchedule().getId())
                 .orElseThrow(() -> new IllegalArgumentException(SCHEDULE_NOT_FOUND));
+            schedule.setStatus(ScheduleStatus.PENDING);
+            scheduleRepository.save(schedule);
             consultation.setSchedule(schedule);
         }
         String email = SecurityContextHolder.getContext().getAuthentication().getName();

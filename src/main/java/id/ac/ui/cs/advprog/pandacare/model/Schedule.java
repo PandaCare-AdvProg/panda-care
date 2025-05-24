@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.dto.DoctorDTO;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.state.*;
 import lombok.Getter;
