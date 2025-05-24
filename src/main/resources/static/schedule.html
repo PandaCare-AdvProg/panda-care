@@ -137,7 +137,6 @@
   <section class="content-section">
     <h2>Consultation Requests</h2>
     <div id="consultationList">
-      <!-- Consultation data will be populated here -->
     </div>
   </section>
 
@@ -217,7 +216,8 @@
           }
           item.innerHTML = `
             <strong>Consultation ID:</strong> ${c.id} <br>
-            <strong>Patient:</strong> ${c.patient.email} <br>
+            <strong>Patient:</strong> ${c.patient.name} <br>
+            <strong>Day:</strong> ${c.dayOfWeek} <br>
             <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
             <strong>Status:</strong> ${c.status} <br>
             ${buttons}
@@ -304,7 +304,9 @@
                  .forEach(schedule => {
           const option = document.createElement('option');
           option.value = schedule.id;
-          option.textContent = schedule.timeslot || `Schedule ${schedule.id}`;
+          option.textContent = schedule.startTime 
+          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
+          : `Schedule ${schedule.id}`;          
           modalSelect.appendChild(option);
         });
       } catch (error) {
