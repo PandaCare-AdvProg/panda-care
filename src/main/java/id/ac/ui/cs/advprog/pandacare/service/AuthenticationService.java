@@ -1,5 +1,18 @@
 package id.ac.ui.cs.advprog.pandacare.service;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import id.ac.ui.cs.advprog.pandacare.enums.TokenType;
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
@@ -11,21 +24,9 @@ import id.ac.ui.cs.advprog.pandacare.repository.UserRepository;
 import id.ac.ui.cs.advprog.pandacare.request.AuthenticationRequest;
 import id.ac.ui.cs.advprog.pandacare.request.RegisterRequest;
 import id.ac.ui.cs.advprog.pandacare.response.AuthenticationResponse;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -84,6 +85,7 @@ public AuthenticationResponse register(RegisterRequest request) {
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .refreshToken(refreshToken)
+        .role(savedUser.getRole().name())  // add the role here
         .build();
 }
 
@@ -103,6 +105,7 @@ public AuthenticationResponse register(RegisterRequest request) {
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         .refreshToken(refreshToken)
+        .role(user.getRole().name())
         .build();
   }
 
