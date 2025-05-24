@@ -22,7 +22,7 @@ public class Doctor extends User {
     @Column(name = "working_address", nullable = true)
     private String workingAddress;
 
-    @Column(name = "specialty", nullable = true)
+    @Column(name = "specialty", nullable = true, columnDefinition = "text")
     private String specialty;
 
     @OneToMany(
