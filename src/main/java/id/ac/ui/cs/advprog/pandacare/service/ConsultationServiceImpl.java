@@ -1,11 +1,15 @@
 package id.ac.ui.cs.advprog.pandacare.service;
 
 import id.ac.ui.cs.advprog.pandacare.model.Consultation;
+import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Schedule;
 import id.ac.ui.cs.advprog.pandacare.enums.ConsultationStatus;
 import id.ac.ui.cs.advprog.pandacare.enums.ScheduleStatus;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.ScheduleRepository;
+import id.ac.ui.cs.advprog.pandacare.repository.PatientRepository;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,20 +19,37 @@ import java.util.Optional;
 @Service
 public class ConsultationServiceImpl implements ConsultationService {
 
+    private static final String SCHEDULE_NOT_FOUND = "Schedule not found";
+
     private final ConsultationRepository consultationRepository;
     private final ScheduleRepository scheduleRepository;
+    private final PatientRepository patientRepository;
 
     public ConsultationServiceImpl(ConsultationRepository consultationRepository,
-                                   ScheduleRepository scheduleRepository) {
+                                   ScheduleRepository scheduleRepository,
+                                   PatientRepository patientRepository) {
         this.consultationRepository = consultationRepository;
         this.scheduleRepository = scheduleRepository;
+        this.patientRepository = patientRepository;
     }
 
     @Override
     @Transactional
     public Consultation createConsultation(Consultation consultation) {
+        if (consultation.getSchedule() != null && consultation.getSchedule().getId() != null) {
+            Schedule schedule = scheduleRepository.findById(consultation.getSchedule().getId())
+                .orElseThrow(() -> new IllegalArgumentException(SCHEDULE_NOT_FOUND));
+            schedule.setStatus(ScheduleStatus.PENDING);
+            scheduleRepository.save(schedule);
+            consultation.setSchedule(schedule);
+        }
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Patient managedPatient = patientRepository.findPatientByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("Patient not found with email: " + email));
+        consultation.setPatient(managedPatient);
+        
         return consultationRepository.save(consultation);
-    }
+    }   
 
     @Override
     @Transactional
@@ -36,26 +57,39 @@ public class ConsultationServiceImpl implements ConsultationService {
         Consultation existing = consultationRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Not found: " + id));
     
-        // 1) Doctor proposes a new slot
         if (existing.getStatus() == ConsultationStatus.PENDING
             && updated.getStatus() == ConsultationStatus.PENDING
             && !existing.getSchedule().getId().equals(updated.getSchedule().getId())) {
     
             Schedule oldSched = existing.getSchedule();
             Schedule newSched = scheduleRepository.findById(updated.getSchedule().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Schedule not found"));
+                .orElseThrow(() -> new IllegalArgumentException(SCHEDULE_NOT_FOUND));
     
-            // Free old slot, mark new slot as AVAILABLE or PENDING
             oldSched.setStatus(ScheduleStatus.AVAILABLE);
             newSched.setStatus(ScheduleStatus.PENDING);
             scheduleRepository.saveAll(List.of(oldSched, newSched));
     
-            // Update the schedule, scheduled_time, and dayOfWeek
             existing.setSchedule(newSched);
             existing.setDayOfWeek(newSched.getDayOfWeek());
-            existing.setScheduledTime(newSched.getStartTime());        
-                
-            existing.notifyObservers("Doctor proposed new time: " + newSched.getId());
+            existing.setScheduledTime(newSched.getStartTime());          
+        }
+        if (existing.getStatus() == ConsultationStatus.PENDING
+            && updated.getStatus() == ConsultationStatus.WAITING_FOR_PATIENT_CONFIRMATION
+            && !existing.getSchedule().getId().equals(updated.getSchedule().getId())) {
+    
+            Schedule oldSched = existing.getSchedule();
+            Schedule newSched = scheduleRepository.findById(updated.getSchedule().getId())
+                .orElseThrow(() -> new IllegalArgumentException(SCHEDULE_NOT_FOUND));
+    
+            oldSched.setStatus(ScheduleStatus.AVAILABLE);
+            newSched.setStatus(ScheduleStatus.PENDING);
+            scheduleRepository.saveAll(List.of(oldSched, newSched));
+    
+            existing.setSchedule(newSched);
+            existing.setDayOfWeek(newSched.getDayOfWeek());
+            existing.setScheduledTime(newSched.getStartTime());  
+            
+            existing.setStatus(ConsultationStatus.WAITING_FOR_PATIENT_CONFIRMATION);
         }
         
         else if (updated.getStatus() == ConsultationStatus.APPROVED) {
@@ -63,17 +97,14 @@ public class ConsultationServiceImpl implements ConsultationService {
             Schedule sched = existing.getSchedule();
             sched.setStatus(ScheduleStatus.BOOKED);
             scheduleRepository.save(sched);
-            existing.notifyObservers("Patient accepted time: " + sched.getId());
         }
+        
         else if (updated.getStatus() == ConsultationStatus.REJECTED) {
             Schedule sched = existing.getSchedule();
             sched.setStatus(ScheduleStatus.AVAILABLE);
-    
             sched.setConsultation(null);
             existing.setSchedule(null);
-    
             scheduleRepository.save(sched);
-    
             consultationRepository.flush();
             consultationRepository.delete(existing);
             consultationRepository.flush();
@@ -81,12 +112,12 @@ public class ConsultationServiceImpl implements ConsultationService {
             return null;
         }
     
-        // Update other fields
         existing.setNotes(updated.getNotes());
         existing.setMeetingUrl(updated.getMeetingUrl());
     
         return consultationRepository.save(existing);
     }
+
     @Override
     @Transactional
     public Consultation completeConsultation(Long consultationId) {
@@ -130,7 +161,6 @@ public class ConsultationServiceImpl implements ConsultationService {
         Consultation consultation = consultationRepository.findById(consultationId)
             .orElseThrow(() -> new IllegalArgumentException("Consultation not found"));
     
-        // Update schedule status
         Schedule schedule = consultation.getSchedule();
         schedule.setStatus(ScheduleStatus.AVAILABLE);
         scheduleRepository.save(schedule);
@@ -143,5 +173,4 @@ public class ConsultationServiceImpl implements ConsultationService {
         consultationRepository.flush();
         return consultation;
     }
-
 }

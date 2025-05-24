@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Schedule Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #222;
+    }
+    form, .content-section, .modal {
+      background: #fff;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input[type="time"],
+    select {
+      width: 100%;
+      padding: 6px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 3px;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .list-item {
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 40%;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      z-index: 1000;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  </style>
+  <script>
+    // Redirect to login if no JWT token is present
+    if (!localStorage.getItem('token')) {
+      window.location.href = '/login.html';
+    }
+
+    // Define the logoutUser function required by the navbar button
+    function logoutUser() {
+      const token = localStorage.getItem('token');
+      fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if(response.ok) {
+          localStorage.removeItem('token');
+          window.location.href = '/login.html';
+        } else {
+          alert('Logout failed');
+        }
+      })
+      .catch(error => {
+        console.error("Error during logout:", error);
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+    }
+  </script>
+</head>
+<body>
+  <nav id="navbar">
+      </div>
+    <button onclick="logoutUser()" style="background:red; border:none; padding:8px 12px; border-radius:3px; cursor:pointer;">Logout</button>
+  </nav>
+  
+  <section class="content-section">
+    <h2>Create Weekly Schedule</h2>
+    <form id="createScheduleForm">
+      <label>
+        Day of Week:
+        <select name="dayOfWeek" required>
+          <option value="">Select</option>
+          <option value="MONDAY">Monday</option>
+          <option value="TUESDAY">Tuesday</option>
+          <option value="WEDNESDAY">Wednesday</option>
+          <option value="THURSDAY">Thursday</option>
+          <option value="FRIDAY">Friday</option>
+          <option value="SATURDAY">Saturday</option>
+          <option value="SUNDAY">Sunday</option>
+        </select>
+      </label>
+      <label>Start Time:
+        <input type="time" name="startTime" required>
+      </label>
+      <label>End Time:
+        <input type="time" name="endTime" required>
+      </label>
+      <button type="submit">Create Schedule</button>
+    </form>
+    <div id="scheduleResult"></div>
+  </section>
+  
+  <section class="content-section">
+    <h2>Consultation Requests</h2>
+    <div id="consultationList">
+    </div>
+  </section>
+
+  <section class="content-section">
+    <h3>Your Schedules</h3>
+    <ul id="scheduleList"></ul>
+  </section>
+
+  <!-- Modal for modifying consultation schedule -->
+  <div id="modifyScheduleModal" class="modal">
+    <h3>Select a New Schedule for Consultation</h3>
+    <select id="modalModifyScheduleSelect">
+      <!-- Options will be loaded dynamically -->
+    </select>
+    <button id="modalModifySubmitBtn">Save Changes</button>
+    <button id="modalModifyCancelBtn">Cancel</button>
+  </div>
+  
+  <script>
+    // Helper function to get default auth headers
+    function getAuthHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+    
+    // Create a new schedule using POST request
+    document.getElementById('createScheduleForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        dayOfWeek: form.dayOfWeek.value,
+        startTime: form.startTime.value,
+        endTime: form.endTime.value,
+        status: "AVAILABLE"
+      };
+      const response = await fetch('/api/schedules', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      document.getElementById('scheduleResult').innerText = "Schedule created successfully!";
+      setTimeout(() => document.getElementById('scheduleResult').innerText = "", 2000);
+      loadDoctorSchedules();
+    });
+    
+    // Get doctor profile
+    async function loadDoctorProfile() {
+      const response = await fetch('/api/doctors/me', { headers: getAuthHeaders() });
+      if (!response.ok) throw new Error("Could not load doctor profile");
+      return response.json();
+    }
+    
+    // Load consultations for the logged-in doctor
+    async function loadConsultations() {
+      try {
+        const doctor = await loadDoctorProfile();
+        const response = await fetch(`/api/consultations/doctor/${doctor.id}`, { headers: getAuthHeaders() });
+        const consultations = await response.json();
+        const listDiv = document.getElementById('consultationList');
+        listDiv.innerHTML = '';
+        consultations.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'list-item';
+          let buttons = "";
+          if (c.status === "PENDING") {
+            buttons = `
+              <button onclick="approveConsultation(${c.id})">Approve</button>
+              <button onclick="rejectConsultation(${c.id})">Reject</button>
+              <button onclick="modifyConsultation(${c.id})">Modify</button>
+            `;
+          } else if (c.status === "APPROVED") {
+            buttons = `<button onclick="completeConsultation(${c.id})">Complete</button>`;
+          }
+          item.innerHTML = `
+            <strong>Consultation ID:</strong> ${c.id} <br>
+            <strong>Patient:</strong> ${c.patient.name} <br>
+            <strong>Day:</strong> ${c.dayOfWeek} <br>
+            <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
+            <strong>Status:</strong> ${c.status} <br>
+            ${buttons}
+          `;
+          listDiv.appendChild(item);
+        });
+      } catch (error) {
+        console.error("Error loading consultations", error);
+      }
+    }
+    
+    // Load available schedules for modal selection from a doctor's profile
+    async function loadDoctorSchedules() {
+      try {
+        const doctor = await loadDoctorProfile();
+        const response = await fetch(`/api/schedules/doctor/${doctor.id}`, { headers: getAuthHeaders() });
+        const schedules = await response.json();
+        const list = document.getElementById('scheduleList');
+        list.innerHTML = '';
+        if (schedules.length === 0) {
+          list.innerHTML = '<li>No schedules found.</li>';
+        } else {
+          schedules.forEach(s => {
+            const li = document.createElement('li');
+            li.textContent = `${s.dayOfWeek}: ${s.startTime} - ${s.endTime} (${s.status})`;
+            list.appendChild(li);
+          });
+        }
+      } catch (error) {
+        console.error("Error loading schedules", error);
+      }
+    }
+    
+    // Approve consultation
+    async function approveConsultation(consultationId) {
+      try {
+        const response = await fetch(`/api/consultations/${consultationId}/approve`, {
+          method: 'PUT',
+          headers: getAuthHeaders()
+        });
+        const result = await response.json();
+        alert('Consultation approved: ' + JSON.stringify(result));
+        loadConsultations();
+      } catch (error) {
+        console.error("Error approving consultation:", error);
+        alert("Error approving consultation: " + error);
+      }
+    }
+    
+    // Reject consultation
+    function rejectConsultation(consultationId) {
+      fetch(`/api/consultations/${consultationId}/reject`, {
+        method: 'PUT',
+        headers: getAuthHeaders()
+      })
+      .then(res => res.text())
+      .then(text => {
+         const result = text ? JSON.parse(text) : {};
+         alert("Consultation rejected: " + JSON.stringify(result));
+         loadConsultations();
+      })
+      .catch(error => {
+         console.error("Error rejecting consultation:", error);
+         alert(error);
+      });
+    }
+    
+    // Modify consultation: open modal
+    let currentConsultationId = null;
+    function modifyConsultation(consultationId) {
+      currentConsultationId = consultationId;
+      loadModalModifySchedules();
+      document.getElementById('modifyScheduleModal').style.display = 'block';
+    }
+    
+    async function loadModalModifySchedules() {
+      try {
+        const doctor = await loadDoctorProfile();
+        const response = await fetch(`/api/schedules/doctor/${doctor.id}`, { headers: getAuthHeaders() });
+        const schedules = await response.json();
+        const modalSelect = document.getElementById('modalModifyScheduleSelect');
+        modalSelect.innerHTML = '';
+        schedules.filter(schedule => schedule.status === "AVAILABLE")
+                 .forEach(schedule => {
+          const option = document.createElement('option');
+          option.value = schedule.id;
+          option.textContent = schedule.startTime 
+          ? `${schedule.startTime} (${schedule.dayOfWeek})` 
+          : `Schedule ${schedule.id}`;          
+          modalSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading modal schedules', error);
+      }
+    }
+    
+    // Modal Save Changes button
+    document.getElementById('modalModifySubmitBtn').addEventListener('click', function() {
+      const selected = document.getElementById('modalModifyScheduleSelect').value;
+      if (!selected) return alert("Please choose a schedule");
+      fetch(`/api/consultations/${currentConsultationId}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ schedule: { id: selected }, status: "WAITING_FOR_PATIENT_CONFIRMATION" })
+      })
+      .then(res => res.json())
+      .then(result => {
+         alert("Consultation modified: " + JSON.stringify(result));
+         loadConsultations();
+         document.getElementById('modifyScheduleModal').style.display = 'none';
+      })
+      .catch(error => {
+         console.error("Error updating consultation:", error);
+         alert("Error updating consultation");
+      });
+    });
+    
+    // Modal Cancel button
+    document.getElementById('modalModifyCancelBtn').addEventListener('click', function() {
+      document.getElementById('modifyScheduleModal').style.display = 'none';
+    });
+    
+    // Complete consultation
+    async function completeConsultation(consultationId) {
+      const response = await fetch(`/api/consultations/${consultationId}/complete`, {
+        method: 'PUT',
+        headers: getAuthHeaders()
+      });
+      const result = await response.json();
+      alert('Consultation completed: ' + JSON.stringify(result));
+      loadConsultations();
+    }
+    
+    // Initial load
+    loadDoctorSchedules();
+    loadConsultations();
+  </script>
+</body>
+</html>
