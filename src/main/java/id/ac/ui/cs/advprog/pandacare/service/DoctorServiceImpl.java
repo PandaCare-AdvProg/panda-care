@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.pandacare.service;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,4 +64,25 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> searchBySpecialty(String specialty) {
         return repo.findBySpecialtyContainingIgnoreCase(specialty);
     }
+
+    @Override
+    public List<Doctor> searchByScheduleDay(DayOfWeek day) {
+        return repo.findByScheduleDay(day);
+    }
+
+    public List<Doctor> searchDoctors(String name, String specialty, DayOfWeek day) {
+    List<Doctor> doctors = getAllDoctors();
+
+    if (name != null && !name.isBlank()) {
+        doctors.retainAll(searchByName(name));
+    }
+    if (specialty != null && !specialty.isBlank()) {
+        doctors.retainAll(searchBySpecialty(specialty));
+    }
+    if (day != null) {
+        doctors.retainAll(searchByScheduleDay(day));
+    }
+    return doctors;
+
+}
 }
