@@ -5,9 +5,10 @@ import id.ac.ui.cs.advprog.pandacare.observer.ConsultationObserver;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Consultation {
 
     @OneToOne
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    @JsonBackReference
     private Schedule schedule;
 
     @Column(name = "scheduled_time", nullable = false)
@@ -50,6 +52,7 @@ public class Consultation {
     @Column(name = "status", nullable = false)
     private ConsultationStatus status = ConsultationStatus.PENDING;
 
+    @JsonIgnore
     @jakarta.persistence.Transient
     private final List<ConsultationObserver> observers = new ArrayList<>();
 
@@ -89,8 +92,8 @@ public class Consultation {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
         if (schedule != null) {
-            this.scheduledTime = schedule.getStartTime(); // Sync start time
-            this.dayOfWeek = schedule.getDayOfWeek();     // Sync day of week
+            this.scheduledTime = schedule.getStartTime(); 
+            this.dayOfWeek = schedule.getDayOfWeek();     
         }
     }
     
