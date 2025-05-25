@@ -4,12 +4,14 @@ import id.ac.ui.cs.advprog.pandacare.model.Consultation;
 import id.ac.ui.cs.advprog.pandacare.model.Doctor;
 import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Rating;
+import id.ac.ui.cs.advprog.pandacare.request.RatingRequest;
 
 import java.util.List;
 
 public interface RatingService {
     // Create a new rating
     Rating createRating(Long consultationId, int score, String review);
+    Rating createRating(RatingRequest request);
     
     // Get a rating by ID
     Rating getRatingById(Long id);
@@ -25,9 +27,11 @@ public interface RatingService {
     
     // Get rating for a specific consultation
     Rating getRatingByConsultation(Consultation consultation);
+    Rating getRatingByConsultationId(Long consultationId);
     
     // Update an existing rating
     Rating updateRating(Long id, int score, String review);
+    Rating updateRating(Long id, RatingRequest request);
     
     // Delete a rating
     void deleteRating(Long id);
