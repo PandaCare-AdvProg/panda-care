@@ -53,7 +53,12 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatRoom getChatRoomByPacilianAndCaregiver(String pacilianId, String caregiverId) {
         ChatRoom room = roomRepository.findByPacilianIdAndCaregiverId(pacilianId, caregiverId);
-        
+        ChatRoom roomtoo = roomRepository.findByPacilianIdAndCaregiverId(caregiverId, pacilianId);
+
+        if (roomtoo != null && room == null) {
+            room = roomtoo;
+        }   
+
         if (room == null) {
             String roomId = UUID.randomUUID().toString();
             room = new ChatRoom(roomId, pacilianId, caregiverId);
