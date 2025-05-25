@@ -73,13 +73,23 @@ public class ArticleRepositoryTest {
                 .author(doctor)
                 .build();
 
+        // persist all three
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);
+        // force Hibernate to flush so the ORDER BY really uses what’s in the DB
+        articleRepository.flush();
 
-        List<Article> publishedArticles = articleRepository.findByPublishedTrueOrderByPublishedAtDesc();
+        // fetch only the two published ones, newest first
+        List<Article> publishedArticles =
+                articleRepository.findByPublishedTrueOrderByPublishedAtDesc();
+
+        // there should be exactly 2 published
         assertEquals(2, publishedArticles.size());
-        assertTrue(publishedArticles.get(0).getPublishedAt().isAfter(publishedArticles.get(1).getPublishedAt()));
+
+        // and in descending order by publishedAt, so "Article 2" then "Article 1"
+        assertEquals("Article 2", publishedArticles.get(0).getTitle());
+        assertEquals("Article 1", publishedArticles.get(1).getTitle());
     }
 
     @Test
