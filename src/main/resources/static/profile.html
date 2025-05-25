@@ -156,7 +156,7 @@
         // Fetch user profile data
         async function fetchUserProfile() {
             try {
-                const response = await fetch('/api/v1/user/profile', {
+                const response = await fetch('/api/profile', {
                     method: 'GET',
                     headers: getAuthHeaders()
                 });
