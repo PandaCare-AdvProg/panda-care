@@ -10,8 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.test.annotation.Rollback;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -25,17 +27,17 @@ public class ArticleRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
-    private Doctor createTestDoctor() {
+    private Doctor createTestDoctor(String email) {
         Doctor doctor = new Doctor(
-            "doctor@example.com", 
-            "password",           
-            "Dr. John",           
-            "1234567890",         
-            "Some Address",       
-            "Hospital Address",   
-            "0987654321",         
-            Role.DOCTOR,          
-            "General"             // specialty
+                email,
+                "password",
+                "Dr. John",
+                "1234567890",
+                "Some Address",
+                "Hospital Address",
+                "0987654321",
+                Role.DOCTOR,
+                "General"
         );
         entityManager.persist(doctor);
         entityManager.flush();
@@ -44,7 +46,7 @@ public class ArticleRepositoryTest {
 
     @Test
     public void testFindByPublishedTrueOrderByPublishedAtDesc() {
-        Doctor doctor = createTestDoctor();
+        Doctor doctor = createTestDoctor("doctor1@example.com");
 
         Article article1 = Article.builder()
                 .title("Article 1")
@@ -73,28 +75,22 @@ public class ArticleRepositoryTest {
                 .author(doctor)
                 .build();
 
-        // persist all three
         articleRepository.save(article1);
         articleRepository.save(article2);
         articleRepository.save(article3);
-        // force Hibernate to flush so the ORDER BY really uses what’s in the DB
         articleRepository.flush();
 
-        // fetch only the two published ones, newest first
         List<Article> publishedArticles =
                 articleRepository.findByPublishedTrueOrderByPublishedAtDesc();
 
-        // there should be exactly 2 published
         assertEquals(2, publishedArticles.size());
-
-        // and in descending order by publishedAt, so "Article 2" then "Article 1"
         assertEquals("Article 2", publishedArticles.get(0).getTitle());
         assertEquals("Article 1", publishedArticles.get(1).getTitle());
     }
 
     @Test
     public void testFindByPublishedTrueAndCategoryIgnoreCaseOrderByPublishedAtDesc() {
-        Doctor doctor = createTestDoctor();
+        Doctor doctor = createTestDoctor("doctor2@example.com");
 
         Article article1 = Article.builder()
                 .title("Health Article 1")
@@ -127,7 +123,9 @@ public class ArticleRepositoryTest {
         articleRepository.save(article2);
         articleRepository.save(article3);
 
-        List<Article> healthArticles = articleRepository.findByPublishedTrueAndCategoryIgnoreCaseOrderByPublishedAtDesc("HeAlTh");
+        List<Article> healthArticles =
+                articleRepository.findByPublishedTrueAndCategoryIgnoreCaseOrderByPublishedAtDesc("HeAlTh");
+
         assertEquals(2, healthArticles.size());
         assertTrue(healthArticles.get(0).getPublishedAt().isAfter(healthArticles.get(1).getPublishedAt()));
     }
