@@ -252,6 +252,7 @@
     <h2>Rate Your Doctor</h2>
     <form id="ratingForm">
       <input type="hidden" id="consultationId" name="consultationId">
+      <input type="hidden" id="ratingId" name="ratingId">
       
       <label>
         Your Rating:
@@ -369,27 +370,50 @@
     async function loadConsultationHistory() {
       try {
         const patient = await loadPatientProfile();
+
+        const allRatingsResponse = await fetch(`/api/v1/ratings/patient/${patient.id}`, { 
+          headers: getAuthHeaders() 
+        });
+        
+        // Create a map of consultation ID -> rating for quick lookup
+        const ratingsByConsultation = {};
+        if (allRatingsResponse.ok) {
+          const allRatings = await allRatingsResponse.json();
+          allRatings.forEach(rating => {
+            ratingsByConsultation[rating.consultationId] = rating;
+          });
+        }
+        
         const response = await fetch(`/api/consultations/patient/${patient.id}`, { headers: getAuthHeaders() });
         const consultations = await response.json();
         const listDiv = document.getElementById('consultationHistory');
         listDiv.innerHTML = '';
-        consultations.forEach(c => {
+        
+        // Process each consultation
+        for (const c of consultations) {
           const item = document.createElement('div');
           item.className = 'list-item';
+
+          let reviewButtonText = "Review";
+          if (c.status === 'COMPLETED' && ratingsByConsultation[c.id]) {
+            reviewButtonText = "Edit Review";
+          }
+          
           item.innerHTML = `
             <strong>ID:</strong> ${c.id} <br>
             <strong>Doctor:</strong> ${c.doctor.name} <br>
             <strong>Day:</strong> ${c.dayOfWeek} <br>
             <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
             <strong>Status:</strong> ${c.status} <br>
-            ${c.status === 'PENDING' ? `<button onclick="editConsultation(${c.id}, ${c.doctor.id})">Edit</button>` : ''}            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
+            ${c.status === 'PENDING' ? `<button onclick="editConsultation(${c.id}, ${c.doctor.id})">Edit</button>` : ''}            
+            ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
               <button onclick="acceptChange(${c.id})">Accept Change</button>
               <button onclick="rejectChange(${c.id})">Reject Change</button>
             ` : ''}
-            ${c.status === 'COMPLETED' ? `<button onclick="openRatingForm(${c.id})">Review</button>` : ''}
+            ${c.status === 'COMPLETED' ? `<button onclick="openRatingForm(${c.id})">${reviewButtonText}</button>` : ''}
           `;
           listDiv.appendChild(item);
-        });
+        }
       } catch (error) {
         console.error("Error loading consultation history", error);
       }
@@ -507,50 +531,101 @@
       // Set the consultation ID in the hidden field
       document.getElementById('consultationId').value = consultationId;
       
+      // Check if rating exists and pre-populate form if it does
+      fetch(`/api/v1/ratings/consultation/${consultationId}`, {
+        headers: getAuthHeaders()
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return null;
+      })
+      .then(rating => {
+        if (rating) {
+          // Pre-fill form with existing rating data
+          document.querySelector(`input[name="score"][value="${rating.score}"]`).checked = true;
+          document.getElementById('review').value = rating.review;
+          document.getElementById('ratingId').value = rating.id; 
+          
+          // Change submit button text
+          document.querySelector('#ratingForm button[type="submit"]').textContent = 'Update Rating';
+        } else {
+          // Reset form for new rating
+          document.getElementById('ratingForm').reset();
+          document.getElementById('ratingId').value = ''; 
+          document.querySelector('#ratingForm button[type="submit"]').textContent = 'Submit Rating';
+        }
+      })
+      .catch(error => {
+        console.error("Error checking existing rating:", error);
+      });
+      
       // Scroll to the rating section
       ratingSection.scrollIntoView({ behavior: 'smooth' });
     }
-
-    document.getElementById('ratingForm').addEventListener('submit', function(e) {
+        document.getElementById('ratingForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       // Get form data
       const consultationId = document.getElementById('consultationId').value;
+      const ratingId = document.getElementById('ratingId').value;
       const score = document.querySelector('input[name="score"]:checked').value;
       const review = document.getElementById('review').value;
       
-      // Prepare data for API
-      const data = {
-        consultationId: parseInt(consultationId),
-        score: parseInt(score),
-        review: review
-      };
-      
-      // Submit to API
-      fetch('/api/v1/ratings', {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(data)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to submit rating');
-        }
-        return response.json();
-      })
-      .then(result => {
-        alert('Rating submitted successfully!');
-        // Hide the rating section
-        document.getElementById('ratingSection').style.display = 'none';
-        // Reset the form
-        document.getElementById('ratingForm').reset();
-        // Refresh consultation history to show updated status
-        loadConsultationHistory();
-      })
-      .catch(error => {
-        console.error('Error submitting rating:', error);
-        alert('Error submitting rating. Please try again.');
-      });
+      // Check if we're updating or creating
+      if (ratingId) {
+        // UPDATE existing rating
+        fetch(`/api/v1/ratings/${ratingId}`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            score: parseInt(score),
+            review: review
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to update rating');
+          }
+          return response.json();
+        })
+        .then(result => {
+          alert('Rating updated successfully!');
+          document.getElementById('ratingSection').style.display = 'none';
+          loadConsultationHistory();
+        })
+        .catch(error => {
+          console.error('Error updating rating:', error);
+          alert('Error updating rating. Please try again.');
+        });
+      } else {
+        // CREATE new rating
+        fetch('/api/v1/ratings', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            consultationId: parseInt(consultationId),
+            score: parseInt(score),
+            review: review
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to submit rating');
+          }
+          return response.json();
+        })
+        .then(result => {
+          alert('Rating submitted successfully!');
+          document.getElementById('ratingSection').style.display = 'none';
+          loadConsultationHistory();
+        })
+        .catch(error => {
+          console.error('Error submitting rating:', error);
+          alert('Error submitting rating. Please try again.');
+        });
+      }
     });
     
     // Initial load
