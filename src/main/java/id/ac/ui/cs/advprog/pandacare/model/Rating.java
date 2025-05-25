@@ -1,5 +1,10 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +41,14 @@ public class Rating {
     @Column(name = "review", columnDefinition = "TEXT")
     private String review;
     
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    @UpdateTimestamp  
+    private LocalDateTime updatedAt;
+
     public void setScore(int score) {
         if (score < 1 || score > 5) {
             throw new IllegalArgumentException("Rating score must be between 1 and 5");

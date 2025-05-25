@@ -10,8 +10,12 @@ import id.ac.ui.cs.advprog.pandacare.service.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -28,21 +32,21 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Rating createRating(Long consultationId, int score, String review) {
         Consultation consultation = consultationRepository.findById(consultationId)
-                .orElseThrow(() -> new RuntimeException("Consultation not found with id: " + consultationId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Consultation not found"));
         
-        // Check if a rating already exists for this consultation
+        // Change this line to handle a direct Rating object, not Optional<Rating>
         Rating existingRating = ratingRepository.findByConsultation(consultation);
         if (existingRating != null) {
-            throw new RuntimeException("Rating already exists for this consultation");
+            throw new IllegalStateException("Rating already exists for this consultation");
         }
         
         Rating rating = new Rating();
+        rating.setConsultation(consultation);
         rating.setDoctor(consultation.getDoctor());
         rating.setPatient(consultation.getPatient());
-        rating.setConsultation(consultation);
         rating.setScore(score);
         rating.setReview(review);
-        
+
         return ratingRepository.save(rating);
     }
 
