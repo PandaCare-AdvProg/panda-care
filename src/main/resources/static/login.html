@@ -2,123 +2,145 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <style>
+    :root {
+      --primary-color: #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color: #4fc3f7;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #757575;
+      --error-color: #d32f2f;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-gray);
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
     }
-    .login-container {
-      background: #fff;
-      padding: 30px;
+    .container {
+      background: white;
+      padding: 30px 25px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      width: 300px;
-      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      box-sizing: border-box;
     }
     h2 {
-      margin-bottom: 20px;
-      color: #333;
+      margin: 0 0 20px;
+      color: var(--primary-color);
+      text-align: center;
     }
     form {
       display: flex;
       flex-direction: column;
     }
     label {
+      font-weight: bold;
+      color: var(--secondary-color);
+      margin-bottom: 5px;
       text-align: left;
-      margin-bottom: 10px;
-      color: #555;
-      font-size: 14px;
     }
-    input[type="email"],
-    input[type="password"] {
+    input {
       padding: 10px;
       margin-bottom: 15px;
-      border: 1px solid #ccc;
+      border: 1px solid var(--medium-gray);
       border-radius: 4px;
       font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(79,195,247,0.2);
     }
     button {
-      padding: 10px;
-      background-color: #007bff;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: white;
       border: none;
       border-radius: 4px;
-      color: #fff;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      margin-bottom: 10px;
+      transition: background-color 0.3s;
     }
     button:hover {
-      background-color: #0056b3;
+      background-color: var(--secondary-color);
     }
     .register-btn {
-      background-color: #6c757d;
+      background-color: var(--primary-color);
+      margin-top: 10px;
     }
     .register-btn:hover {
-      background-color: #5a6268;
+      background-color: var(--secondary-color);
     }
     #loginResult {
       margin-top: 10px;
+      color: var(--error-color);
       font-size: 14px;
-      color: red;
+      min-height: 18px;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px 15px;
+      }
+      button {
+        font-size: 14px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
+  <div class="container">
     <h2>Login</h2>
     <form id="loginForm">
-      <label>Email:
-        <input type="email" name="email" required>
-      </label>
-      <label>Password:
-        <input type="password" name="password" required>
-      </label>
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
       <button type="submit">Login</button>
     </form>
-    <button class="register-btn" onclick="window.location.href='register.html'">Go to Register</button>
+    <button class="register-btn" onclick="window.location.href='register.html'">
+      Go to Register
+    </button>
     <div id="loginResult"></div>
   </div>
-  
-<script>
-  document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const form = e.target;
-    const data = {
-      email: form.email.value,
-      password: form.password.value
-    };
-    try {
-      const response = await fetch('/api/v1/auth/authenticate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      const result = await response.json();
-      console.log('Authentication result:', result); // Debug log
-      if (result.access_token) {
-        localStorage.setItem('token', result.access_token);
-        alert('Login Successful');
-        // Check role and redirect accordingly
-        if (result.role && result.role.toUpperCase() === 'DOCTOR') {
-          window.location.href = 'schedule.html';
-        } else if (result.role && result.role.toUpperCase() === 'PATIENT') {
-          window.location.href = 'consultation.html';
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = { email: form.email.value, password: form.password.value };
+      try {
+        const res = await fetch('/api/v1/auth/authenticate', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.access_token) {
+          localStorage.setItem('token', result.access_token);
+          // redirect by role
+          const role = (result.role||'').toUpperCase();
+          const dest = role === 'DOCTOR' ? 'schedule.html' 
+                     : role === 'PATIENT' ? 'consultation.html' 
+                     : 'schedule.html';
+          window.location.href = dest;
         } else {
-          // If role is missing or not as expected, use a default
-          window.location.href = 'schedule.html';
+          document.getElementById('loginResult').innerText = 'Invalid credentials.';
         }
-      } else {
-        document.getElementById('loginResult').innerText = 'Login failed. Please check your credentials.';
+      } catch {
+        document.getElementById('loginResult').innerText = 'Login error. Try again.';
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      document.getElementById('loginResult').innerText = 'An error occurred during login.';
-    }
-  });
-</script> 
+    });
+  </script>
+</body>
+</html>
