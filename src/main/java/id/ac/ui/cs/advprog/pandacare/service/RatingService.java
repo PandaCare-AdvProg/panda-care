@@ -37,4 +37,7 @@ public interface RatingService {
     
     // Calculate average rating for a doctor by ID
     double getAverageRatingByDoctorId(Long doctorId);
+
+    // Get all ratings by a patient ID
+    List<Rating> getRatingsByPatientId(Long patientId);
 }

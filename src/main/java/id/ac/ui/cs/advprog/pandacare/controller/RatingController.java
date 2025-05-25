@@ -76,6 +76,16 @@ public class RatingController {
         double averageRating = ratingService.getAverageRatingByDoctorId(doctorId);
         return ResponseEntity.ok(averageRating);
     }
+
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<List<RatingResponse>> getRatingsByPatientId(@PathVariable Long patientId) {
+        List<Rating> ratings = ratingService.getRatingsByPatientId(patientId);
+        List<RatingResponse> responses = ratings.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+        
+        return ResponseEntity.ok(responses);
+    }
     
     // Helper method to map Rating entity to RatingResponse DTO
     private RatingResponse mapToResponse(Rating rating) {
