@@ -38,8 +38,13 @@ public class SecurityConfiguration {
     "/searchdoctor.html",
     "/viewdoctorprofile.html", 
     "/api/doctors/**",
-    "/api/doctors"
-, "/actuator/**","/","/static/**","/index.html"};
+    "/api/doctors",
+    "/actuator/**",
+    "/",
+    "/static/**",
+    "/index.html",
+    "/consultation.html"
+};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
