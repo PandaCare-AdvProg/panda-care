@@ -39,7 +39,7 @@ public class SecurityConfiguration {
     "/viewdoctorprofile.html", 
     "/api/doctors/**",
     "/api/doctors"
-};
+, "/actuator/**","/","/static/**","/index.html"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
