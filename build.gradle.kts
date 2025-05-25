@@ -27,6 +27,8 @@ repositories {
 dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.security:spring-security-messaging")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -35,7 +37,6 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.1")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation ("jakarta.persistence:jakarta.persistence-api:3.1.0")
@@ -46,8 +47,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus")
     testImplementation("com.h2database:h2")
-    
-
 }
 
 tasks.test {
