@@ -22,18 +22,15 @@ public class ProfileController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<ProfileDTO>> getUserProfile() {
-        // Get authentication principal (username) - which might be email or ID
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userIdentifier = authentication.getName();
         
         ProfileDTO profileDTO;
         
         if (userIdentifier.contains("@")) {
-            // Handle as email - you'll need a method in your service
             profileDTO = profileService.getUserProfileByEmail(userIdentifier);
         } else {
             try {
-                // Handle as numeric ID
                 Long userId = Long.parseLong(userIdentifier);
                 profileDTO = profileService.getUserProfile(userId);
             } catch (NumberFormatException e) {
@@ -52,11 +49,9 @@ public class ProfileController {
     public ResponseEntity<ApiResponse<ProfileDTO>> updateUserProfile(
             @RequestBody ProfileUpdateRequest request) {
         
-        // Get authentication principal (username)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userIdentifier = authentication.getName();
         
-        // Convert request to DTO
         ProfileDTO profileDTO = ProfileDTO.builder()
                 .email(request.getEmail())
                 .name(request.getName())
@@ -88,7 +83,6 @@ public class ProfileController {
 
     @DeleteMapping
     public ResponseEntity<ApiResponse<Void>> deleteUserAccount() {
-        // Get authentication principal (username)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userIdentifier = authentication.getName();
         
@@ -111,13 +105,11 @@ public class ProfileController {
 
     @GetMapping("/consultations")
     public ResponseEntity<ApiResponse<List<ConsultationHistoryDTO>>> getUserConsultationHistory() {
-        // Get authentication principal (username)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userIdentifier = authentication.getName();
         
         List<ConsultationHistoryDTO> history;
         
-        // Handle email or numeric ID
         if (userIdentifier.contains("@")) {
             history = profileService.getUserConsultationHistoryByEmail(userIdentifier);
         } else {
