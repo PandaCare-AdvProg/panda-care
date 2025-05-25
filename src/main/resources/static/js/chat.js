@@ -1,9 +1,38 @@
+if (!localStorage.getItem('token')) {
+      window.location.href = '/login.html';
+}
+
 let stompClient = null;
 let currentRoomId = null;
 let currentUserId = null;
+let isSubscribed = false;
+
+function getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {  
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+
+async function initUser() {
+  try {
+    const response = await fetch('/api/profile', {
+      method: 'GET',
+      headers: getAuthHeaders()
+    });
+    
+    const userData = await response.json();
+    console.log('User data:', userData);
+    currentUserId = userData.data.email;
+  } catch (error) {
+    console.error('Error fetching profile:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initUser);
 
       function connect() {
-        currentUserId = document.getElementById('userId').value.trim();
         if (!currentUserId) {
           addNewMessage('Please enter a User ID', 'system');
           return;
@@ -17,11 +46,7 @@ let currentUserId = null;
           function () {
             addNewMessage('Connected to WebSocket', 'system');
 
-            // Personal messages
-            stompClient.subscribe('/user/' + currentUserId, function (message) {
-              const { sender, content } = JSON.parse(message.body);
-              addNewMessage(`[Private] ${sender}: ${content}`, 'received');
-            });
+            createRoom();
           },
           function (error) {
             addNewMessage('STOMP error: ' + error, 'system');
@@ -35,6 +60,7 @@ let currentUserId = null;
           stompClient.disconnect();
           stompClient = null;
           currentRoomId = null;
+          isSubscribed = false;
           addNewMessage('Disconnected from WebSocket', 'system');
         }
       }
@@ -45,44 +71,37 @@ let currentUserId = null;
           return;
         }
 
-        const roomId = document.getElementById('roomId').value.trim();
-        if (!roomId) {
-          addNewMessage('Please enter a Room ID', 'system');
-          return;
-        }
-
-        currentRoomId = roomId;
+        const roomId = currentRoomId;
 
         // Room messages
         stompClient.subscribe('/topic/chat/' + roomId, function (message) {
-          const { sender, content, id} = JSON.parse(message.body);
+          const { sender, content, id, edited } = JSON.parse(message.body);
           const msg = `${sender}: ${content}`;
           const type = sender === currentUserId ? 'sent' : 'received';
-          addNewMessage(msg, type, id);
+          addNewMessage(msg, type, id, edited);
         });
 
         // Edited messages
         stompClient.subscribe('/topic/chat/' + roomId + '/edit', function (message) {
             const editedMessage = JSON.parse(message.body);
-            updateChangedMessage(editedMessage)
-        })
+            updateChangedMessage(editedMessage);
+        });
 
         stompClient.subscribe('/topic/chat/' + roomId + '/delete', function (message) {
-            updateDeletedMessage(message.body)
-        })
+            updateDeletedMessage(message.body);
+        });
 
         // History
         stompClient.subscribe('/app/chat/' + roomId, function (message) {
           const messages = JSON.parse(message.body);
           addNewMessage(`Loaded ${messages.length} previous messages`, 'system');
-          messages.forEach(({ sender, content, id }) => {
+          messages.forEach(({ sender, content, id, edited }) => {
             const msg = `${sender}: ${content}`;
             const type = sender === currentUserId ? 'sent' : 'received';
-            addNewMessage(msg, type, id);
+            addNewMessage(msg, type, id, edited);
           });
         });
 
-        addNewMessage('Subscribed to room: ' + roomId, 'system');
       }
 
       function createRoom() {
@@ -91,11 +110,11 @@ let currentUserId = null;
           return;
         }
 
-        const userId = document.getElementById('userId').value.trim();
+        const userId = currentUserId;
         const receiverId = document.getElementById('receiverId').value.trim();
 
         if (!userId || !receiverId) {
-          addNewMessage('Please enter both User ID and Receiver ID', 'system');
+          addNewMessage('Please enter Receiver ID', 'system');
           return;
         }
 
@@ -103,9 +122,11 @@ let currentUserId = null;
         stompClient.subscribe('/topic/rooms', function (message) {
           const { roomId } = JSON.parse(message.body);
           currentRoomId = roomId;
-          document.getElementById('roomId').value = roomId;
-          addNewMessage('Room created: ' + roomId, 'system');
-          subscribeToRoom();
+          if (!isSubscribed) {
+            subscribeToRoom();
+            isSubscribed = true;
+            addNewMessage(`Connected to Room with ${receiverId}`, 'system');
+          }
         });
 
         stompClient.send(`/app/chat/create/${userId}/${receiverId}`, {}, JSON.stringify({}));
@@ -132,7 +153,7 @@ let currentUserId = null;
       }
 
 // Update the addNewMessage function to separate username and content in the HTML structure
-function addNewMessage(text, type, id=null) {
+function addNewMessage(text, type, id=null, edited=false) {
   timestamp = new Date()
   const wrap = document.getElementById('messages');
   const div = document.createElement('div');
@@ -146,6 +167,10 @@ function addNewMessage(text, type, id=null) {
     const parts = text.split(':');
     sender = parts[0];
     content = parts.slice(1).join(':').trim();
+  }
+
+  if (edited) {
+    content += " (edited)";
   }
   
   let messageHTML = '';
@@ -198,9 +223,11 @@ function editMessage(id) {
   const currentContent = contentSpan.textContent.trim();
   
   // Simple implementation - replace with actual edit logic
+ // Remove sender part if exists
   const newContent = prompt('Edit message:', currentContent);
+  
   if (newContent && newContent !== currentContent) {
-    contentSpan.textContent = newContent;
+    contentSpan.textContent = newContent + "(edited)";
     
     if (stompClient && currentRoomId) {
       stompClient.send(
@@ -223,7 +250,7 @@ function updateChangedMessage(editedMessage) {
     const newContent = editedMessage.content;
     if (messageDiv) {
         const contentSpan = messageDiv.querySelector('.message-content');
-        contentSpan.textContent = newContent;
+        contentSpan.textContent = newContent + " (edited)";
     } 
 }
 
