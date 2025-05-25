@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PandaCare - Welcome</title>
+  <link href="/css/main.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .landing-container {
+      max-width: 500px;
+      margin: 80px auto 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 40px 32px 32px 32px;
+      text-align: center;
+    }
+    .landing-title {
+      font-size: 2.5rem;
+      color: #009688;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+    .landing-desc {
+      font-size: 1.15rem;
+      color: #444;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .landing-btn {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 12px 32px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: #009688;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .landing-btn:hover {
+      background: #00796b;
+    }
+    .landing-btn.secondary {
+      background: #6c757d;
+    }
+    .landing-btn.secondary:hover {
+      background: #495057;
+    }
+    @media (max-width: 600px) {
+      .landing-container {
+        padding: 24px 8px;
+      }
+      .landing-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="landing-container">
+    <div class="landing-title">Welcome to PandaCare</div>
+    <div class="landing-desc">
+      PandaCare is your one-stop platform for Fasilkom UI students to access doctors, schedule consultations, and stay informed about health—all in one cozy click. <br><br>
+      Easily register, log in, and start your journey to better health with our seamless and secure system.
+    </div>
+    <a href="login.html" class="landing-btn">Login</a>
+    <a href="register.html" class="landing-btn secondary">Register</a>
+  </div>
+</body>
+</html>
