@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Doctors</title>
+  <style>
+    :root {
+      --primary-color: #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color: #4fc3f7;
+      --light-gray: #f5f5f5;
+      --medium-gray: #e0e0e0;
+      --dark-gray: #757575;
+      --error-color: #d32f2f;
+      --success-color: #388e3c;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 0.5em;
+      font-weight: 600;
+    }
+    
+    p {
+      color: var(--dark-gray);
+      margin-bottom: 2em;
+    }
+    
+    #searchForm {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2em;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      align-items: end;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0;
+      font-weight: 500;
+      color: var(--secondary-color);
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid var(--medium-gray);
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.2);
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+      height: fit-content;
+    }
+    
+    button:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 1em;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+    
+    th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 500;
+    }
+    
+    tr:hover {
+      background-color: var(--light-gray);
+    }
+    
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+    
+    #error {
+      color: var(--error-color);
+      margin: 1em 0;
+      padding: 10px;
+      background-color: #ffebee;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 20px;
+      color: var(--dark-gray);
+      font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+      #searchForm {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+  <div class="navbar-brand">PandaCare</div>
+  <ul class="navbar-nav">
+    <li><button onclick="logoutUser()" style="background:red; border:none; padding:8px 12px; border-radius:3px; cursor:pointer;">Logout</button></li>
+  </ul>
+  </nav>
+
+  <script>
+    // redirect to login if not authenticated
+    if (!localStorage.getItem('token')) {
+      window.location.href = '/login.html';
+    }
+
+    function logoutUser() {
+      const token = localStorage.getItem('token');
+      fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if(response.ok) {
+          localStorage.removeItem('token');
+          window.location.href = '/login.html';
+        } else {
+          alert('Logout failed');
+        }
+      })
+      .catch(error => {
+        console.error("Error during logout:", error);
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+    }
+  </script>
+
+  <style>
+    :root {
+    --primary-color:   #4a6fa5;
+    --secondary-color: #166088;
+    --accent-color:    #4fc3f7;
+    --light-gray:      #f5f5f5;
+    --medium-gray:     #e0e0e0;
+    --dark-gray:       #757575;
+    --error-color:     #d32f2f;
+    --success-color:   #388e3c;
+  }
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--primary-color);
+    padding: 0.5rem 1rem;
+  }
+
+  .navbar-brand {
+    color: var(--light-gray);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .navbar-nav li {
+    margin: 0;
+  }
+
+  .btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    color: var(--light-gray);
+    cursor: pointer;
+    transition: background  0.3s;
+    text-decoration: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;        
+    height: 36px;        
+    min-width: 100px;
+    height: 36px;
+    box-sizing: border-box;
+  }
+
+  .btn--search {
+    background: var(--secondary-color);
+  }
+  .btn--search:hover {
+    background: #0d4b6e;
+  }
+
+  .btn--logout {
+    background: var(--error-color);
+  }
+  .btn--logout:hover {
+    background: #c62828;
+  }
+  </style>
+
+  <h1>Find a Doctor</h1>
+  <p>Search for doctors using filters such as name, specialty, and working schedule to find the right healthcare professional for your needs.</p>
+  
+  <form id="searchForm">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" id="name" placeholder="e.g. Dr. Alice" />
+    </div>
+    
+    <div>
+      <label for="specialty">Specialty</label>
+      <input type="text" id="specialty" placeholder="e.g. Cardiology" />
+    </div>
+    
+    <div>
+      <label for="schedule">Working Day</label>
+      <select id="schedule">
+        <option value="">Any Day</option>
+        <option value="MONDAY">Monday</option>
+        <option value="TUESDAY">Tuesday</option>
+        <option value="WEDNESDAY">Wednesday</option>
+        <option value="THURSDAY">Thursday</option>
+        <option value="FRIDAY">Friday</option>
+        <option value="SATURDAY">Saturday</option>
+        <option value="SUNDAY">Sunday</option>
+      </select>
+    </div>
+    
+    <button type="submit">Search Doctors</button>
+  </form>
+
+  <div id="error"></div>
+
+  <div id="results-container">
+    <table id="results">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Specialty</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div id="no-results" class="no-results" style="display: none;">
+      No doctors found matching your search criteria.
+    </div>
+  </div>
+
+  <script>
+    function getAuthHeaders() {
+      const token = localStorage.getItem('token');
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
+    }
+
+    const form = document.getElementById('searchForm');
+    const table = document.getElementById('results');
+    const tbody = table.querySelector('tbody');
+    const errDiv = document.getElementById('error');
+    const noResultsDiv = document.getElementById('no-results');
+    const resultsContainer = document.getElementById('results-container');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      errDiv.textContent = '';
+      errDiv.style.display = 'none';
+      
+      let url = '/api/doctors';
+      const params = new URLSearchParams();
+      const nameVal = document.getElementById('name').value.trim();
+      const specialtyVal = document.getElementById('specialty').value.trim();
+      const scheduleDay = document.getElementById('schedule').value;
+      
+      if (nameVal) params.set('name', nameVal);
+      if (specialtyVal) params.set('specialty', specialtyVal);
+      if (scheduleDay) params.set('schedule', scheduleDay);
+      
+      if ([...params].length) url += '?' + params.toString();
+
+      try {
+        // Show loading state
+        table.style.display = 'none';
+        noResultsDiv.style.display = 'none';
+        
+        const resp = await fetch(url, { headers: getAuthHeaders() });
+        
+        if (resp.status === 401 || resp.status === 403) {
+          return window.location.href = '/login.html';
+        }
+        
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+        
+        const docs = await resp.json();
+        tbody.innerHTML = '';
+        
+        if (docs.length) {
+          docs.forEach(d => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${d.id}</td>
+              <td>${d.name}</td>
+              <td>${d.email}</td>
+              <td>${d.specialty || '-'}</td>
+              <td><a href="viewdoctorprofile.html?id=${d.id}">View Profile</a></td>
+            `;
+            tbody.appendChild(tr);
+          });
+          table.style.display = '';
+          noResultsDiv.style.display = 'none';
+        } else {
+          table.style.display = 'none';
+          noResultsDiv.style.display = '';
+        }
+      } catch (err) {
+        console.error(err);
+        errDiv.textContent = 'Failed to load doctors. Please try again.';
+        errDiv.style.display = 'block';
+        table.style.display = 'none';
+        noResultsDiv.style.display = 'none';
+      }
+    });
+
+    // auto-search on page load
+    window.addEventListener('load', function() {
+      form.dispatchEvent(new Event('submit'));
+    });
+  </script>
+</body>
+</html>

@@ -7,4 +7,5 @@ public enum ConsultationStatus {
     RESCHEDULED,
     COMPLETED,
     CANCELLED,
+    WAITING_FOR_PATIENT_CONFIRMATION
 }
