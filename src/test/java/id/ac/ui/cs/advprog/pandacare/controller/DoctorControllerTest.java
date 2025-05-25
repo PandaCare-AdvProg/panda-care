@@ -93,22 +93,26 @@ class DoctorControllerTest {
 
     @Test
     void testSearchByName() {
-        when(doctorService.searchByName("Alice")).thenReturn(List.of(doctor));
+        when(doctorService.searchDoctors("Alice", null, null))
+                .thenReturn(List.of(doctor));
 
         List<Doctor> result = doctorController.listAll("Alice", null, null);
 
         assertEquals(1, result.size());
         assertEquals(doctor, result.get(0));
+        verify(doctorService).searchDoctors("Alice", null, null);
     }
 
     @Test
     void testSearchBySpecialty() {
-        when(doctorService.searchBySpecialty("Cardiology")).thenReturn(List.of(doctor));
+        when(doctorService.searchDoctors(null, "Cardiology", null))
+                .thenReturn(List.of(doctor));
 
         List<Doctor> result = doctorController.listAll(null, "Cardiology", null);
 
         assertEquals(1, result.size());
         assertEquals(doctor, result.get(0));
+        verify(doctorService).searchDoctors(null, "Cardiology", null);
     }
 
     @Test
