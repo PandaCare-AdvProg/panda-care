@@ -1663,3 +1663,115 @@ java.lang.IllegalStateException: Rating already exists for this consultation
 2025-05-26T10:08:08.713+07:00 DEBUG 20048 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/consultations/patient/1949
 2025-05-26T10:08:08.713+07:00  INFO 20048 --- [pandacare] [http-nio-8080-exec-8] i.a.u.c.a.p.c.ConsultationController     : Getting consultations for patient id 1949 with email chiapasien@gmail.com
 2025-05-26T10:08:14.361+07:00  INFO 20048 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T10:29:40.602+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T10:29:40.606+07:00  INFO 20048 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T10:29:40.608+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T10:29:40.609+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@14ede83c]]
+2025-05-26T10:29:40.609+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T10:29:40.618+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T10:29:40.622+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T10:29:43.143+07:00  INFO 20048 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T17:07:56.520+07:00  INFO 6912 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 6912 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T17:07:56.524+07:00  INFO 6912 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T17:07:56.585+07:00  INFO 6912 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T17:07:56.585+07:00  INFO 6912 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T17:07:59.689+07:00  INFO 6912 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T17:07:59.829+07:00  INFO 6912 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 123 ms. Found 10 JPA repository interfaces.
+2025-05-26T17:08:01.291+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T17:08:01.317+07:00  INFO 6912 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T17:08:01.318+07:00  INFO 6912 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T17:08:01.413+07:00  INFO 6912 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T17:08:01.414+07:00  INFO 6912 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4828 ms
+2025-05-26T17:08:02.025+07:00  INFO 6912 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T17:08:02.166+07:00  INFO 6912 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T17:08:02.234+07:00  INFO 6912 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T17:08:02.788+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T17:08:02.844+07:00  INFO 6912 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T17:08:06.447+07:00  INFO 6912 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@27e016bd
+2025-05-26T17:08:06.450+07:00  INFO 6912 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T17:08:06.811+07:00  WARN 6912 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T17:08:07.487+07:00  INFO 6912 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T17:08:10.111+07:00  INFO 6912 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T17:08:24.760+07:00  INFO 6912 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T17:08:25.373+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T17:08:26.614+07:00  INFO 6912 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T17:08:26.615+07:00  WARN 6912 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T17:08:27.745+07:00  WARN 6912 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T17:08:28.065+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T17:08:28.642+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T17:08:28.842+07:00 DEBUG 6912 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T17:08:29.238+07:00  WARN 6912 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T17:08:30.352+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T17:08:30.466+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T17:08:30.467+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2416dbd1]]
+2025-05-26T17:08:30.467+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T17:08:30.501+07:00  INFO 6912 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T17:08:30.522+07:00  INFO 6912 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 34.717 seconds (process running for 36.159)
+2025-05-26T17:08:31.158+07:00  INFO 6912 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T17:08:31.158+07:00  INFO 6912 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T17:08:31.162+07:00  INFO 6912 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-05-26T17:08:36.980+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T17:08:37.015+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:08:37.025+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T17:08:37.285+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /favicon.ico
+2025-05-26T17:08:37.286+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:08:37.287+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /favicon.ico
+2025-05-26T17:08:37.313+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /error
+2025-05-26T17:08:37.315+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /error
+2025-05-26T17:08:37.424+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:08:41.168+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T17:08:41.170+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:08:41.172+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T17:08:42.636+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T17:08:44.496+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T17:08:44.497+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:08:44.498+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T17:08:44.542+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T17:08:44.544+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T17:08:45.254+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T17:08:45.539+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T17:08:45.540+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-8] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T17:08:45.813+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T17:08:45.816+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/schedules/doctor/202
+2025-05-26T17:08:46.474+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/schedules/doctor/202
+2025-05-26T17:08:46.474+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T17:08:46.477+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-10] i.a.u.c.a.p.c.ScheduleController         : Getting schedules for doctor id 202
+2025-05-26T17:08:48.345+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/consultations/patient/826
+2025-05-26T17:08:48.935+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/consultations/patient/826
+2025-05-26T17:08:48.938+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-1] i.a.u.c.a.p.c.ConsultationController     : Getting consultations for patient id 826 with email chia@gmail.com
+2025-05-26T17:08:54.699+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/consultation/452
+2025-05-26T17:08:55.552+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/consultation/452
+2025-05-26T17:09:04.785+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing DELETE /api/v1/ratings/14
+2025-05-26T17:09:05.627+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured DELETE /api/v1/ratings/14
+2025-05-26T17:09:05.630+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity id.ac.ui.cs.advprog.pandacare.controller.RatingController.deleteRating(java.lang.Long); target is of class [id.ac.ui.cs.advprog.pandacare.controller.RatingController]
+2025-05-26T17:09:05.673+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-5] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity id.ac.ui.cs.advprog.pandacare.controller.RatingController.deleteRating(java.lang.Long); target is of class [id.ac.ui.cs.advprog.pandacare.controller.RatingController]
+2025-05-26T17:09:08.695+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T17:09:09.523+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T17:09:09.525+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-6] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T17:09:09.822+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T17:09:10.747+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T17:09:12.256+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/consultations/patient/826
+2025-05-26T17:09:13.018+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/consultations/patient/826
+2025-05-26T17:09:13.020+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-7] i.a.u.c.a.p.c.ConsultationController     : Getting consultations for patient id 826 with email chia@gmail.com
+2025-05-26T17:09:19.392+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/consultation/452
+2025-05-26T17:09:20.382+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/consultation/452
+2025-05-26T17:09:30.422+07:00  INFO 6912 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T17:09:30.917+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/ratings
+2025-05-26T17:09:31.854+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/ratings
+2025-05-26T17:09:31.869+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity id.ac.ui.cs.advprog.pandacare.controller.RatingController.createRating(id.ac.ui.cs.advprog.pandacare.request.RatingRequest); target is of class [id.ac.ui.cs.advprog.pandacare.controller.RatingController]
+2025-05-26T17:09:31.873+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-9] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity id.ac.ui.cs.advprog.pandacare.controller.RatingController.createRating(id.ac.ui.cs.advprog.pandacare.request.RatingRequest); target is of class [id.ac.ui.cs.advprog.pandacare.controller.RatingController]
+2025-05-26T17:09:47.014+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T17:09:47.916+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T17:09:47.918+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-2] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T17:09:48.222+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T17:09:48.843+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T17:09:50.578+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/consultations/patient/826
+2025-05-26T17:09:51.194+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/consultations/patient/826
+2025-05-26T17:09:51.198+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-3] i.a.u.c.a.p.c.ConsultationController     : Getting consultations for patient id 826 with email chia@gmail.com
