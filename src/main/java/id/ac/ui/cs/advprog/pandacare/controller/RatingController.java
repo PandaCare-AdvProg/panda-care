@@ -25,7 +25,7 @@ public class RatingController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<RatingResponse> createRating(@RequestBody RatingRequest request) {
         Rating rating = ratingService.createRating(
                 request.getConsultationId(),
@@ -53,7 +53,7 @@ public class RatingController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<RatingResponse> updateRating(@PathVariable Long id, @RequestBody RatingRequest request) {
         Rating rating = ratingService.updateRating(
                 id,
@@ -65,7 +65,7 @@ public class RatingController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('PATIENT')")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<String> deleteRating(@PathVariable Long id) {
         ratingService.deleteRating(id);
         return ResponseEntity.ok("Rating deleted successfully");

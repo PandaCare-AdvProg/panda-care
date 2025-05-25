@@ -20,7 +20,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**","/login.html","/register.html","/schedule.html","/consultation.html", "/searchdoctor.html", "/viewdoctorprofile.html", "/api/doctors/**","/api/doctors"};
+    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**","/login.html","/register.html","/schedule.html","/consultation.html", "/searchdoctor.html", "/viewdoctorprofile.html", "/api/doctors/**","/api/doctors", "/api/v1/ratings/**", "/api/ratings/**"};
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final LogoutHandler logoutHandler;
