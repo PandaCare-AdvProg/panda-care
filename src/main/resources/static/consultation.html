@@ -606,33 +606,29 @@
     // Function to open rating form when Review button is clicked
     function openRatingForm(consultationId) {
       const ratingSection = document.getElementById('ratingSection');
-      if (!ratingSection) {
-        console.error("Rating section element not found");
-        return;
-      }
       
       // Show the rating form
       ratingSection.style.display = 'block';
-      
-      // Set the consultation ID in the hidden field
       document.getElementById('consultationId').value = consultationId;
       
-      // Check if rating exists and pre-populate form if it does
-      fetch(`/api/v1/ratings/consultation/${consultationId}`, {
-        headers: getAuthHeaders()
+      // Direct API call to get rating by consultation ID
+      fetch(`/api/v1/ratings/consultation/${consultationId}`, { 
+        headers: getAuthHeaders() 
       })
       .then(response => {
-        if (response.ok) {
+        if (response.status === 200) {
           return response.json();
         }
         return null;
       })
       .then(rating => {
+        console.log("Rating data for consultation", consultationId, ":", rating);
+        
         if (rating) {
           // Pre-fill form with existing rating data
           document.querySelector(`input[name="score"][value="${rating.score}"]`).checked = true;
-          document.getElementById('review').value = rating.review;
-          document.getElementById('ratingId').value = rating.id; 
+          document.getElementById('review').value = rating.review || '';
+          document.getElementById('ratingId').value = rating.id;
           
           // Change submit button text
           document.querySelector('#ratingForm button[type="submit"]').textContent = 'Update Rating';
@@ -644,13 +640,15 @@
         }
       })
       .catch(error => {
-        console.error("Error checking existing rating:", error);
+        console.error("Error loading rating:", error);
       });
       
       // Scroll to the rating section
       ratingSection.scrollIntoView({ behavior: 'smooth' });
     }
-        document.getElementById('ratingForm').addEventListener('submit', function(e) {
+
+    // Update form submission handler to properly process edits
+    document.getElementById('ratingForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       // Get form data
@@ -658,6 +656,12 @@
       const ratingId = document.getElementById('ratingId').value;
       const score = document.querySelector('input[name="score"]:checked').value;
       const review = document.getElementById('review').value;
+      
+      // Add visual feedback
+      const submitButton = document.querySelector('#ratingForm button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = ratingId ? 'Updating...' : 'Submitting...';
       
       // Check if we're updating or creating
       if (ratingId) {
@@ -684,6 +688,8 @@
         .catch(error => {
           console.error('Error updating rating:', error);
           alert('Error updating rating. Please try again.');
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
         });
       } else {
         // CREATE new rating
@@ -710,78 +716,18 @@
         .catch(error => {
           console.error('Error submitting rating:', error);
           alert('Error submitting rating. Please try again.');
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
         });
       }
     });
     
-    // Initial load
     loadDoctors();
     loadConsultationHistory();
     
-    // Add rating setup to page load
     document.addEventListener('DOMContentLoaded', function() {
-      // Show rating form if this is a completed consultation
       checkCompletedConsultation();
-      
-      // Setup rating form submission
-      const ratingForm = document.getElementById('ratingForm');
-      if (ratingForm) {
-        ratingForm.addEventListener('submit', handleRatingSubmit);
-      }
     });
-    
-    function openRatingForm(consultationId) {
-      // Show the rating section
-      document.getElementById('ratingSection').style.display = 'block';
-      
-      // Scroll to the rating section
-      document.getElementById('ratingSection').scrollIntoView({ behavior: 'smooth' });
-      
-      // Set the consultation ID in the form
-      document.getElementById('consultationId').value = consultationId;
-      
-      // NEW ASYNC TECHNIQUE: Promise.all for parallel API calls
-      // Get both the consultation details and any existing rating simultaneously
-      Promise.all([
-        // First promise: get consultation details to know the doctor
-        fetch(`/api/v1/consultations/${consultationId}`, { 
-          headers: getAuthHeaders() 
-        }).then(res => res.json()),
-        
-        // Second promise: check if there's an existing rating
-        fetch(`/api/v1/ratings/consultation/${consultationId}`, { 
-          headers: getAuthHeaders() 
-        }).then(res => res.status === 200 ? res.json() : null)
-      ])
-      .then(([consultation, existingRating]) => {
-        // Show doctor's name in the rating form
-        const ratingHeader = document.querySelector('#ratingSection .card-header h4');
-        ratingHeader.textContent = `Rate Dr. ${consultation.doctor.name}`;
-        
-        // If there's an existing rating, pre-fill the form
-        if (existingRating) {
-          document.querySelector(`input[name="score"][value="${existingRating.score}"]`).checked = true;
-          document.getElementById('review').value = existingRating.review;
-          document.getElementById('submitRating').textContent = 'Update Rating';
-          document.getElementById('ratingForm').dataset.ratingId = existingRating.id;
-        }
-        
-        // Also fetch the doctor's average rating
-        return fetch(`/api/v1/ratings/doctor/${consultation.doctor.id}/average`, {
-          headers: getAuthHeaders()
-        }).then(res => res.json());
-      })
-      .then(avgRating => {
-        // Add average rating comparison to form
-        const compareText = document.createElement('p');
-        compareText.className = 'text-muted mt-2';
-        compareText.textContent = `Average rating for this doctor: ${avgRating.toFixed(1)}/5`;
-        document.querySelector('.rating-stars').appendChild(compareText);
-      })
-      .catch(error => {
-        console.error('Error loading rating data:', error);
-      });
-    }
   </script>
 </body>
 </html>
