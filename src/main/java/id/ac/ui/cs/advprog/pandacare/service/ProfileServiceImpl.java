@@ -92,17 +92,17 @@ public class ProfileServiceImpl implements ProfileService {
     // Helper method for updating user fields
     private ProfileDTO updateUserFields(User user, ProfileDTO profileDTO) {
         // Update common fields
-        user.setEmail(profileDTO.getEmail());
         user.setName(profileDTO.getName());
-        user.setAddress(profileDTO.getAddress());
         user.setPhonenum(profileDTO.getPhonenum());
         
         // Type-specific updates
         if (user.getRole() == Role.PATIENT && user instanceof Patient) {
             Patient patient = (Patient) user;
+            patient.setAddress(profileDTO.getAddress());
             patient.setMedicalHistory(profileDTO.getMedicalHistory());
         } else if (user.getRole() == Role.DOCTOR && user instanceof Doctor) {
             Doctor doctor = (Doctor) user;
+            doctor.setWorkingAddress(profileDTO.getWorkingAddress());
             doctor.setSpecialty(profileDTO.getSpecialty());
             doctor.setWorkingAddress(profileDTO.getWorkingAddress());
         }
@@ -111,7 +111,6 @@ public class ProfileServiceImpl implements ProfileService {
         return mapToProfileDTO(updatedUser);
     }
     
-    // Helper method for getting consultations by user
     private List<ConsultationHistoryDTO> getConsultationsByUser(User user) {
         List<Consultation> consultations = new ArrayList<>();
         
