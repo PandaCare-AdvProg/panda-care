@@ -38,6 +38,22 @@
             top: 20px;
             right: 20px;
         }
+
+        /* Rating styles */
+        #ratingsList .card {
+            border-left: 4px solid #6c757d;
+            transition: all 0.2s ease;
+        }
+        
+        #ratingsList .card:hover {
+            border-left-color: #ffc107;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .text-warning {
+            color: #ffc107 !important;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +98,24 @@
                     <button type="button" class="btn btn-danger" id="change-password-btn">Change Password</button>
                 </div>
             </form>
+        </div>
+        
+        <!-- Doctor ratings display -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h4>Patient Ratings</h4>
+          </div>
+          <div class="card-body">
+            <div class="average-rating mb-3">
+              <h5>Average Rating: <span id="avgRating" class="text-warning">0.0</span>/5
+              <span id="avgStars" class="text-warning">★★★★★</span></h5>
+            </div>
+            
+            <div id="ratingsList" class="mt-4">
+              <!-- Ratings will be loaded here -->
+              <div class="text-center" id="loadingRatings">Loading ratings...</div>
+            </div>
+          </div>
         </div>
     </div>
 
@@ -138,7 +172,7 @@
         // Fetch user profile data
         async function fetchUserProfile() {
             try {
-                const response = await fetch('/api/v1/user/profile', {
+                const response = await fetch('/api/profile', {
                     method: 'GET',
                     headers: getAuthHeaders()
                 });
@@ -253,10 +287,127 @@
             window.location.href = 'login.html';
         }
 
+        // Get doctor ID for the current profile
+        async function getDoctorId() {
+            try {
+                const response = await fetch('/api/v1/user/profile', {
+                    headers: getAuthHeaders()
+                });
+                const userData = await response.json();
+                return userData.id;
+            } catch (error) {
+                console.error('Error getting doctor ID:', error);
+                return null;
+            }
+        }
+
+        // Load ratings for the doctor
+        async function loadDoctorRatings() {
+            try {
+                // Get the current user profile
+                const response = await fetch('/api/v1/user/profile', {
+                    headers: getAuthHeaders()
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile');
+                }
+                
+                const userData = await response.json();
+                
+                // Check if user is a doctor
+                if (userData.role !== 'DOCTOR') {
+                    document.querySelector('.card.mt-4').style.display = 'none';
+                    return;
+                }
+                
+                const doctorId = userData.id;
+                console.log('Loading ratings for doctor ID:', doctorId);
+                
+                // Fetch all ratings for this doctor
+                const ratingsResponse = await fetch(`/api/v1/ratings/doctor/${doctorId}`, {
+                    headers: getAuthHeaders()
+                });
+                
+                if (!ratingsResponse.ok) {
+                    throw new Error(`Error fetching ratings: ${ratingsResponse.status}`);
+                }
+                
+                const ratings = await ratingsResponse.json();
+                console.log('Ratings loaded:', ratings);
+                
+                document.querySelector('.average-rating').style.display = 'none';
+                
+                displayRatings(ratings);
+                
+            } catch (error) {
+                console.error('Error in loadDoctorRatings:', error);
+                const loadingElement = document.getElementById('loadingRatings');
+                if (loadingElement) {
+                    loadingElement.textContent = 'Error loading ratings. Please refresh the page.';
+                    loadingElement.className = 'text-danger';
+                }
+            }
+        }
+        
+        // Display ratings in the ratings list
+        function displayRatings(ratings) {
+          const ratingsListElement = document.getElementById('ratingsList');
+          
+          // Clear loading message
+          ratingsListElement.innerHTML = '';
+          
+          if (ratings.length === 0) {
+            ratingsListElement.innerHTML = '<div class="text-center text-muted">No ratings yet for this doctor.</div>';
+            return;
+          }
+          
+          // Sort ratings by date (newest first)
+          ratings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          
+          // Create and append rating items
+          ratings.forEach(rating => {
+            const ratingItem = document.createElement('div');
+            ratingItem.className = 'card mb-3';
+            
+            const stars = '★'.repeat(rating.score) + '☆'.repeat(5 - rating.score);
+            
+            ratingItem.innerHTML = `
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <h6 class="card-subtitle text-primary">${rating.patientName || 'Anonymous'}</h6>
+                  <span class="text-warning">${stars} (${rating.score}/5)</span>
+                </div>
+                <p class="card-text ${rating.review ? '' : 'text-muted fst-italic'}">${rating.review || 'No written review'}</p>
+              </div>
+            `;
+            
+            ratingsListElement.appendChild(ratingItem);
+          });
+        }
+
+        // Update star display based on rating
+        function updateStarDisplay(rating) {
+            const avgStars = document.getElementById('avgStars');
+            const fullStars = Math.round(rating);
+            
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    starsHtml += '★';
+                } else {
+                    starsHtml += '☆';
+                }
+            }
+            
+            avgStars.textContent = starsHtml;
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             checkAuth();
             fetchUserProfile();
+            loadDoctorRatings();
             
             document.getElementById('profile-form').addEventListener('submit', updateProfile);
             document.getElementById('logout-btn').addEventListener('click', logout);
