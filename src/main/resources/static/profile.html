@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - PandaCare</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
     <style>
         body {
             background-color: #f8f9fa;
@@ -55,6 +56,9 @@
             letter-spacing: 2px;
         }
     </style>
+
+    <link rel="stylesheet" href="css/profile.css">
+  
 </head>
 <body>
     <div class="container">
@@ -62,9 +66,10 @@
         
         <div class="profile-container">
             <div class="profile-header">
-                <div class="avatar" id="user-initial">U</div>
+                <div class="avatar" id="user-initial">I</div>
                 <h2 id="user-name">Loading...</h2>
                 <p id="user-email">loading@example.com</p>
+                <span class="badge bg-primary" id="user-role">ROLE</span>
             </div>
             
             <div class="alert alert-success d-none" id="success-alert">
@@ -77,25 +82,57 @@
             
             <form id="profile-form">
                 <div class="mb-3">
-                    <label for="firstName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstName" name="firstName">
-                </div>
-                <div class="mb-3">
-                    <label for="lastName" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" name="lastName">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" readonly>
+                    <input type="email" class="form-control" id="email" name="email" disabled>
                 </div>
                 <div class="mb-3">
                     <label for="role" class="form-label">Role</label>
                     <input type="text" class="form-control" id="role" name="role" readonly>
                 </div>
                 
-                <div class="d-flex justify-content-between">
+                <!-- Add this after the standard fields and before doctor-info div -->
+                <div class="patient-info">
+                    <h4>Patient Information</h4>
+                    <div class="mb-3">
+                        <label for="nik" class="form-label">NIK (National Identification Number)</label>
+                        <input type="text" class="form-control" id="nik" name="nik" placeholder="" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter your address"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number">
+                    </div>
+                    <div class="mb-3">
+                        <label for="medicalHistory" class="form-label">Medical History</label>
+                    </div>
+                </div>
+
+                <!-- Doctor-specific fields -->
+                <div class="doctor-info">
+                    <h4>Doctor Information</h4>
+                    <div class="mb-3">
+                        <label for="specialty" class="form-label">Specialty</label>
+                        <input type="text" class="form-control" id="specialty" name="specialty" placeholder="Add your specialty">
+                    </div>
+                    <div class="mb-3">
+                        <label for="workingAddress" class="form-label">Working Address</label>
+                        <input type="text" class="form-control" id="workingAddress" name="workingAddress" placeholder="Add your working address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phonenum" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phonenum" name="phonenum" placeholder="Add your phone number">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
                     <button type="submit" class="btn btn-primary">Update Profile</button>
-                    <button type="button" class="btn btn-danger" id="change-password-btn">Change Password</button>
                 </div>
             </form>
         </div>
@@ -119,7 +156,6 @@
         </div>
     </div>
 
-    <!-- Password Change Modal -->
     <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -152,6 +188,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         // Authentication header function
         function getAuthHeaders() {
@@ -420,5 +457,7 @@
             document.getElementById('save-password').addEventListener('click', changePassword);
         });
     </script>
+
+    <script src="js/profile.js"></script>
 </body>
 </html>
