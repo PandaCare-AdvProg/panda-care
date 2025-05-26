@@ -6,9 +6,11 @@ import id.ac.ui.cs.advprog.pandacare.response.RatingResponse;
 import id.ac.ui.cs.advprog.pandacare.service.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,13 +29,24 @@ public class RatingController {
     @PostMapping
     @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<RatingResponse> createRating(@RequestBody RatingRequest request) {
-        Rating rating = ratingService.createRating(
-                request.getConsultationId(),
-                request.getScore(),
-                request.getReview()
-        );
-        
-        return ResponseEntity.ok(mapToResponse(rating));
+        // Check if a rating already exists for this consultation
+        try {
+            // First find if there's an existing rating for this consultation
+            Rating existingRating = ratingService.getRatingByConsultationId(request.getConsultationId());
+            
+            // If found, update it instead of creating a new one
+            Rating updated = ratingService.updateRating(
+                    existingRating.getId(),
+                    request.getScore(),
+                    request.getReview()
+            );
+            
+            return ResponseEntity.ok(mapToResponse(updated));
+        } catch (Exception e) {
+            // If no existing rating found or other error, create a new one
+            Rating rating = ratingService.createRating(request);
+            return ResponseEntity.ok(mapToResponse(rating));
+        }
     }
 
     @GetMapping("/{id}")
@@ -85,6 +98,19 @@ public class RatingController {
                 .collect(Collectors.toList());
         
         return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/consultation/{consultationId}")
+    public ResponseEntity<RatingResponse> getRatingByConsultationId(@PathVariable Long consultationId) {
+        try {
+            Rating rating = ratingService.getRatingByConsultationId(consultationId);
+            return ResponseEntity.ok(mapToResponse(rating));
+        } catch (ResponseStatusException e) {
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+                return ResponseEntity.notFound().build();
+            }
+            throw e;
+        }
     }
     
     // Helper method to map Rating entity to RatingResponse DTO
