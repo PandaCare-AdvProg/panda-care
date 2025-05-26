@@ -34,9 +34,7 @@ class RatingControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
+    }    @Test
     void createRating_shouldReturnCreatedRating() {
         // Setup
         RatingRequest request = new RatingRequest();
@@ -65,7 +63,10 @@ class RatingControllerTest {
         rating.setScore(5);
         rating.setReview("Excellent service");
 
-        when(ratingService.createRating(eq(1L), eq(5), eq("Excellent service"))).thenReturn(rating);
+        // Mock the flow: first getRatingByConsultationId throws exception (no existing rating)
+        // then createRating(request) is called and returns the rating
+        when(ratingService.getRatingByConsultationId(1L)).thenThrow(new RuntimeException("Rating not found"));
+        when(ratingService.createRating(request)).thenReturn(rating);
 
         // Execute
         ResponseEntity<RatingResponse> response = ratingController.createRating(request);
@@ -76,7 +77,11 @@ class RatingControllerTest {
         assertEquals(1L, response.getBody().getId());
         assertEquals(5, response.getBody().getScore());
         assertEquals("Excellent service", response.getBody().getReview());
-        verify(ratingService).createRating(1L, 5, "Excellent service");
+        assertEquals("Dr. Smith", response.getBody().getDoctorName());
+        assertEquals("John Doe", response.getBody().getPatientName());
+        
+        verify(ratingService).getRatingByConsultationId(1L);
+        verify(ratingService).createRating(request);
     }
 
     @Test

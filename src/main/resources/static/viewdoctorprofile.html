@@ -360,49 +360,44 @@
       const profile = document.getElementById('profile');
       
       if (!id) {
-        profile.innerHTML = '<p class="error">No doctor ID provided in the URL.</p>';
+        profile.innerHTML = `<div class="error">No doctor ID provided.</div>`;
         return;
       }
       
       try {
-        const resp = await fetch('/api/doctors/' + id, { headers: getAuthHeaders() });
-        
-        if (resp.status === 401 || resp.status === 403) {
-          window.location.href = '/login.html';
-          return;
+        const res = await fetch(`/api/doctors/${id}`, {
+          headers: getAuthHeaders()
+        });
+        if (!res.ok) throw new Error('Doctor not found');
+        const d = await res.json();
+
+        // Helper to format time as HH:mm
+        function formatTime(t) {
+          if (!t) return '';
+          return t.length > 5 ? t.slice(0,5) : t;
         }
-        
-        if (resp.status !== 200) {
-          profile.innerHTML = '<p class="error">Doctor not found. Please check the ID and try again.</p>';
-          return;
+
+        // Build schedule HTML
+        let scheduleHtml = 'Schedule not available';
+        if (Array.isArray(d.schedules) && d.schedules.length > 0) {
+          scheduleHtml = `<ul style="padding-left:1.2em;margin:0;">` +
+            d.schedules.map(s =>
+              `<li>
+                <strong>${s.dayOfWeek || s.day}:</strong>
+                ${formatTime(s.startTime)} – ${formatTime(s.endTime)}
+              </li>`
+            ).join('') +
+            `</ul>`;
         }
-        
-        const d = await resp.json();
-        
-        // display doctor info
+
         profile.innerHTML = `
           <dl>
-            <dt>ID</dt>
-            <dd>${d.id}</dd>
-            
-            <dt>Name</dt>
-            <dd><strong>${d.name}</strong></dd>
-            
-            <dt>Email</dt>
-            <dd><a href="mailto:${d.email}">${d.email}</a></dd>
-            
-            <dt>Practice Address</dt>
-            <dd>${d.workingAddress || 'Not specified'}</dd>
-            
-            <dt>Phone</dt>
-            <dd>${d.phonenum ? `<a href="tel:${d.phonenum}">${d.phonenum}</a>` : 'Not provided'}</dd>
-            
-            <dt>Work Schedule</dt>
-            <dd>
-              ${(d.schedules || []).length 
-                ? d.schedules.map(s => `<strong>${s.day}:</strong> ${s.startTime} – ${s.endTime}`).join('<br>')
-                : 'Schedule not available'}
-            </dd>
+            <dt>Name</dt><dd>${d.name}</dd>
+            <dt>Email</dt><dd>${d.email}</dd>
+            <dt>Specialty</dt><dd>${d.specialty || '-'}</dd>
+            <dt>Working Address</dt><dd>${d.workingAddress || '-'}</dd>
+            <dt>Phone</dt><dd>${d.phonenum || '-'}</dd>
+            <dt>Work Schedule</dt><dd>${scheduleHtml}</dd>
           </dl>
         `;
         
@@ -418,8 +413,7 @@
         loadDoctorRatings(d.id);
         
       } catch (error) {
-        console.error('Error loading doctor profile:', error);
-        profile.innerHTML = '<p class="error">Failed to load doctor information. Please try again later.</p>';
+        profile.innerHTML = `<div class="error">${error.message}</div>`;
       }
     }
 

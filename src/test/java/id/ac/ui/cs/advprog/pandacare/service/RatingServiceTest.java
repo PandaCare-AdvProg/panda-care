@@ -6,18 +6,22 @@ import id.ac.ui.cs.advprog.pandacare.model.Patient;
 import id.ac.ui.cs.advprog.pandacare.model.Rating;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.RatingRepository;
+import id.ac.ui.cs.advprog.pandacare.repository.PatientRepository;
 import id.ac.ui.cs.advprog.pandacare.service.ratingimpl.RatingServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class RatingServiceTest {
@@ -28,12 +32,15 @@ class RatingServiceTest {
     @Mock
     private ConsultationRepository consultationRepository;
     
+    @Mock
+    private PatientRepository patientRepository;
+    
     private RatingService ratingService;
     
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        ratingService = new RatingServiceImpl(ratingRepository, consultationRepository);
+        ratingService = new RatingServiceImpl(ratingRepository, consultationRepository, patientRepository);
     }
     
     @Test
@@ -80,23 +87,22 @@ class RatingServiceTest {
         verify(ratingRepository).findByConsultation(consultation);
         verify(ratingRepository).save(any(Rating.class));
     }
-    
-    @Test
+      @Test
     void createRating_shouldThrowExceptionIfConsultationNotFound() {
         // Setup
         when(consultationRepository.findById(1L)).thenReturn(Optional.empty());
         
         // Execute & Verify
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
             ratingService.createRating(1L, 5, "Excellent");
         });
         
-        assertEquals("Consultation not found with id: 1", exception.getMessage());
+        // Check the exact exception message from your implementation
+        assertEquals("Consultation not found", exception.getReason());
         verify(consultationRepository).findById(1L);
         verify(ratingRepository, never()).save(any(Rating.class));
     }
-    
-    @Test
+      @Test
     void createRating_shouldThrowExceptionIfRatingExists() {
         // Setup
         Doctor doctor = new Doctor();
@@ -114,7 +120,7 @@ class RatingServiceTest {
         when(ratingRepository.findByConsultation(consultation)).thenReturn(existingRating);
         
         // Execute & Verify
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             ratingService.createRating(1L, 5, "Excellent");
         });
         
