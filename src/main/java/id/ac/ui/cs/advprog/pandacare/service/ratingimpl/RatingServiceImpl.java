@@ -7,6 +7,7 @@ import id.ac.ui.cs.advprog.pandacare.model.Rating;
 import id.ac.ui.cs.advprog.pandacare.repository.ConsultationRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.RatingRepository;
 import id.ac.ui.cs.advprog.pandacare.repository.PatientRepository;
+import id.ac.ui.cs.advprog.pandacare.request.RatingRequest;
 import id.ac.ui.cs.advprog.pandacare.service.RatingService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +100,6 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.delete(rating);
     }
 
-    @Override
     public double getAverageRating(Doctor doctor) {
         List<Rating> ratings = getRatingsByDoctor(doctor);
         if (ratings.isEmpty()) {
@@ -127,5 +127,53 @@ public class RatingServiceImpl implements RatingService {
         }
         
         return (double) sum / ratings.size();
+    }
+
+    public Rating updateRating(Long id, RatingRequest request) {
+        Rating rating = ratingRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rating not found"));
+        
+        rating.setScore(request.getScore());
+        rating.setReview(request.getReview());
+        
+        return ratingRepository.save(rating);
+    }
+
+    public Rating createRating(RatingRequest request) {
+        Consultation consultation = consultationRepository.findById(request.getConsultationId())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Consultation not found"));
+        
+        Rating existingRating = ratingRepository.findByConsultation(consultation);
+        if (existingRating != null) {
+            // Update existing rating
+            existingRating.setScore(request.getScore());
+            existingRating.setReview(request.getReview());
+            return ratingRepository.save(existingRating);
+        }
+        
+        // Create new rating if none exists
+        Rating newRating = new Rating();
+        newRating.setConsultation(consultation);
+        newRating.setDoctor(consultation.getDoctor());
+        newRating.setPatient(consultation.getPatient());
+        newRating.setScore(request.getScore());
+        newRating.setReview(request.getReview());
+        
+        return ratingRepository.save(newRating);
+    }
+
+    @Override
+    public Rating getRatingByConsultationId(Long consultationId) {
+        Consultation consultation = consultationRepository.findById(consultationId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                    "Consultation not found with id: " + consultationId));
+        
+        Rating rating = ratingRepository.findByConsultation(consultation);
+        if (rating == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+                    "Rating not found for consultation with id: " + consultationId);
+        }
+        
+        return rating;
     }
 }
