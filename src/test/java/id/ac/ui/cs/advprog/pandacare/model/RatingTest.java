@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
-import id.ac.ui.cs.advprog.pandacare.enums.Role;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +17,7 @@ class RatingTest {
         Patient patient = new Patient();
         Consultation consultation = new Consultation();
         
-        Rating rating = new Rating(1L, doctor, patient, consultation, 5, "Excellent service");
+        Rating rating = new Rating(1L, doctor, patient, consultation, 5, "Excellent service", null, null);
         
         assertEquals(1L, rating.getId());
         assertEquals(doctor, rating.getDoctor());
