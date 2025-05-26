@@ -1775,3 +1775,585 @@ java.lang.IllegalStateException: Rating already exists for this consultation
 2025-05-26T17:09:50.578+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/consultations/patient/826
 2025-05-26T17:09:51.194+07:00 DEBUG 6912 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/consultations/patient/826
 2025-05-26T17:09:51.198+07:00  INFO 6912 --- [pandacare] [http-nio-8080-exec-3] i.a.u.c.a.p.c.ConsultationController     : Getting consultations for patient id 826 with email chia@gmail.com
+2025-05-26T17:39:30.444+07:00  INFO 6912 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2025-05-26T17:43:18.207+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T17:43:18.277+07:00  INFO 6912 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T17:43:18.328+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T17:43:18.331+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2416dbd1]]
+2025-05-26T17:43:18.332+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T17:43:18.440+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T17:43:18.593+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T17:43:21.670+07:00  INFO 6912 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T17:44:23.599+07:00  INFO 24084 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 24084 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T17:44:23.603+07:00  INFO 24084 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T17:44:23.662+07:00  INFO 24084 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T17:44:23.663+07:00  INFO 24084 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T17:44:25.942+07:00  INFO 24084 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T17:44:26.111+07:00  INFO 24084 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 157 ms. Found 10 JPA repository interfaces.
+2025-05-26T17:44:27.982+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T17:44:28.010+07:00  INFO 24084 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T17:44:28.011+07:00  INFO 24084 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T17:44:28.133+07:00  INFO 24084 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T17:44:28.134+07:00  INFO 24084 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4471 ms
+2025-05-26T17:44:28.726+07:00  INFO 24084 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T17:44:28.898+07:00  INFO 24084 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T17:44:28.990+07:00  INFO 24084 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T17:44:29.661+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T17:44:29.718+07:00  INFO 24084 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T17:44:33.551+07:00  INFO 24084 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@274c4dcd
+2025-05-26T17:44:33.554+07:00  INFO 24084 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T17:44:33.888+07:00  WARN 24084 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T17:44:34.596+07:00  INFO 24084 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T17:44:37.490+07:00  INFO 24084 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T17:44:52.179+07:00  INFO 24084 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T17:44:53.304+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T17:44:54.723+07:00  INFO 24084 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T17:44:54.724+07:00  WARN 24084 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T17:44:56.117+07:00  WARN 24084 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T17:44:56.486+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T17:44:57.100+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T17:44:57.340+07:00 DEBUG 24084 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T17:44:57.789+07:00  WARN 24084 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T17:44:58.609+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T17:44:58.714+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T17:44:58.715+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@54108e58]]
+2025-05-26T17:44:58.716+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T17:44:58.757+07:00  INFO 24084 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T17:44:58.775+07:00  INFO 24084 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 35.871 seconds (process running for 37.358)
+2025-05-26T17:44:59.327+07:00  INFO 24084 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T17:44:59.328+07:00  INFO 24084 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T17:44:59.332+07:00  INFO 24084 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-05-26T17:45:05.107+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T17:45:05.140+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T17:45:07.182+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T17:45:07.190+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:07.206+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T17:45:07.357+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /favicon.ico
+2025-05-26T17:45:07.358+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:07.360+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /favicon.ico
+2025-05-26T17:45:07.394+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /error
+2025-05-26T17:45:07.396+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /error
+2025-05-26T17:45:07.520+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:11.385+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T17:45:11.387+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:11.389+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T17:45:13.058+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-5] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T17:45:14.746+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T17:45:14.747+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:14.748+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T17:45:14.802+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T17:45:14.807+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T17:45:15.540+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T17:45:15.805+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T17:45:15.808+07:00  INFO 24084 --- [pandacare] [http-nio-8080-exec-7] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T17:45:15.995+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T17:45:15.997+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:15.999+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T17:45:16.095+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T17:45:16.927+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T17:45:20.193+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T17:45:20.194+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:45:20.195+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T17:45:20.407+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T17:45:21.382+07:00 DEBUG 24084 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T17:45:21.388+07:00  INFO 24084 --- [pandacare] [http-nio-8080-exec-1] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T17:45:58.665+07:00  INFO 24084 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T17:54:44.546+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T17:54:44.569+07:00  INFO 24084 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T17:54:44.576+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T17:54:44.577+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@54108e58]]
+2025-05-26T17:54:44.577+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T17:54:44.596+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T17:54:44.627+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T17:54:47.726+07:00  INFO 24084 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T17:54:54.794+07:00  INFO 4236 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 4236 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T17:54:54.798+07:00  INFO 4236 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T17:54:54.856+07:00  INFO 4236 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T17:54:54.856+07:00  INFO 4236 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T17:54:57.299+07:00  INFO 4236 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T17:54:57.464+07:00  INFO 4236 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 152 ms. Found 10 JPA repository interfaces.
+2025-05-26T17:54:59.185+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T17:54:59.205+07:00  INFO 4236 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T17:54:59.206+07:00  INFO 4236 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T17:54:59.300+07:00  INFO 4236 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T17:54:59.301+07:00  INFO 4236 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4444 ms
+2025-05-26T17:54:59.961+07:00  INFO 4236 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T17:55:00.109+07:00  INFO 4236 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T17:55:00.179+07:00  INFO 4236 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T17:55:00.747+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T17:55:00.814+07:00  INFO 4236 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T17:55:04.429+07:00  INFO 4236 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@61017eb3
+2025-05-26T17:55:04.433+07:00  INFO 4236 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T17:55:04.773+07:00  WARN 4236 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T17:55:05.408+07:00  INFO 4236 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T17:55:08.556+07:00  INFO 4236 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T17:55:23.665+07:00  INFO 4236 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T17:55:24.295+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T17:55:26.077+07:00  INFO 4236 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T17:55:26.079+07:00  WARN 4236 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T17:55:27.598+07:00  WARN 4236 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T17:55:27.995+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T17:55:28.709+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T17:55:28.929+07:00 DEBUG 4236 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T17:55:29.370+07:00  WARN 4236 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T17:55:30.219+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T17:55:30.355+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T17:55:30.357+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@229f0f70]]
+2025-05-26T17:55:30.358+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T17:55:30.395+07:00  INFO 4236 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T17:55:30.421+07:00  INFO 4236 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 36.303 seconds (process running for 37.443)
+2025-05-26T17:55:31.153+07:00  INFO 4236 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T17:55:31.154+07:00  INFO 4236 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T17:55:31.166+07:00  INFO 4236 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-05-26T17:55:44.990+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T17:55:45.011+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T17:55:46.945+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T17:55:46.952+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:55:46.958+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T17:55:54.297+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T17:55:54.298+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:55:54.301+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T17:55:56.128+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T17:55:58.058+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T17:55:58.059+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:55:58.060+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T17:55:58.112+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T17:55:58.125+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T17:55:58.838+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T17:55:58.842+07:00  INFO 4236 --- [pandacare] [http-nio-8080-exec-5] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T17:55:59.109+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T17:55:59.389+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T17:55:59.737+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/schedules/doctor/202
+2025-05-26T17:56:00.029+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T17:56:00.337+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/schedules/doctor/202
+2025-05-26T17:56:00.342+07:00  INFO 4236 --- [pandacare] [http-nio-8080-exec-9] i.a.u.c.a.p.c.ScheduleController         : Getting schedules for doctor id 202
+2025-05-26T17:56:01.025+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T17:56:01.026+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:56:01.028+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T17:56:01.081+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T17:56:01.613+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T17:56:09.685+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T17:56:09.686+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:56:09.688+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T17:56:09.766+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T17:56:10.680+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T17:56:10.684+07:00  INFO 4236 --- [pandacare] [http-nio-8080-exec-3] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T17:56:26.416+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T17:56:26.417+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T17:56:26.421+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T17:56:26.483+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T17:56:27.472+07:00 DEBUG 4236 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T17:56:27.475+07:00  INFO 4236 --- [pandacare] [http-nio-8080-exec-9] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T17:56:30.316+07:00  INFO 4236 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T18:00:59.219+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T18:00:59.225+07:00  INFO 4236 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T18:00:59.228+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T18:00:59.229+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@229f0f70]]
+2025-05-26T18:00:59.229+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T18:00:59.241+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:00:59.249+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T18:01:02.022+07:00  INFO 4236 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T18:01:08.456+07:00  INFO 4904 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 4904 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T18:01:08.459+07:00  INFO 4904 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T18:01:08.522+07:00  INFO 4904 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T18:01:08.522+07:00  INFO 4904 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T18:01:10.511+07:00  INFO 4904 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T18:01:10.668+07:00  INFO 4904 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 141 ms. Found 10 JPA repository interfaces.
+2025-05-26T18:01:12.085+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T18:01:12.104+07:00  INFO 4904 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T18:01:12.105+07:00  INFO 4904 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T18:01:12.207+07:00  INFO 4904 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T18:01:12.207+07:00  INFO 4904 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3684 ms
+2025-05-26T18:01:12.793+07:00  INFO 4904 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T18:01:12.969+07:00  INFO 4904 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T18:01:13.049+07:00  INFO 4904 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T18:01:13.570+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T18:01:13.646+07:00  INFO 4904 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T18:01:17.450+07:00  INFO 4904 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@498bb214
+2025-05-26T18:01:17.453+07:00  INFO 4904 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T18:01:17.834+07:00  WARN 4904 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T18:01:18.492+07:00  INFO 4904 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T18:01:21.274+07:00  INFO 4904 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T18:01:35.927+07:00  INFO 4904 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:01:36.695+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T18:01:37.882+07:00  INFO 4904 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T18:01:37.882+07:00  WARN 4904 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T18:01:39.160+07:00  WARN 4904 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T18:01:39.442+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T18:01:39.985+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T18:01:40.148+07:00 DEBUG 4904 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T18:01:40.540+07:00  WARN 4904 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T18:01:41.456+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T18:01:41.565+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T18:01:41.566+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@19b198d]]
+2025-05-26T18:01:41.568+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T18:01:41.601+07:00  INFO 4904 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T18:01:41.619+07:00  INFO 4904 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 33.747 seconds (process running for 34.718)
+2025-05-26T18:01:42.151+07:00  INFO 4904 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T18:01:42.152+07:00  INFO 4904 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T18:01:42.157+07:00  INFO 4904 --- [pandacare] [RMI TCP Connection(3)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-05-26T18:02:14.836+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T18:02:14.856+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T18:02:16.593+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T18:02:16.600+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:02:16.611+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T18:02:23.465+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T18:02:23.467+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:02:23.469+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T18:02:25.137+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T18:02:26.938+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T18:02:26.940+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:02:26.942+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T18:02:27.099+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T18:02:27.102+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:02:27.907+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:02:28.156+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T18:02:28.158+07:00  INFO 4904 --- [pandacare] [http-nio-8080-exec-8] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T18:02:28.527+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T18:02:28.529+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:02:28.531+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T18:02:28.546+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/schedules/doctor/202
+2025-05-26T18:02:28.546+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T18:02:28.653+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:02:29.242+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T18:02:29.243+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/schedules/doctor/202
+2025-05-26T18:02:29.249+07:00  INFO 4904 --- [pandacare] [http-nio-8080-exec-1] i.a.u.c.a.p.c.ScheduleController         : Getting schedules for doctor id 202
+2025-05-26T18:02:29.551+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:02:38.636+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T18:02:38.636+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:02:38.638+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T18:02:38.703+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T18:02:39.686+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T18:02:39.690+07:00  INFO 4904 --- [pandacare] [http-nio-8080-exec-3] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T18:02:40.251+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/doctor/827
+2025-05-26T18:02:40.915+07:00 DEBUG 4904 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/doctor/827
+2025-05-26T18:02:41.521+07:00  INFO 4904 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T18:04:51.346+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T18:04:51.354+07:00  INFO 4904 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T18:04:51.356+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T18:04:51.356+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@19b198d]]
+2025-05-26T18:04:51.356+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T18:04:51.366+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:04:51.371+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T18:04:54.320+07:00  INFO 4904 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T18:04:59.279+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 24252 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T18:04:59.282+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T18:04:59.337+07:00  INFO 24252 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T18:04:59.337+07:00  INFO 24252 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T18:05:01.386+07:00  INFO 24252 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T18:05:01.526+07:00  INFO 24252 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 128 ms. Found 10 JPA repository interfaces.
+2025-05-26T18:05:02.827+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T18:05:02.845+07:00  INFO 24252 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T18:05:02.846+07:00  INFO 24252 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T18:05:02.931+07:00  INFO 24252 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T18:05:02.931+07:00  INFO 24252 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3593 ms
+2025-05-26T18:05:03.591+07:00  INFO 24252 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T18:05:03.673+07:00  INFO 24252 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T18:05:03.728+07:00  INFO 24252 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T18:05:04.295+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T18:05:04.348+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T18:05:07.746+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@73cf8220
+2025-05-26T18:05:07.749+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T18:05:08.095+07:00  WARN 24252 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T18:05:08.781+07:00  INFO 24252 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T18:05:11.041+07:00  INFO 24252 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T18:05:26.110+07:00  INFO 24252 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:05:26.625+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T18:05:27.767+07:00  INFO 24252 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T18:05:27.767+07:00  WARN 24252 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T18:05:28.939+07:00  WARN 24252 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T18:05:29.443+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T18:05:30.018+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T18:05:30.178+07:00 DEBUG 24252 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T18:05:30.546+07:00  WARN 24252 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T18:05:31.441+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T18:05:31.525+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T18:05:31.526+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2227db46]]
+2025-05-26T18:05:31.527+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T18:05:31.549+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T18:05:31.566+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 32.918 seconds (process running for 33.939)
+2025-05-26T18:05:31.816+07:00  INFO 24252 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T18:05:31.817+07:00  INFO 24252 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T18:05:31.823+07:00  INFO 24252 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-05-26T18:05:38.000+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T18:05:38.015+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T18:05:39.814+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T18:05:39.819+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:05:39.826+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T18:05:46.060+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T18:05:46.063+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:05:46.064+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T18:05:47.772+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-3] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T18:05:49.475+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T18:05:49.477+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:05:49.480+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T18:05:49.538+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:05:49.541+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T18:05:50.254+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T18:05:50.259+07:00  INFO 24252 --- [pandacare] [http-nio-8080-exec-6] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T18:05:50.551+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:05:50.562+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T18:05:51.022+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T18:05:51.023+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:05:51.026+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T18:05:51.139+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:05:51.161+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T18:05:52.091+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:05:55.277+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T18:05:55.279+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:05:55.281+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T18:05:55.410+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T18:05:56.345+07:00 DEBUG 24252 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T18:05:56.349+07:00  INFO 24252 --- [pandacare] [http-nio-8080-exec-1] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T18:06:23.756+07:00  INFO 24252 --- [pandacare] [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 13 class path changes (0 additions, 0 deletions, 13 modifications)
+2025-05-26T18:06:23.762+07:00  INFO 24252 --- [pandacare] [Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T18:06:23.768+07:00  INFO 24252 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T18:06:23.771+07:00  INFO 24252 --- [pandacare] [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T18:06:23.771+07:00  INFO 24252 --- [pandacare] [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2227db46]]
+2025-05-26T18:06:23.771+07:00  INFO 24252 --- [pandacare] [Thread-5] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T18:06:23.780+07:00  INFO 24252 --- [pandacare] [Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:06:23.785+07:00  INFO 24252 --- [pandacare] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T18:06:26.683+07:00  INFO 24252 --- [pandacare] [Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T18:06:26.818+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 24252 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T18:06:26.820+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T18:06:27.574+07:00  INFO 24252 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T18:06:27.649+07:00  INFO 24252 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 72 ms. Found 10 JPA repository interfaces.
+2025-05-26T18:06:27.978+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T18:06:27.980+07:00  INFO 24252 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T18:06:27.981+07:00  INFO 24252 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T18:06:28.028+07:00  INFO 24252 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T18:06:28.028+07:00  INFO 24252 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1205 ms
+2025-05-26T18:06:28.274+07:00  INFO 24252 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T18:06:28.281+07:00  INFO 24252 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T18:06:28.306+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T18:06:28.308+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2025-05-26T18:06:31.394+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@54e39674
+2025-05-26T18:06:31.394+07:00  INFO 24252 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2025-05-26T18:06:31.703+07:00  WARN 24252 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T18:06:32.255+07:00  INFO 24252 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T18:06:32.884+07:00  INFO 24252 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T18:06:46.855+07:00  INFO 24252 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:06:47.175+07:00  INFO 24252 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T18:06:47.176+07:00  WARN 24252 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T18:06:47.949+07:00  WARN 24252 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T18:06:48.095+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T18:06:48.421+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T18:06:48.588+07:00 DEBUG 24252 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T18:06:48.777+07:00  WARN 24252 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T18:06:49.223+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T18:06:49.260+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T18:06:49.260+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1e6db746]]
+2025-05-26T18:06:49.260+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T18:06:49.265+07:00  INFO 24252 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T18:06:49.274+07:00  INFO 24252 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 22.503 seconds (process running for 111.647)
+2025-05-26T18:06:49.276+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T18:06:49.278+07:00  INFO 24252 --- [pandacare] [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2025-05-26T18:06:49.281+07:00  INFO 24252 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T18:06:49.283+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T18:06:49.283+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1e6db746]]
+2025-05-26T18:06:49.283+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T18:06:49.287+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:06:49.287+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2025-05-26T18:06:52.180+07:00  INFO 24252 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+2025-05-26T18:06:56.633+07:00  INFO 14688 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 14688 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T18:06:56.636+07:00  INFO 14688 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T18:06:56.690+07:00  INFO 14688 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T18:06:56.690+07:00  INFO 14688 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T18:06:58.863+07:00  INFO 14688 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T18:06:59.023+07:00  INFO 14688 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 139 ms. Found 10 JPA repository interfaces.
+2025-05-26T18:07:00.305+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T18:07:00.326+07:00  INFO 14688 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T18:07:00.326+07:00  INFO 14688 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T18:07:00.403+07:00  INFO 14688 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T18:07:00.404+07:00  INFO 14688 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3712 ms
+2025-05-26T18:07:00.969+07:00  INFO 14688 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T18:07:01.058+07:00  INFO 14688 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T18:07:01.115+07:00  INFO 14688 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T18:07:01.550+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T18:07:01.597+07:00  INFO 14688 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T18:07:05.112+07:00  INFO 14688 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2ca579f7
+2025-05-26T18:07:05.115+07:00  INFO 14688 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T18:07:05.541+07:00  WARN 14688 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T18:07:06.129+07:00  INFO 14688 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T18:07:08.337+07:00  INFO 14688 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T18:07:23.415+07:00  INFO 14688 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:07:23.935+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T18:07:25.108+07:00  INFO 14688 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T18:07:25.109+07:00  WARN 14688 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T18:07:26.690+07:00  WARN 14688 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T18:07:27.077+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T18:07:27.637+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T18:07:27.809+07:00 DEBUG 14688 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T18:07:28.178+07:00  WARN 14688 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T18:07:28.950+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T18:07:29.041+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T18:07:29.042+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7cb13c4a]]
+2025-05-26T18:07:29.043+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T18:07:29.066+07:00  INFO 14688 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T18:07:29.088+07:00  INFO 14688 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 33.061 seconds (process running for 34.01)
+2025-05-26T18:07:29.733+07:00  INFO 14688 --- [pandacare] [RMI TCP Connection(1)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T18:07:29.733+07:00  INFO 14688 --- [pandacare] [RMI TCP Connection(1)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T18:07:29.736+07:00  INFO 14688 --- [pandacare] [RMI TCP Connection(1)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-05-26T18:07:38.885+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T18:07:38.903+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T18:07:40.949+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T18:07:40.955+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:07:40.961+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T18:07:44.759+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T18:07:44.761+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:07:44.763+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T18:07:46.503+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T18:07:48.362+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T18:07:48.363+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:07:48.364+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T18:07:48.420+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T18:07:48.420+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:07:49.134+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:07:49.437+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T18:07:49.440+07:00  INFO 14688 --- [pandacare] [http-nio-8080-exec-6] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T18:07:49.751+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/schedules/doctor/202
+2025-05-26T18:07:49.754+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/patient/826
+2025-05-26T18:07:49.890+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T18:07:49.892+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:07:49.893+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T18:07:49.995+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:07:50.362+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/patient/826
+2025-05-26T18:07:50.362+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/schedules/doctor/202
+2025-05-26T18:07:50.369+07:00  INFO 14688 --- [pandacare] [http-nio-8080-exec-7] i.a.u.c.a.p.c.ScheduleController         : Getting schedules for doctor id 202
+2025-05-26T18:07:50.975+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:07:54.408+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T18:07:54.409+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:07:54.411+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T18:07:54.474+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T18:07:55.480+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T18:07:55.484+07:00  INFO 14688 --- [pandacare] [http-nio-8080-exec-2] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T18:07:56.051+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/doctor/827
+2025-05-26T18:07:56.596+07:00 DEBUG 14688 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/doctor/827
+2025-05-26T18:08:29.002+07:00  INFO 14688 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2025-05-26T18:10:11.317+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-26T18:10:11.325+07:00  INFO 14688 --- [pandacare] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-26T18:10:11.328+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2025-05-26T18:10:11.329+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7cb13c4a]]
+2025-05-26T18:10:11.329+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2025-05-26T18:10:11.360+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:10:11.365+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-26T18:10:14.313+07:00  INFO 14688 --- [pandacare] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-05-26T18:10:19.816+07:00  INFO 19920 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Starting PandacareApplication using Java 21.0.7 with PID 19920 (C:\Users\Chiara\Documents\uni\advpro\panda-care\build\classes\java\main started by Chiara in C:\Users\Chiara\Documents\uni\advpro\panda-care)
+2025-05-26T18:10:19.818+07:00  INFO 19920 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : No active profile set, falling back to 1 default profile: "default"
+2025-05-26T18:10:19.971+07:00  INFO 19920 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-05-26T18:10:19.971+07:00  INFO 19920 --- [pandacare] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-05-26T18:10:22.764+07:00  INFO 19920 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-26T18:10:22.924+07:00  INFO 19920 --- [pandacare] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 145 ms. Found 10 JPA repository interfaces.
+2025-05-26T18:10:24.694+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-26T18:10:24.717+07:00  INFO 19920 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-26T18:10:24.717+07:00  INFO 19920 --- [pandacare] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-26T18:10:24.807+07:00  INFO 19920 --- [pandacare] [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-26T18:10:24.808+07:00  INFO 19920 --- [pandacare] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4837 ms
+2025-05-26T18:10:25.415+07:00  INFO 19920 --- [pandacare] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-26T18:10:25.548+07:00  INFO 19920 --- [pandacare] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-05-26T18:10:25.620+07:00  INFO 19920 --- [pandacare] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-26T18:10:26.156+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-26T18:10:26.218+07:00  INFO 19920 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-26T18:10:29.889+07:00  INFO 19920 --- [pandacare] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6c7a7e17
+2025-05-26T18:10:29.893+07:00  INFO 19920 --- [pandacare] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-26T18:10:30.257+07:00  WARN 19920 --- [pandacare] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-26T18:10:31.024+07:00  INFO 19920 --- [pandacare] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-26T18:10:34.503+07:00  INFO 19920 --- [pandacare] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-26T18:10:49.441+07:00  INFO 19920 --- [pandacare] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-26T18:10:50.091+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-05-26T18:10:51.391+07:00  INFO 19920 --- [pandacare] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-26T18:10:51.393+07:00  WARN 19920 --- [pandacare] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-26T18:10:53.293+07:00  WARN 19920 --- [pandacare] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-26T18:10:53.666+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-05-26T18:10:54.291+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-26T18:10:54.635+07:00 DEBUG 19920 --- [pandacare] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-05-26T18:10:55.368+07:00  WARN 19920 --- [pandacare] [restartedMain] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2025-05-26T18:10:56.616+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2025-05-26T18:10:56.728+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2025-05-26T18:10:56.728+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7e44cef5]]
+2025-05-26T18:10:56.730+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2025-05-26T18:10:56.776+07:00  INFO 19920 --- [pandacare] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-26T18:10:56.798+07:00  INFO 19920 --- [pandacare] [restartedMain] i.a.u.c.a.p.PandacareApplication         : Started PandacareApplication in 37.822 seconds (process running for 38.912)
+2025-05-26T18:10:57.454+07:00  INFO 19920 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-26T18:10:57.455+07:00  INFO 19920 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-05-26T18:10:57.458+07:00  INFO 19920 --- [pandacare] [RMI TCP Connection(4)-10.5.91.172] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-05-26T18:11:29.772+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/logout
+2025-05-26T18:11:29.789+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-3] o.s.s.w.a.logout.LogoutFilter            : Logging out [null]
+2025-05-26T18:11:31.758+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /login.html
+2025-05-26T18:11:31.764+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:11:31.770+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /login.html
+2025-05-26T18:11:37.025+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing POST /api/v1/auth/authenticate
+2025-05-26T18:11:37.028+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:11:37.029+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured POST /api/v1/auth/authenticate
+2025-05-26T18:11:38.543+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-2] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-05-26T18:11:40.459+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /consultation.html
+2025-05-26T18:11:40.461+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:11:40.462+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /consultation.html
+2025-05-26T18:11:40.524+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/patients/me
+2025-05-26T18:11:40.523+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:11:41.267+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:11:41.595+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/patients/me
+2025-05-26T18:11:41.598+07:00  INFO 19920 --- [pandacare] [http-nio-8080-exec-8] i.a.u.c.a.p.c.PatientController          : Getting current patient for email: chia@gmail.com
+2025-05-26T18:11:41.960+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /searchdoctor.html
+2025-05-26T18:11:41.961+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:11:41.962+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /searchdoctor.html
+2025-05-26T18:11:42.059+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors
+2025-05-26T18:11:42.700+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors
+2025-05-26T18:11:52.636+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /viewdoctorprofile.html?id=827
+2025-05-26T18:11:52.637+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-05-26T18:11:52.638+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /viewdoctorprofile.html?id=827
+2025-05-26T18:11:52.721+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/doctors/827
+2025-05-26T18:11:53.656+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/doctors/827
+2025-05-26T18:11:53.661+07:00  INFO 19920 --- [pandacare] [http-nio-8080-exec-10] i.a.u.c.a.p.controller.DoctorController  : Getting doctor by id: 827
+2025-05-26T18:11:54.275+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/v1/ratings/doctor/827
+2025-05-26T18:11:54.889+07:00 DEBUG 19920 --- [pandacare] [http-nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/v1/ratings/doctor/827
+2025-05-26T18:11:56.689+07:00  INFO 19920 --- [pandacare] [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
