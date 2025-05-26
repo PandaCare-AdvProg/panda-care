@@ -145,6 +145,38 @@
       margin: 1rem 0;
     }
     
+    .ratings-section {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+    
+    .rating-item {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--medium-gray);
+    }
+    
+    .rating-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .rating-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .rating-body {
+      color: var(--dark-gray);
+      font-style: italic;
+      line-height: 1.5;
+    }
+    
     @media (max-width: 768px) {
       body {
         padding: 1rem;
@@ -285,6 +317,13 @@
     <p class="loading">Loading doctor information...</p>
   </div>
   
+  <div class="section ratings-section" id="ratingsSection">
+    <h3>Patient Ratings & Reviews</h3>
+    <div id="ratingsList">
+      <p class="loading">Loading ratings...</p>
+    </div>
+  </div>
+  
   <div class="button-group">
     <button id="chatBtn" style="display:none">
       <i class="fas fa-comments" style="margin-right: 8px;"></i> Chat with Doctor
@@ -358,9 +397,6 @@
             <dt>Phone</dt>
             <dd>${d.phonenum ? `<a href="tel:${d.phonenum}">${d.phonenum}</a>` : 'Not provided'}</dd>
             
-            <dt>Rating</dt>
-            <dd class="rating">${formatRating(d.rating)}</dd>
-            
             <dt>Work Schedule</dt>
             <dd>
               ${(d.schedules || []).length 
@@ -378,12 +414,67 @@
         chatBtn.onclick = () => window.location.href = `chat.html?doctorId=${d.id}`;
         consultBtn.onclick = () => window.location.href = `consultation.html?doctorId=${d.id}`;
         
+        // Load ratings for the doctor
+        loadDoctorRatings(d.id);
+        
       } catch (error) {
         console.error('Error loading doctor profile:', error);
         profile.innerHTML = '<p class="error">Failed to load doctor information. Please try again later.</p>';
       }
     }
 
+    async function loadDoctorRatings(doctorId) {
+      const ratingsListElement = document.getElementById('ratingsList');
+      
+      try {
+        // Fetch all ratings for this doctor
+        const ratingsResponse = await fetch(`/api/v1/ratings/doctor/${doctorId}`, {
+          headers: getAuthHeaders()
+        });
+        
+        if (!ratingsResponse.ok) {
+          throw new Error(`Error fetching ratings: ${ratingsResponse.status}`);
+        }
+        
+        const ratings = await ratingsResponse.json();
+        console.log('Ratings loaded:', ratings);
+        
+        // Clear loading message
+        ratingsListElement.innerHTML = '';
+        
+        if (ratings.length === 0) {
+          ratingsListElement.innerHTML = '<p class="loading">No ratings yet for this doctor.</p>';
+          return;
+        }
+        
+        // Sort ratings by date (newest first)
+        ratings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        
+        // Create and append rating items
+        ratings.forEach(rating => {
+          const ratingItem = document.createElement('div');
+          ratingItem.className = 'rating-item';
+          
+          const stars = '★'.repeat(rating.score) + '☆'.repeat(5 - rating.score);
+          
+          ratingItem.innerHTML = `
+            <div class="rating-header">
+              <strong>${rating.patientName || 'Anonymous Patient'}</strong>
+              <span class="rating-stars">${stars} (${rating.score}/5)</span>
+            </div>
+            <div class="rating-body">
+              ${rating.review || 'No written review'}
+            </div>
+          `;
+          
+          ratingsListElement.appendChild(ratingItem);
+        });
+      } catch (error) {
+        console.error('Error loading ratings:', error);
+        ratingsListElement.innerHTML = '<p class="error">Failed to load ratings. Please try again later.</p>';
+      }
+    }
+    
     // Load doctor data when page loads
     document.addEventListener('DOMContentLoaded', load);
   </script>
