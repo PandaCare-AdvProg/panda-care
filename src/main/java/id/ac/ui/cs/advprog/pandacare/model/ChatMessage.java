@@ -1,49 +1,56 @@
 package id.ac.ui.cs.advprog.pandacare.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "chat_messages")
 public class ChatMessage {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+    
+    @Column(name = "sender")
+    private String sender;
+
+    @Column(name = "receiver")
+    private String receiver;
+
+    @Column(name = "content")
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt = null;
+
+    @Column(name = "edited")
+    private boolean edited = false;
     
-    public ChatMessage() {
-    }
+    @Column(name = "deleted")
+    private boolean deleted = false;
     
-    public ChatMessage(String content) {
+    @Column(name = "timestamp", columnDefinition = "TIMESTAMP")
+    private LocalDateTime timestamp;
+    
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", referencedColumnName = "room_id", nullable = false)
+    private ChatRoom chatRoom;
+
+    public ChatMessage(String sender, String receiver, String content, LocalDateTime timestamp, ChatRoom chatRoom) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.content = content;
+        this.timestamp = timestamp;
+        this.chatRoom = chatRoom;
+        this.edited = false;
+        this.deleted = false;
     }
-    
-    public Long getId() {
-        return id;
-    }
-    
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getContent() {
-        return content;
-    }
-    
-    public void setContent(String content) {
-        this.content = content;
-    }
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+
 }
