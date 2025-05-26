@@ -5,7 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - PandaCare</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 48px;
+            color: #6c757d;
+        }
+        #logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        /* Rating styles */
+        #ratingsList .card {
+            border-left: 4px solid #6c757d;
+            transition: all 0.2s ease;
+        }
+        
+        #ratingsList .card:hover {
+            border-left-color: #ffc107;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .text-warning {
+            color: #ffc107 !important;
+            letter-spacing: 2px;
+        }
+    </style>
+
     <link rel="stylesheet" href="css/profile.css">
+  
 </head>
 <body>
     <div class="container">
@@ -135,6 +188,276 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Authentication header function
+        function getAuthHeaders() {
+            const token = localStorage.getItem('token');
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        // Check if user is logged in
+        function checkAuth() {
+            if (!localStorage.getItem('token')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Fetch user profile data
+        async function fetchUserProfile() {
+            try {
+                const response = await fetch('/api/profile', {
+                    method: 'GET',
+                    headers: getAuthHeaders()
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile');
+                }
+                
+                const userData = await response.json();
+                populateProfile(userData);
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                document.getElementById('error-alert').textContent = 'Failed to load profile data.';
+                document.getElementById('error-alert').classList.remove('d-none');
+            }
+        }
+
+        // Populate profile form with user data
+        function populateProfile(userData) {
+            document.getElementById('firstName').value = userData.firstName || '';
+            document.getElementById('lastName').value = userData.lastName || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('role').value = userData.role || '';
+            
+            // Update header info
+            const fullName = `${userData.firstName} ${userData.lastName}`;
+            document.getElementById('user-name').textContent = fullName;
+            document.getElementById('user-email').textContent = userData.email;
+            
+            // Set avatar initial
+            if (userData.firstName) {
+                document.getElementById('user-initial').textContent = userData.firstName.charAt(0);
+            }
+        }
+
+        // Update profile
+        async function updateProfile(event) {
+            event.preventDefault();
+            
+            const profileData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value
+            };
+            
+            try {
+                const response = await fetch('/api/v1/user/profile', {
+                    method: 'PUT',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(profileData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to update profile');
+                }
+                
+                document.getElementById('success-alert').classList.remove('d-none');
+                setTimeout(() => {
+                    document.getElementById('success-alert').classList.add('d-none');
+                }, 3000);
+                
+                // Refresh profile data
+                fetchUserProfile();
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                document.getElementById('error-alert').textContent = 'Failed to update profile.';
+                document.getElementById('error-alert').classList.remove('d-none');
+            }
+        }
+
+        // Change password
+        async function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match!');
+                return;
+            }
+            
+            const passwordData = {
+                currentPassword: document.getElementById('currentPassword').value,
+                newPassword: newPassword
+            };
+            
+            try {
+                const response = await fetch('/api/v1/user/change-password', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(passwordData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to change password');
+                }
+                
+                alert('Password changed successfully!');
+                
+                // Close modal and clear form
+                const passwordModal = bootstrap.Modal.getInstance(document.getElementById('passwordModal'));
+                passwordModal.hide();
+                document.getElementById('password-form').reset();
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('Failed to change password. Please check your current password and try again.');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            window.location.href = 'login.html';
+        }
+
+        // Get doctor ID for the current profile
+        async function getDoctorId() {
+            try {
+                const response = await fetch('/api/v1/user/profile', {
+                    headers: getAuthHeaders()
+                });
+                const userData = await response.json();
+                return userData.id;
+            } catch (error) {
+                console.error('Error getting doctor ID:', error);
+                return null;
+            }
+        }
+
+        // Load ratings for the doctor
+        async function loadDoctorRatings() {
+            try {
+                // Get the current user profile
+                const response = await fetch('/api/v1/user/profile', {
+                    headers: getAuthHeaders()
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch profile');
+                }
+                
+                const userData = await response.json();
+                
+                // Check if user is a doctor
+                if (userData.role !== 'DOCTOR') {
+                    document.querySelector('.card.mt-4').style.display = 'none';
+                    return;
+                }
+                
+                const doctorId = userData.id;
+                console.log('Loading ratings for doctor ID:', doctorId);
+                
+                // Fetch all ratings for this doctor
+                const ratingsResponse = await fetch(`/api/v1/ratings/doctor/${doctorId}`, {
+                    headers: getAuthHeaders()
+                });
+                
+                if (!ratingsResponse.ok) {
+                    throw new Error(`Error fetching ratings: ${ratingsResponse.status}`);
+                }
+                
+                const ratings = await ratingsResponse.json();
+                console.log('Ratings loaded:', ratings);
+                
+                document.querySelector('.average-rating').style.display = 'none';
+                
+                displayRatings(ratings);
+                
+            } catch (error) {
+                console.error('Error in loadDoctorRatings:', error);
+                const loadingElement = document.getElementById('loadingRatings');
+                if (loadingElement) {
+                    loadingElement.textContent = 'Error loading ratings. Please refresh the page.';
+                    loadingElement.className = 'text-danger';
+                }
+            }
+        }
+        
+        // Display ratings in the ratings list
+        function displayRatings(ratings) {
+          const ratingsListElement = document.getElementById('ratingsList');
+          
+          // Clear loading message
+          ratingsListElement.innerHTML = '';
+          
+          if (ratings.length === 0) {
+            ratingsListElement.innerHTML = '<div class="text-center text-muted">No ratings yet for this doctor.</div>';
+            return;
+          }
+          
+          // Sort ratings by date (newest first)
+          ratings.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          
+          // Create and append rating items
+          ratings.forEach(rating => {
+            const ratingItem = document.createElement('div');
+            ratingItem.className = 'card mb-3';
+            
+            const stars = '★'.repeat(rating.score) + '☆'.repeat(5 - rating.score);
+            
+            ratingItem.innerHTML = `
+              <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                  <h6 class="card-subtitle text-primary">${rating.patientName || 'Anonymous'}</h6>
+                  <span class="text-warning">${stars} (${rating.score}/5)</span>
+                </div>
+                <p class="card-text ${rating.review ? '' : 'text-muted fst-italic'}">${rating.review || 'No written review'}</p>
+              </div>
+            `;
+            
+            ratingsListElement.appendChild(ratingItem);
+          });
+        }
+
+        // Update star display based on rating
+        function updateStarDisplay(rating) {
+            const avgStars = document.getElementById('avgStars');
+            const fullStars = Math.round(rating);
+            
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    starsHtml += '★';
+                } else {
+                    starsHtml += '☆';
+                }
+            }
+            
+            avgStars.textContent = starsHtml;
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            fetchUserProfile();
+            loadDoctorRatings();
+            
+            document.getElementById('profile-form').addEventListener('submit', updateProfile);
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            document.getElementById('change-password-btn').addEventListener('click', function() {
+                const passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
+                passwordModal.show();
+            });
+            
+            document.getElementById('save-password').addEventListener('click', changePassword);
+        });
+    </script>
+
     <script src="js/profile.js"></script>
 </body>
 </html>
