@@ -3,57 +3,403 @@
 <head>
   <meta charset="UTF-8">
   <title>Propose Consultation Schedule</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    h2, h3 {
+      color: #222;
+    }
+    form, .content-section, .modal {
+      background: #fff;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 6px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 8px 12px;
+      background-color: #4a6fa5;
+      border: none;
+      border-radius: 3px;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #166088;
+    }
+    .list-item {
+      background: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 40%;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #ccc;
+      z-index: 1000;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .rating-stars {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+    
+    .rating-stars input {
+      display: none;
+    }
+    
+    .rating-stars label {
+      cursor: pointer;
+      font-size: 30px;
+      color: #ccc;
+      margin: 0 5px;
+    }
+    
+    .rating-stars label:hover,
+    .rating-stars label:hover ~ label,
+    .rating-stars input:checked ~ label {
+      color: #ffc107;
+    }
+    
+    #ratingSection {
+      transition: all 0.3s ease;
+    }
+
+    .delete-btn {
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    
+    .delete-btn:hover {
+      background-color: #b71c1c;
+    }
+    
+    #ratingForm {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #ratingForm .button-group {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 15px;
+    }
+  </style>
   <script>
+    
     // Redirect to login if no JWT token is present
     if (!localStorage.getItem('token')) {
       window.location.href = '/login.html';
     }
+
+    function logoutUser() {
+      const token = localStorage.getItem('token');
+      fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        if(response.ok) {
+          localStorage.removeItem('token');
+          window.location.href = '/login.html';
+        } else {
+          alert('Logout failed');
+        }
+      })
+      .catch(error => {
+        console.error("Error during logout:", error);
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+    }
+
+    // Check if user is viewing a completed consultation
+    function checkCompletedConsultation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const consultationId = urlParams.get('id');
+      
+      if (consultationId) {
+        fetch(`/api/v1/consultations/${consultationId}`, {
+          headers: getAuthHeaders()
+        })
+        .then(response => response.json())
+        .then(consultation => {
+          if (consultation.status === 'COMPLETED') {
+            // Show rating section for completed consultations
+            document.getElementById('ratingSection').style.display = 'block';
+            document.getElementById('consultationId').value = consultationId;
+            
+            // Check if user already rated this consultation
+            checkExistingRating(consultationId);
+          }
+        })
+        .catch(error => console.error('Error checking consultation:', error));
+      }
+    }
+
+    // Check if user already rated this consultation
+    function checkExistingRating(consultationId) {
+      fetch(`/api/v1/ratings/consultation/${consultationId}`, {
+        headers: getAuthHeaders()
+      })
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then(rating => {
+        if (rating) {
+          // Pre-fill form with existing rating
+          document.querySelector(`input[name="score"][value="${rating.score}"]`).checked = true;
+          document.getElementById('review').value = rating.review;
+          document.getElementById('submitRating').textContent = 'Update Rating';
+          document.getElementById('ratingForm').dataset.ratingId = rating.id;
+        }
+      })
+      .catch(error => console.error('Error checking existing rating:', error));
+    }
+
+    // Handle rating form submission (create or update)
+    function handleRatingSubmit(event) {
+      event.preventDefault();
+      
+      console.log("Auth headers:", getAuthHeaders());
+      console.log("Token payload:", JSON.parse(atob(localStorage.getItem('token').split('.')[1])));
+      
+      const ratingId = this.dataset.ratingId;
+      const consultationId = document.getElementById('consultationId').value;
+      const score = document.querySelector('input[name="score"]:checked').value;
+      const review = document.getElementById('review').value;
+      
+      const url = ratingId 
+        ? `/api/v1/ratings/${ratingId}` 
+        : '/api/v1/ratings';
+        
+      const method = ratingId ? 'PUT' : 'POST';
+
+      const data = ratingId 
+        ? { score: parseInt(score), review } 
+        : { consultationId: parseInt(consultationId), score: parseInt(score), review };
+      
+      fetch(url, {
+        method: method,
+        headers: getAuthHeaders(),
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (response.ok) {
+          alert(ratingId ? 'Rating updated successfully!' : 'Rating submitted successfully!');
+          window.location.reload();
+        } else {
+          throw new Error('Failed to submit rating');
+        }
+      })
+      .catch(error => {
+        console.error('Error with rating:', error);
+        alert('Failed to process rating. Please try again.');
+      });
+    }
+
   </script>
 </head>
-...
 <body>
-  <h2>Propose a Consultation Schedule</h2>
-  <form id="createConsultationForm">
-    <label>
-      Select Doctor:
-      <select name="doctorId" required>
-        <!-- Options will be loaded dynamically -->
-      </select>
-    </label>
-    <br>
-    <label>
-      Select Available Schedule:
-      <select name="scheduleId" required>
-        <!-- Options will be loaded dynamically based on selected doctor -->
-      </select>
-    </label>
-    <br>
-    <label>Meeting URL: <input type="url" name="meetingUrl"></label><br>
-    <label>Additional Notes: <textarea name="notes"></textarea></label><br>
-    <button type="submit">Send Consultation Request</button>
-  </form>
-  <div id="consultationResult"></div>
-  
-  <hr>
-  
-  <h2>Your Consultation History</h2>
-  <div id="consultationHistory">
-    <!-- Consultation requests will be listed here -->
-  </div>
-  
-  <!-- Modal for editing consultation schedule -->
-  <div id="editScheduleModal" style="display:none; position:fixed; top:20%; left:40%; padding:20px; background:#fff; border:1px solid #ccc; z-index:1000;">
+  <nav class="navbar">
+    <div class="navbar-brand">PandaCare</div>
+    <ul class="navbar-nav">
+      <li>
+       <button onclick="window.location.href='searchdoctor.html'" class="btn btn--search">
+         Search Doctors
+       </button>
+      <li><button onclick="logoutUser()" class="btn btn--logout">Logout</button></li>
+    </ul>
+  </nav>
+
+  <style>
+    :root {
+      --primary-color:   #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color:    #4fc3f7;
+      --light-gray:      #f5f5f5;
+      --medium-gray:     #e0e0e0;
+      --dark-gray:       #757575;
+      --error-color:     #d32f2f;
+      --success-color:   #388e3c;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--primary-color);
+      padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+      color: var(--light-gray);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .navbar-nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .navbar-nav li { margin: 0; }
+
+    .btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      color: var(--light-gray);
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 36px;
+      box-sizing: border-box;
+    }
+
+    .btn--search {
+      background: var(--secondary-color);
+    }
+    .btn--search:hover {
+      background: #0d4b6e;
+    }
+
+    .btn--logout {
+      background: var(--error-color);
+    }
+    .btn--logout:hover {
+      background: #c62828;
+    }
+  </style>
+
+  <section class="content-section">
+    <h2>Propose a Consultation Schedule</h2>
+    <form id="createConsultationForm">
+      <label>
+        Select Doctor:
+        <select name="doctorId" required>
+          <!-- Options will be loaded dynamically -->
+        </select>
+      </label>
+      <label>
+        Select Available Schedule:
+        <select name="scheduleId" required>
+          <!-- Options will be loaded dynamically based on selected doctor -->
+        </select>
+      </label>
+      <label>
+        Meeting URL:
+        <input type="url" name="meetingUrl">
+      </label>
+      <label>
+        Additional Notes:
+        <textarea name="notes" rows="3"></textarea>
+      </label>
+      <button type="submit">Send Consultation Request</button>
+    </form>
+    <div id="consultationResult"></div>
+  </section>
+
+  <section class="content-section">
+    <h2>Your Consultation History</h2>
+    <div id="consultationHistory">
+    </div>
+  </section>
+
+  <button onclick="window.location.href='searchdoctor.html'" style="margin-top: 20px; padding: 10px 20px; background-color: #4a6fa5; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    Search Doctors
+  </button>
+
+  <div id="editScheduleModal" class="modal">
     <h3>Select a New Schedule</h3>
     <select id="modalScheduleSelect">
-      <!-- Options will be loaded dynamically -->
     </select>
-    <br><br>
     <button id="modalSubmitBtn">Save Changes</button>
     <button id="modalCancelBtn">Cancel</button>
   </div>
-  
+
+  <!-- Rating Section -->
+  <section class="content-section" id="ratingSection" style="display: none;">
+    <h2>Rate Your Doctor</h2>
+    <form id="ratingForm">
+      <input type="hidden" id="consultationId" name="consultationId">
+      <input type="hidden" id="ratingId" name="ratingId">
+      
+      <label>
+        Your Rating:
+        <div class="rating-stars">
+          <input type="radio" id="star5" name="score" value="5" required>
+          <label for="star5">★</label>
+          <input type="radio" id="star4" name="score" value="4">
+          <label for="star4">★</label>
+          <input type="radio" id="star3" name="score" value="3">
+          <label for="star3">★</label>
+          <input type="radio" id="star2" name="score" value="2">
+          <label for="star2">★</label>
+          <input type="radio" id="star1" name="score" value="1">
+          <label for="star1">★</label>
+        </div>
+      </label>
+      
+      <label>
+        Your Review:
+        <textarea id="review" name="review" rows="4" placeholder="Share your experience with this doctor"></textarea>
+      </label>
+      
+      <div class="button-group">
+        <button type="submit">Submit Rating</button>
+      </div>
+    </form>
+  </section>
+
   <script>
-    // Helper function to get auth headers
+    // Helper to get auth headers
     function getAuthHeaders() {
       const token = localStorage.getItem('token');
       return {
@@ -62,7 +408,7 @@
       };
     }
     
-    // Load doctors from API and populate the select
+    // Load doctors and populate select
     async function loadDoctors() {
       try {
         const response = await fetch('/api/doctors', { headers: getAuthHeaders() });
@@ -75,7 +421,6 @@
           option.textContent = doctor.email || `Doctor ${doctor.id}`;
           doctorSelect.appendChild(option);
         });
-        // Trigger schedule load for the first doctor in the list
         if (doctorSelect.value) {
           loadSchedulesForDoctor(doctorSelect.value);
         }
@@ -84,14 +429,13 @@
       }
     }
     
-    // Load schedules for a selected doctor from API and populate the schedule select in the form
+    // Load available schedules for a given doctor
     async function loadSchedulesForDoctor(doctorId) {
       try {
         const response = await fetch(`/api/schedules/doctor/${doctorId}`, { headers: getAuthHeaders() });
         const schedules = await response.json();
         const scheduleSelect = document.querySelector('select[name="scheduleId"]');
         scheduleSelect.innerHTML = '';
-        // Only include schedules with status AVAILABLE
         schedules.filter(schedule => schedule.status === "AVAILABLE")
                  .forEach(schedule => {
           const option = document.createElement('option');
@@ -104,7 +448,7 @@
       }
     }
     
-    // Create a consultation request using POST /api/consultations
+    // Submit new consultation request
     document.getElementById('createConsultationForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const form = e.target;
@@ -120,50 +464,78 @@
         body: JSON.stringify(data)
       });
       const result = await response.json();
-      document.getElementById('consultationResult').innerText = JSON.stringify(result, null, 2);
+      const out = document.getElementById('consultationResult');
+      if (response.ok) {
+        // user‐friendly message:
+        out.innerText = 
+          `Request submitted! Your consultation ID is ${result.id}.\n` +
+          `Day: ${result.dayOfWeek}, Time: ${result.scheduledTime}`;
+      } else {
+        out.innerText = 'Failed to submit. Please try again.';
+      }
       loadConsultationHistory();
     });
     
-    // Load the logged-in patient profile
+    // Load patient profile
     async function loadPatientProfile() {
       const response = await fetch('/api/patients/me', { headers: getAuthHeaders() });
       if (!response.ok) throw new Error("Could not load patient profile");
       return response.json();
     }
     
-    // Fetch consultation history for the logged-in patient
+    // Load consultation history for logged-in patient
     async function loadConsultationHistory() {
       try {
         const patient = await loadPatientProfile();
-        // Use the correct endpoint to retrieve the consultation history
+
+        const allRatingsResponse = await fetch(`/api/v1/ratings/patient/${patient.id}`, { 
+          headers: getAuthHeaders() 
+        });
+        
+        // Create a map of consultation ID -> rating for quick lookup
+        const ratingsByConsultation = {};
+        if (allRatingsResponse.ok) {
+          const allRatings = await allRatingsResponse.json();
+          allRatings.forEach(rating => {
+            ratingsByConsultation[rating.consultationId] = rating;
+          });
+        }
+        
         const response = await fetch(`/api/consultations/patient/${patient.id}`, { headers: getAuthHeaders() });
         const consultations = await response.json();
         const listDiv = document.getElementById('consultationHistory');
         listDiv.innerHTML = '';
-        consultations.forEach(c => {
+        
+        // Process each consultation
+        for (const c of consultations) {
           const item = document.createElement('div');
-          item.style.border = "1px solid #ccc";
-          item.style.margin = "5px";
-          item.style.padding = "5px";
+          item.className = 'list-item';
+
+          let reviewButtonText = "Review";
+          if (c.status === 'COMPLETED' && ratingsByConsultation[c.id]) {
+            reviewButtonText = "Edit Review";
+          }
+          
           item.innerHTML = `
             <strong>ID:</strong> ${c.id} <br>
             <strong>Doctor:</strong> ${c.doctor.email} <br>
             <strong>Scheduled Time:</strong> ${c.scheduledTime} <br>
             <strong>Status:</strong> ${c.status} <br>
-            <button onclick="editConsultation(${c.id}, ${c.doctor.id})" ${c.status !== 'PENDING' ? 'disabled' : ''}>Edit</button>
+            ${c.status === 'PENDING' ? `<button onclick="editConsultation(${c.id}, ${c.doctor.id})">Edit</button>` : ''}            
             ${c.status === 'WAITING_FOR_PATIENT_CONFIRMATION' ? `
               <button onclick="acceptChange(${c.id})">Accept Change</button>
               <button onclick="rejectChange(${c.id})">Reject Change</button>
             ` : ''}
+            ${c.status === 'COMPLETED' ? `<button onclick="openRatingForm(${c.id})">${reviewButtonText}</button>` : ''}
           `;
           listDiv.appendChild(item);
-        });
+        }
       } catch (error) {
         console.error("Error loading consultation history", error);
       }
     }
     
-    // Edit consultation: open modal to select a new schedule from the same doctor
+    // Open modal to edit consultation's schedule
     let currentConsultationId = null;
     function editConsultation(consultationId, doctorId) {
       currentConsultationId = consultationId;
@@ -171,14 +543,13 @@
       document.getElementById('editScheduleModal').style.display = 'block';
     }
     
-    // Load available schedules for the given doctor into the modal select element
+    // Load schedules for modal selection
     async function loadModalSchedules(doctorId) {
       try {
         const response = await fetch(`/api/schedules/doctor/${doctorId}`, { headers: getAuthHeaders() });
         const schedules = await response.json();
         const modalSelect = document.getElementById('modalScheduleSelect');
         modalSelect.innerHTML = '';
-        // Only include AVAILABLE schedules
         schedules.filter(schedule => schedule.status === "AVAILABLE")
                  .forEach(schedule => {
           const option = document.createElement('option');
@@ -217,6 +588,7 @@
       document.getElementById('editScheduleModal').style.display = 'none';
     });
     
+    // Accept change for consultation
     function acceptChange(consultationId) {
       fetch(`/api/consultations/${consultationId}`, {
         method: 'PUT',
@@ -225,9 +597,6 @@
       })
       .then(res => res.json())
       .then(result => {
-        if(result.notification) {
-          showToast(result.notification);
-        }
         alert("Change accepted");
         loadConsultationHistory();
       })
@@ -237,6 +606,7 @@
       });
     }
     
+    // Reject change for consultation
     function rejectChange(consultationId) {
       fetch(`/api/consultations/${consultationId}`, {
         method: 'PUT',
@@ -246,9 +616,6 @@
       .then(res => res.text())
       .then(text => {
         const result = text ? JSON.parse(text) : {};
-        if(result.notification) {
-          showToast(result.notification);
-        }
         alert("Change rejected");
         loadConsultationHistory();
       })
@@ -263,9 +630,187 @@
       loadSchedulesForDoctor(this.value);
     });
     
-    // Initial load of doctors and consultation history
+    // Function to open rating form when Review button is clicked
+    function openRatingForm(consultationId) {
+      const ratingSection = document.getElementById('ratingSection');
+      
+      // Show the rating form
+      ratingSection.style.display = 'block';
+      document.getElementById('consultationId').value = consultationId;
+      
+      // Direct API call to get rating by consultation ID
+      fetch(`/api/v1/ratings/consultation/${consultationId}`, { 
+        headers: getAuthHeaders() 
+      })
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return null;
+      })
+      .then(rating => {
+        console.log("Rating data for consultation", consultationId, ":", rating);
+        
+        if (rating) {
+          // Pre-fill form with existing rating data
+          document.querySelector(`input[name="score"][value="${rating.score}"]`).checked = true;
+          document.getElementById('review').value = rating.review || '';
+          document.getElementById('ratingId').value = rating.id;
+          
+          // Change submit button text
+          document.querySelector('#ratingForm button[type="submit"]').textContent = 'Update Rating';
+          
+          // Add delete button (only show for existing ratings)
+          const deleteButton = document.createElement('button');
+          deleteButton.type = 'button';
+          deleteButton.id = 'deleteRatingBtn';
+          deleteButton.textContent = 'Delete Rating';
+          deleteButton.className = 'delete-btn';
+          deleteButton.onclick = function() { deleteRating(rating.id, consultationId); };
+          
+          const submitButton = document.querySelector('#ratingForm button[type="submit"]');
+          submitButton.parentNode.insertBefore(deleteButton, submitButton.nextSibling);
+        } else {
+          // Reset form for new rating
+          document.getElementById('ratingForm').reset();
+          document.getElementById('ratingId').value = ''; 
+          document.querySelector('#ratingForm button[type="submit"]').textContent = 'Submit Rating';
+          
+          // Remove delete button if it exists
+          const deleteButton = document.getElementById('deleteRatingBtn');
+          if (deleteButton) deleteButton.remove();
+        }
+      })
+      .catch(error => {
+        console.error("Error loading rating:", error);
+      });
+      
+      // Scroll to the rating section
+      ratingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deleteRating(ratingId, consultationId) {
+      if (!confirm('Are you sure you want to delete this rating?')) {
+        return;
+      }
+      
+      fetch(`/api/v1/ratings/${ratingId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to delete rating');
+        }
+        return response.text();
+      })
+      .then(() => {
+        alert('Rating deleted successfully!');
+        
+        // Reset the form
+        document.getElementById('ratingForm').reset();
+        document.getElementById('ratingId').value = '';
+        
+        // Remove the delete button
+        const deleteButton = document.getElementById('deleteRatingBtn');
+        if (deleteButton) deleteButton.remove();
+        
+        // Update button text in the form and consultation list
+        document.querySelector('#ratingForm button[type="submit"]').textContent = 'Submit Rating';
+        
+        // Hide the rating section
+        document.getElementById('ratingSection').style.display = 'none';
+        
+        // Refresh consultation history to update the buttons
+        loadConsultationHistory();
+      })
+      .catch(error => {
+        console.error('Error deleting rating:', error);
+        alert('Error deleting rating. Please try again.');
+      });
+    }
+
+    // Update form submission handler to properly process edits
+    document.getElementById('ratingForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form data
+      const consultationId = document.getElementById('consultationId').value;
+      const ratingId = document.getElementById('ratingId').value;
+      const score = document.querySelector('input[name="score"]:checked').value;
+      const review = document.getElementById('review').value;
+      
+      // Add visual feedback
+      const submitButton = document.querySelector('#ratingForm button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = ratingId ? 'Updating...' : 'Submitting...';
+      
+      // Check if we're updating or creating
+      if (ratingId) {
+        // UPDATE existing rating
+        fetch(`/api/v1/ratings/${ratingId}`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            score: parseInt(score),
+            review: review
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to update rating');
+          }
+          return response.json();
+        })
+        .then(result => {
+          alert('Rating updated successfully!');
+          document.getElementById('ratingSection').style.display = 'none';
+          loadConsultationHistory();
+        })
+        .catch(error => {
+          console.error('Error updating rating:', error);
+          alert('Error updating rating. Please try again.');
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
+        });
+      } else {
+        // CREATE new rating
+        fetch('/api/v1/ratings', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({
+            consultationId: parseInt(consultationId),
+            score: parseInt(score),
+            review: review
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to submit rating');
+          }
+          return response.json();
+        })
+        .then(result => {
+          alert('Rating submitted successfully!');
+          document.getElementById('ratingSection').style.display = 'none';
+          loadConsultationHistory();
+        })
+        .catch(error => {
+          console.error('Error submitting rating:', error);
+          alert('Error submitting rating. Please try again.');
+          submitButton.disabled = false;
+          submitButton.textContent = originalText;
+        });
+      }
+    });
+    
     loadDoctors();
     loadConsultationHistory();
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      checkCompletedConsultation();
+    });
   </script>
 </body>
 </html>
