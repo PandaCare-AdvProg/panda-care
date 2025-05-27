@@ -16,10 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class JwtService {
     
-    @Value("${JWT_SECRET_KEY}")
-    private String SECRET_KEY;
-    private static final long jwtExpiration = 1000 * 60 * 60 * 10; 
-    private static final long refreshExpiration = 1000 * 60 * 60 * 24 * 30;
+    @Value("${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}")
+    private String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    private static final long jwtExpiration = 36000000L;       
+    private static final long refreshExpiration = 2592000000L; 
     
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
