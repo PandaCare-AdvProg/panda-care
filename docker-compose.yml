@@ -5,7 +5,7 @@ services:
     image: keiradiaz/pandacare:latest
     container_name: pandacare
     ports: 
-      - "8080:8080"
+      - "8080:80"
     environment:
       - DB_URL=jdbc:postgresql://panda-care-db.cjhwe3715lop.us-east-1.rds.amazonaws.com:5432/postgres
       - DB_USERNAME=postgres
