@@ -1,8 +1,10 @@
 <!-- PandaCare Navbar Component -->
 <nav class="navbar">
   <div class="navbar-brand">PandaCare</div>
-  <ul class="navbar-nav" id="navbar-nav">
-    <li><button onclick="logoutUser()" class="btn btn--logout">Logout</button></li>
+  <ul class="navbar-nav">
+    <li><button onclick="window.location.href='/profile.html'" class="btn btn--profile">Profile</button></li>
+    <li><button onclick="logoutUser()" style="background:red; border:none; padding:8px 12px; border-radius:3px; cursor:pointer;">Logout</button></li>
+
   </ul>
 </nav>
 
