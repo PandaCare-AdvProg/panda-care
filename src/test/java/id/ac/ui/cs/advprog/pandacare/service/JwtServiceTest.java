@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +26,11 @@ class JwtServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         jwtService = new JwtService();
+        ReflectionTestUtils.setField(
+            jwtService, 
+            "SECRET_KEY", 
+            "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+        );
     }
 
     @Test
