@@ -42,7 +42,7 @@ jobs:
       - name: SSH into EC2 and deploy
         run: |
           ssh ubuntu@ec2-44-198-79-139.compute-1.amazonaws.com << 'EOF'
-            cd /panda-care
+            cd panda-care
             git pull origin main
 
             docker compose down
