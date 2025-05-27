@@ -17,14 +17,6 @@ async function loadNavbar() {
     const scriptElement = tempDiv.querySelector('script');
     
     if (navElement) {
-      // Check if we're on consultation.html and add Search Doctors button
-      if (window.location.pathname.includes('consultation.html')) {
-        const navList = navElement.querySelector('#navbar-nav');
-        const searchDoctorsButton = document.createElement('li');
-        searchDoctorsButton.innerHTML = '<button onclick="window.location.href=\'searchdoctor.html\'" class="btn btn--search">Search Doctors</button>';
-        navList.insertBefore(searchDoctorsButton, navList.firstChild);
-      }
-      
       // Insert navbar at the beginning of body
       document.body.insertBefore(navElement, document.body.firstChild);
     }
