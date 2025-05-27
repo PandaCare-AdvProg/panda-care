@@ -43,7 +43,7 @@ jobs:
         run: |
           ssh ubuntu@ec2-44-198-79-139.compute-1.amazonaws.com << 'EOF'
             cd panda-care
-            git pull origin main
+            sudo git pull origin main
 
             docker compose down
             docker compose pull  
